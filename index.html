@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Basic Page Needs
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta charset="utf-8">
+        <title>Skeleton: Responsive CSS Boilerplate</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Mobile Specific Metas
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- FONT
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+        <!-- CSS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/skeleton.css">
+        <link rel="stylesheet" href="css/custom.css">
+        <link rel="stylesheet" href="css/farbtastic.css" type="text/css">
+
+        <!-- Scripts
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+        <link rel="stylesheet" href="css/github-prettify-theme.css">
+        <script src="js/site.js"></script>
+        <script type="text/javascript" src="js/farbtastic.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#colorpicker').farbtastic('#colorvalue');
+            });
+        </script>
+        <!-- Favicon
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="icon" type="image/png" href="dist/images/favicon.png">
+
+    </head>
+    <body>
+        <header>
+            <nav class="navbar">
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="#" data-popover="#fileMenu">File</a>
+                        <div id="fileMenu" class="popover">
+                            <ul class="popover-list">
+                                <li class="popover-item">
+                                    <a class="popover-link" href="#grid">New</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="#" data-popover="#editMenu">Edit</a>
+                        <div id="editMenu" class="popover">
+                            <ul class="popover-list">
+                                <li class="popover-item">
+                                    <a class="popover-link" href="#grid">Rotate</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="#" data-popover="#imageMenu">Image</a>
+                        <div id="imageMenu" class="popover">
+                            <ul class="popover-list">
+                                <li class="popover-item">
+                                    <a class="popover-link" href="#grid">Export</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="navbar-item">
+                        <a class="navbar-link" href="#" data-popover="#helpMenu">Help</a>
+                        <div id="helpMenu" class="popover">
+                            <ul class="popover-list">
+                                <li class="popover-item">
+                                    <a class="popover-link" href="#grid">About</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <div class="tools">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+            <img class="tool" src="images/tools/man.png">
+        </div>
+
+        <div class="colorwrapper">
+            <div id="colorpicker"></div>
+            <br/>
+            <form><input type="text" id="colorvalue" name="color" value="#000000" /></form>
+        </div>
+        <canvas id="canvas" width="800" height="500"></canvas>
+
+        <footer>
+            <script>
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+                ctx.moveTo(0,0);
+                ctx.lineTo(200,100);
+                ctx.stroke();
+                ctx.moveTo(200,100);
+                ctx.lineTo(300,100);
+                ctx.stroke();
+                ctx.moveTo(300,100);
+                ctx.lineTo(300,400);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(95,50,40,0,2*Math.PI);
+                ctx.stroke();
+                ctx.font = "60px Raleway";
+                ctx.fillText("Hello World",100,200);
+            </script>    
+        </footer>
+    </body>
