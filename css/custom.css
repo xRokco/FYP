@@ -38,10 +38,24 @@ body {
   line-height: normal;
   margin-top: 100px;
   margin-right:50px;
+  width: 300px;
 }
 
 .colorwrapper form {
   text-align: center;
+}
+
+.farbtastic {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.rgbvalue, .hslvalue {
+  width:25%;
+}
+
+label {
+  display: inline;
 }
 
 .container {
