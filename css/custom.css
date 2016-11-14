@@ -19,6 +19,7 @@ body {
 
 .tools {
   border: 1px solid silver;
+  border-top: 20px solid silver;
   width: 84px;
   height: 252px;
   margin-left:5px;
@@ -26,6 +27,7 @@ body {
   float: left;
   line-height: normal;
   font-size: 0em;
+  background-color: #EEE;
 }
 
 .tool {
@@ -34,11 +36,13 @@ body {
 
 .colorwrapper {
   border: 1px solid silver;
+  border-top: 20px solid silver;
   float: right;
   line-height: normal;
   margin-top: 100px;
   margin-right:50px;
   width: 300px;
+  background-color: #EEE;
 }
 
 .colorwrapper form {
