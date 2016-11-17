@@ -27,9 +27,7 @@
         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script type="text/javascript" src="js/site.js"></script>
         <script type="text/javascript" src="js/farbtastic.js"></script>
-        <script type="text/javascript" src="js/custom.js"></script>
         <script type="text/javascript" src="js/fabric.js"></script>
 
         <!-- Favicon
@@ -94,9 +92,12 @@
             </nav>
         </header>
         <div class="tools drag">
-            <img class="tool" src="images/tools/pencil.png">
-            <img class="tool" src="images/tools/image.png">
-            <img class="tool" src="images/tools/man.png">
+            <img id="drawing-mode" class="tool" src="images/tools/pencil.png">
+            <label for="selectFile">
+                <img class="tool" onclick="hideOptions()" src="images/tools/image.png"/>
+            </label>
+            <input id="selectFile" type="file"/>
+            <img id="rectangle-mode" class="tool" src="images/tools/man.png">
             <img class="tool" src="images/tools/fill.png">
             <img class="tool" src="images/tools/man.png">
             <img class="tool" src="images/tools/pencil.png">
@@ -106,6 +107,19 @@
             <img class="tool" src="images/tools/pencil.png">
             <img class="tool" src="images/tools/image.png">
             <img class="tool" src="images/tools/man.png">
+        </div>
+
+        <div class="drag toolOptions">
+            <div style="display: none;" id="drawing-mode-options" class="options">
+                <label for="drawing-line-width">Line width:</label>
+                <input type="range" value="10" min="0" max="150" id="drawing-line-width"><br>
+            </div>
+            <div style="display: none;" id="rectangle-mode-options" class="options">
+                <label for="rectangle-line-width">Line width:</label>
+                <input type="range" value="10" min="0" max="150" id="rectangle-line-width"><br>
+                <label for="rectangle-fill">Fill:</label>
+                <input type="checkbox" id="rectangle-fill"/><br/>
+            </div>
         </div>
 
         <div class="colorwrapper drag">
@@ -123,26 +137,14 @@
                 <label>l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
             </form>
         </div>
-        <canvas id="canvas" width="800" height="500"></canvas>
+
+        <div id="canvasWrapper">
+            <canvas id="c" width="800" height="500" style="border:1px solid silver"></canvas>
+        </div>
 
         <footer>
-            <script>
-                var c = document.getElementById("canvas");
-                var ctx = c.getContext("2d");
-                ctx.moveTo(0,0);
-                ctx.lineTo(200,100);
-                ctx.stroke();
-                ctx.moveTo(200,100);
-                ctx.lineTo(300,100);
-                ctx.stroke();
-                ctx.moveTo(300,100);
-                ctx.lineTo(300,400);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(95,50,40,0,2*Math.PI);
-                ctx.stroke();
-                ctx.font = "60px Raleway";
-                ctx.fillText("Hello World",100,200);
-            </script> 
+            <!-- More Scripts
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+            <script type="text/javascript" src="js/custom.js"></script>
         </footer>
     </body>
