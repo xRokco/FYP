@@ -239,8 +239,7 @@ $(document).ready(function(){
                     height:0,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("rectangle-line-width").value, 10) || 1,
-                    fill:fill,
-                    selectable: true
+                    fill:fill
                 });
                     
                 canvas.add(rect);
