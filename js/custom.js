@@ -98,10 +98,12 @@ $( function() {
 //hide options
 function hideOptions() {
     canvas.isDrawingMode = false;
-    canvas.freeDrawing = false;
+    canvas.rectDrawing = false;
+    canvas.circleDrawing = false;
 
     document.getElementById("drawing-mode-options").style.display = 'none';
-    document.getElementById("rectangle-mode-options").style.display = 'none';
+    document.getElementById("shape-mode-options").style.display = 'none';
+    //document.getElementById("circle-mode-options").style.display = 'none';
 }
 
 //Canvac creation
@@ -214,16 +216,16 @@ $(document).ready(function(){
         var refRect;
 
         hideOptions();
-        document.getElementById("rectangle-mode-options").style.display = '';
+        document.getElementById("shape-mode-options").style.display = '';
 
-        canvas.freeDrawing = true;
+        canvas.rectDrawing = true;
 
         //Setting the mouse events
         canvas.on('mouse:down',function(event){   
             //Defining the procedure
             isMouseDown=true;
 
-            if(document.getElementById('rectangle-fill').checked) {
+            if(document.getElementById('shape-fill').checked) {
                 var fill = $.farbtastic('#colorpicker').color;
             } else {
                 var fill = '';
@@ -231,14 +233,14 @@ $(document).ready(function(){
 
             //Getting yhe mouse Co-ordinates
             //Creating the rectangle object
-            if(canvas.freeDrawing) {
+            if(canvas.rectDrawing) {
                 var rect=new fabric.Rect({
                     left:divPos.left,
                     top:divPos.top,
                     width:0,
                     height:0,
                     stroke: $.farbtastic('#colorpicker').color,
-                    strokeWidth: parseInt(document.getElementById("rectangle-line-width").value, 10) || 1,
+                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
                 });
                     
@@ -254,12 +256,89 @@ $(document).ready(function(){
             }
             
             //Getting the mouse Co-ordinates
-            if(canvas.freeDrawing) {
+            if(canvas.rectDrawing) {
                 var posX=divPos.left;
                 var posY=divPos.top;
 
                 refRect.setWidth(Math.abs((posX-refRect.get('left'))));
                 refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+                canvas.renderAll(); 
+            }
+        });
+
+        canvas.on('mouse:up',function(){
+            //alert("mouse up!");
+            isMouseDown=false;
+            //hideOptions();
+            //freeDrawing=false;  // **Disables line drawing
+        });
+    });
+});
+
+//Circle drawing
+$(document).ready(function(){
+    var divPos = {};
+    var offset = $("#c").offset();
+
+    $(document).mousemove(function(e){
+        divPos = {
+            left: e.pageX - offset.left,
+            top: e.pageY - offset.top
+        };
+    });
+
+    $('#circle-mode').click(function(){
+        console.log("Button 2 cilcked");
+
+        //Declaring the variables
+        var isMouseDown=false;
+        var refCircle;
+
+        hideOptions();
+        document.getElementById("shape-mode-options").style.display = '';
+
+        canvas.circleDrawing = true;
+
+        //Setting the mouse events
+        canvas.on('mouse:down',function(event){   
+            //Defining the procedure
+            isMouseDown=true;
+
+            if(document.getElementById('shape-fill').checked) {
+                var fill = $.farbtastic('#colorpicker').color;
+            } else {
+                var fill = '';
+            }
+
+            //Getting yhe mouse Co-ordinates
+            //Creating the rectangle object
+            if(canvas.circleDrawing) {
+                var circle = new fabric.Circle({
+                    left:divPos.left,
+                    top:divPos.top,                
+                    radius:0,
+                    stroke: $.farbtastic('#colorpicker').color,
+                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                    fill:fill
+                 });
+                
+                canvas.add(circle);
+                refCircle=circle;  //**Reference of rectangle object
+            }
+        });
+
+        canvas.on('mouse:move', function(event){
+            // Defining the procedure
+            if(!isMouseDown) {
+                return;
+            }
+            
+            //Getting the mouse Co-ordinates
+            if(canvas.circleDrawing) {
+                var posX=divPos.left;
+                var posY=divPos.top;
+
+                refCircle.set('radius',Math.abs((posX-refCircle.get('left'))));
                 canvas.renderAll(); 
             }
         });
