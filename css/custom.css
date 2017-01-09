@@ -78,6 +78,19 @@ html {
   display: inline;
 }
 
+#layers {
+  border: 1px solid silver;
+  border-top: 20px solid silver;
+  min-width: 200px;
+  min-height: 80px; 
+  margin-left: -155px;
+  margin-right: 5px;
+  top: 500px;
+  float: left;
+  line-height: normal;
+  background-color: #EEE;
+}
+
 .popover{
   z-index: 999;
 }

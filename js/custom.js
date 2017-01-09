@@ -103,7 +103,18 @@ function hideOptions() {
 
     document.getElementById("drawing-mode-options").style.display = 'none';
     document.getElementById("shape-mode-options").style.display = 'none';
+    fabric.Object.prototype.selectable = false;
     //document.getElementById("circle-mode-options").style.display = 'none';
+}
+
+function updateLayers() {
+    var obj = canvas.getObjects();
+    console.log(obj);
+    var text = "";
+    for(i=0; i < obj.length;i++){
+        text += obj[i].id + "<br/>"
+    }
+    document.getElementById("layers").innerHTML = text;
 }
 
 //Canvac creation
@@ -114,6 +125,7 @@ canvas.renderAll();
 
 //Free drawing-mode
 document.getElementById("drawing-mode").onclick = function() {
+    console.log("drawing cilcked");
     hideOptions();
     canvas.isDrawingMode = true;
     document.getElementById("drawing-mode-options").style.display = '';
@@ -151,6 +163,7 @@ var myAppModule = (function () {
         //canvas.setHeight(img.height);
 
         cImg = new fabric.Image(img, {
+            id: 'image',
             left: 0,
             top: 0,
             angle: 0,
@@ -158,6 +171,7 @@ var myAppModule = (function () {
         });
 
         canvas.add(cImg);
+        updateLayers();
     };
 
     var onloadFile = function (e) {
@@ -192,12 +206,8 @@ function handleFileSelect(evt) {
     }
 }
 
-$(document).ready(function () {
-    document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
-});
-
-//Rectangle drawing
 $(document).ready(function(){
+    document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
     var divPos = {};
     var offset = $("#c").offset();
 
@@ -208,146 +218,122 @@ $(document).ready(function(){
         };
     });
 
+    //Rectangle drawing
     $('#rectangle-mode').click(function(){
         console.log("Button 2 cilcked");
-
+        hideOptions();
         //Declaring the variables
-        var isMouseDown=false;
+        canvas.isMouseDown=false;
         var refRect;
 
-        hideOptions();
+        
         document.getElementById("shape-mode-options").style.display = '';
 
         canvas.rectDrawing = true;
-
-        //Setting the mouse events
-        canvas.on('mouse:down',function(event){   
-            //Defining the procedure
-            isMouseDown=true;
-
-            if(document.getElementById('shape-fill').checked) {
-                var fill = $.farbtastic('#colorpicker').color;
-            } else {
-                var fill = '';
-            }
-
-            //Getting yhe mouse Co-ordinates
-            //Creating the rectangle object
-            if(canvas.rectDrawing) {
-                var rect=new fabric.Rect({
-                    left:divPos.left,
-                    top:divPos.top,
-                    width:0,
-                    height:0,
-                    stroke: $.farbtastic('#colorpicker').color,
-                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
-                    fill:fill
-                });
-                    
-                canvas.add(rect);
-                refRect=rect;  //**Reference of rectangle object
-            }
-        });
-
-        canvas.on('mouse:move', function(event){
-            // Defining the procedure
-            if(!isMouseDown) {
-                return;
-            }
-            
-            //Getting the mouse Co-ordinates
-            if(canvas.rectDrawing) {
-                var posX=divPos.left;
-                var posY=divPos.top;
-
-                refRect.setWidth(Math.abs((posX-refRect.get('left'))));
-                refRect.setHeight(Math.abs((posY-refRect.get('top'))));
-                canvas.renderAll(); 
-            }
-        });
-
-        canvas.on('mouse:up',function(){
-            //alert("mouse up!");
-            isMouseDown=false;
-            //hideOptions();
-            //freeDrawing=false;  // **Disables line drawing
-        });
-    });
-});
-
-//Circle drawing
-$(document).ready(function(){
-    var divPos = {};
-    var offset = $("#c").offset();
-
-    $(document).mousemove(function(e){
-        divPos = {
-            left: e.pageX - offset.left,
-            top: e.pageY - offset.top
-        };
     });
 
+    //Circle Drawing
     $('#circle-mode').click(function(){
         console.log("Button 2 cilcked");
 
         //Declaring the variables
-        var isMouseDown=false;
+        canvas.isMouseDown=false;
         var refCircle;
 
         hideOptions();
         document.getElementById("shape-mode-options").style.display = '';
 
         canvas.circleDrawing = true;
+    });
 
-        //Setting the mouse events
-        canvas.on('mouse:down',function(event){   
-            //Defining the procedure
-            isMouseDown=true;
+    //Setting the mouse events
+    canvas.on('mouse:down',function(event){   
+        //Defining the procedure
+        canvas.isMouseDown=true;
 
-            if(document.getElementById('shape-fill').checked) {
-                var fill = $.farbtastic('#colorpicker').color;
-            } else {
-                var fill = '';
-            }
+        if(document.getElementById('shape-fill').checked) {
+            var fill = $.farbtastic('#colorpicker').color;
+        } else {
+            var fill = '';
+        }
 
-            //Getting yhe mouse Co-ordinates
-            //Creating the rectangle object
-            if(canvas.circleDrawing) {
-                var circle = new fabric.Circle({
-                    left:divPos.left,
-                    top:divPos.top,                
-                    radius:0,
-                    stroke: $.farbtastic('#colorpicker').color,
-                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
-                    fill:fill
-                 });
+        //Getting yhe mouse Co-ordinates
+        //Creating the rectangle object
+        if(canvas.rectDrawing) {
+            var rect=new fabric.Rect({
+                id: 'rectangle',
+                left:divPos.left,
+                top:divPos.top,
+                width:0,
+                height:0,
+                stroke: $.farbtastic('#colorpicker').color,
+                strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                fill:fill
+            });
                 
-                canvas.add(circle);
-                refCircle=circle;  //**Reference of rectangle object
-            }
-        });
+            canvas.add(rect);
+            refRect=rect;  //**Reference of rectangle object
+        }
 
-        canvas.on('mouse:move', function(event){
-            // Defining the procedure
-            if(!isMouseDown) {
-                return;
-            }
+        if(canvas.circleDrawing) {
+            var circle = new fabric.Circle({
+                id: 'circle',
+                left:divPos.left,
+                top:divPos.top,                
+                radius:0,
+                stroke: $.farbtastic('#colorpicker').color,
+                strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                fill:fill
+             });
             
-            //Getting the mouse Co-ordinates
-            if(canvas.circleDrawing) {
-                var posX=divPos.left;
-                var posY=divPos.top;
+            canvas.add(circle);
+            refCircle=circle;  //**Reference of rectangle object
+        }
+    });
 
-                refCircle.set('radius',Math.abs((posX-refCircle.get('left'))));
-                canvas.renderAll(); 
-            }
-        });
+    canvas.on('mouse:move', function(event){
+        // Defining the procedure
+        if(!canvas.isMouseDown) {
+            return;
+        }
+        
+        //Getting the mouse Co-ordinates
+        if(canvas.rectDrawing) {
+            var posX=divPos.left;
+            var posY=divPos.top;
 
-        canvas.on('mouse:up',function(){
-            //alert("mouse up!");
-            isMouseDown=false;
-            //hideOptions();
-            //freeDrawing=false;  // **Disables line drawing
-        });
+            refRect.setWidth(Math.abs((posX-refRect.get('left'))));
+            refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+            canvas.renderAll(); 
+        }
+
+        if(canvas.circleDrawing) {
+            var posX=divPos.left;
+            var posY=divPos.top;
+
+            refCircle.set('radius',Math.abs((posX-refCircle.get('left'))));
+            canvas.renderAll(); 
+        }
+    });
+
+    canvas.on('mouse:up',function(){
+        //alert("mouse up!");
+        canvas.isMouseDown=false;
+        updateLayers();
+
+        if(canvas.rectDrawing) {
+            console.log("rect update");
+        }
+
+        if(canvas.circleDrawing) {
+            console.log("circle update");
+        }
+    });
+
+    //Select tool
+    $('#select-mode').click(function(){
+        console.log("select cilcked");
+        hideOptions();
+        fabric.Object.prototype.selectable = true; 
     });
 });
