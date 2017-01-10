@@ -112,9 +112,24 @@ function updateLayers() {
     console.log(obj);
     var text = "";
     for(i=0; i < obj.length;i++){
-        text += obj[i].id + "<br/>"
+        text += "<p onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</p><img src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\">"
     }
     document.getElementById("layers").innerHTML = text;
+}
+
+function selectLayer(index) {
+    hideOptions();
+    fabric.Object.prototype.selectable = true; 
+    canvas.setActiveObject(canvas.item(index));
+}
+
+function hideLayer(index) {
+    if (canvas.item(index).visible==false) {
+        canvas.item(index).visible=true;
+    } else {
+        canvas.item(index).visible=false;
+    }
+    canvas.renderAll(); 
 }
 
 //Canvac creation
@@ -264,8 +279,8 @@ $(document).ready(function(){
                 id: 'rectangle',
                 left:divPos.left,
                 top:divPos.top,
-                width:0,
-                height:0,
+                width:5,
+                height:5,
                 stroke: $.farbtastic('#colorpicker').color,
                 strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                 fill:fill
@@ -304,6 +319,7 @@ $(document).ready(function(){
 
             refRect.setWidth(Math.abs((posX-refRect.get('left'))));
             refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+            refRect.setCoords();
             canvas.renderAll(); 
         }
 
@@ -312,6 +328,7 @@ $(document).ready(function(){
             var posY=divPos.top;
 
             refCircle.set('radius',Math.abs((posX-refCircle.get('left'))));
+            refCircle.setCoords();
             canvas.renderAll(); 
         }
     });
