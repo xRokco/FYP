@@ -91,6 +91,28 @@ html {
   background-color: #EEE;
 }
 
+#layers {
+  text-align: center;
+  max-height: 300px;
+  overflow: auto;
+}
+
+#layers div {
+  border-bottom: 1px solid silver;
+  padding: 5px 0;
+}
+
+#layers span {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+#layers img {
+  display: inline;
+  float: right;
+  margin-right: 4px;
+}
+
 .popover{
   z-index: 999;
 }

@@ -112,7 +112,11 @@ function updateLayers() {
     console.log(obj);
     var text = "";
     for(i=0; i < obj.length;i++){
-        text += "<p onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</p><img src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\">"
+        if(obj[i].id == undefined) {
+            text += "<div><span onclick=\"selectLayer(" + i + ")\">line</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>";
+        } else {
+            text += "<div><span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        }
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -126,8 +130,10 @@ function selectLayer(index) {
 function hideLayer(index) {
     if (canvas.item(index).visible==false) {
         canvas.item(index).visible=true;
+        document.getElementById("image" + index).src="images/eye.png";
     } else {
         canvas.item(index).visible=false;
+        document.getElementById("image" + index).src="images/eye-white.png";
     }
     canvas.renderAll(); 
 }
