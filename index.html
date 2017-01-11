@@ -15,6 +15,7 @@
         <!-- FONT
         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
         <!-- CSS
         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -53,7 +54,7 @@
                                     <a class="popover-link" href="#grid">Save</a>
                                 </li>
                                 <li class="popover-item">
-                                    <a class="popover-link" href="#grid">Export</a>
+                                    <a href="javascript:void(0)" class="popover-link" id="myBtn">Export</a>
                                 </li>
                             </ul>
                         </div>
@@ -73,7 +74,7 @@
                         <div id="imageMenu" class="popover">
                             <ul class="popover-list">
                                 <li class="popover-item">
-                                    <a class="popover-link" href="#grid">Export</a>
+                                    <a class="popover-link">Export</a>
                                 </li>
                             </ul>
                         </div>
@@ -144,6 +145,25 @@
 
         <div id="canvasWrapper">
             <canvas id="c" width="800" height="500" style="border:1px solid silver"></canvas>
+        </div>
+
+       
+
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--<div class="modal-close-icon">-->
+                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
+                <h4>Export as...</h4>
+                <ul>
+                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'png' }))"">PNG</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'jpeg' }))"">JPG</a></li>
+                    <li><a href="javascript:void(0)" onclick="document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)">JSON</a></li>
+                    <li><a onclick="">SVG</a></li>
+                </ul>
+
+                <pre><code id="json"></code></pre>
+            </div>
         </div>
 
         <footer>
