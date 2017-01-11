@@ -113,12 +113,36 @@ function updateLayers() {
     var text = "";
     for(i=0; i < obj.length;i++){
         if(obj[i].id == undefined) {
-            text += "<div><span onclick=\"selectLayer(" + i + ")\">line</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>";
+            var id = "line";
         } else {
-            text += "<div><span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>"
+            var id = obj[i].id;
         }
+
+        if(i == 0){
+            var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
+        } else {
+            var up = "<img src=\"images/up.png\" onclick=\"moveBack(" + i + ")\">"
+        }
+
+        if(i == obj.length - 1) {
+            var down = "<img src=\"images/down.png\" style=\"opacity:0.1\">";
+        } else {
+            var down = "<img src=\"images/down.png\" onclick=\"moveForwards(" + i + ")\">";
+        }
+     
+        text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + id + "</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
+}
+
+function moveBack(index) {
+    canvas.sendBackwards(canvas.item(index));
+    updateLayers();
+}
+
+function moveForwards(index) {
+    canvas.bringForward(canvas.item(index));
+    updateLayers();
 }
 
 function selectLayer(index) {
