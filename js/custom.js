@@ -112,12 +112,6 @@ function updateLayers() {
     console.log(obj);
     var text = "";
     for(i=0; i < obj.length;i++){
-        if(obj[i].id == undefined) {
-            var id = "line";
-        } else {
-            var id = obj[i].id;
-        }
-
         if(i == 0){
             var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
         } else {
@@ -130,7 +124,12 @@ function updateLayers() {
             var down = "<img src=\"images/down.png\" onclick=\"moveForwards(" + i + ")\">";
         }
      
-        text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + id + "</span><img id=\"image" + i + "\" src=\"images/eye.png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        var image = "";
+        if(obj[i].visible == false) {
+            var image = "-white";
+        }
+
+        text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -366,6 +365,11 @@ $(document).ready(function(){
     canvas.on('mouse:up',function(){
         //alert("mouse up!");
         canvas.isMouseDown=false;
+        if(canvas.isDrawingMode == true) {
+            var obj = canvas.getObjects()
+            obj[obj.length - 1].id = "line";
+        }
+
         updateLayers();
 
         if(canvas.rectDrawing) {
