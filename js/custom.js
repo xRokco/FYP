@@ -172,6 +172,7 @@ document.getElementById("drawing-mode").onclick = function() {
     console.log("drawing cilcked");
     hideOptions();
     canvas.isDrawingMode = true;
+    canvas.freeDrawingCursor = "url('/images/cursors/pencil.png'), auto";
     document.getElementById("drawing-mode-options").style.display = '';
 };
 
@@ -272,6 +273,7 @@ $(document).ready(function(){
 
         
         document.getElementById("shape-mode-options").style.display = '';
+        canvas.defaultCursor = "url('/images/cursors/rectangle.png'), auto";
 
         canvas.rectDrawing = true;
     });
@@ -286,6 +288,7 @@ $(document).ready(function(){
 
         hideOptions();
         document.getElementById("shape-mode-options").style.display = '';
+        canvas.defaultCursor = "url('/images/cursors/circle.png'), auto";
 
         canvas.circleDrawing = true;
     });
@@ -385,6 +388,7 @@ $(document).ready(function(){
     $('#select-mode').click(function(){
         console.log("select cilcked");
         hideOptions();
+        canvas.defaultCursor = "url('/images/cursors/select.png'), auto";
         fabric.Object.prototype.selectable = true; 
     });
 });
