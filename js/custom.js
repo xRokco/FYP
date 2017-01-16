@@ -111,17 +111,17 @@ function updateLayers() {
     var obj = canvas.getObjects();
     console.log(obj);
     var text = "";
-    for(i=0; i < obj.length;i++){
-        if(i == 0){
+    for(i=obj.length - 1; i >= 0;i--){
+        if(i == obj.length - 1){
             var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
         } else {
-            var up = "<img src=\"images/up.png\" onclick=\"moveBack(" + i + ")\">"
+            var up = "<img src=\"images/up.png\" onclick=\"moveForwards(" + i + ")\">"
         }
 
-        if(i == obj.length - 1) {
+        if(i == 0) {
             var down = "<img src=\"images/down.png\" style=\"opacity:0.1\">";
         } else {
-            var down = "<img src=\"images/down.png\" onclick=\"moveForwards(" + i + ")\">";
+            var down = "<img src=\"images/down.png\" onclick=\"moveBack(" + i + ")\">";
         }
      
         var image = "";
@@ -172,7 +172,7 @@ document.getElementById("drawing-mode").onclick = function() {
     console.log("drawing cilcked");
     hideOptions();
     canvas.isDrawingMode = true;
-    canvas.freeDrawingCursor = "url('/images/cursors/pencil.png'), auto";
+    canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
     document.getElementById("drawing-mode-options").style.display = '';
 };
 
@@ -273,8 +273,8 @@ $(document).ready(function(){
 
         
         document.getElementById("shape-mode-options").style.display = '';
-        canvas.defaultCursor = "url('/images/cursors/rectangle.png'), auto";
-
+        canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/rectangle.png'), auto";
         canvas.rectDrawing = true;
     });
 
@@ -288,8 +288,8 @@ $(document).ready(function(){
 
         hideOptions();
         document.getElementById("shape-mode-options").style.display = '';
-        canvas.defaultCursor = "url('/images/cursors/circle.png'), auto";
-
+        canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
         canvas.circleDrawing = true;
     });
 
@@ -388,7 +388,8 @@ $(document).ready(function(){
     $('#select-mode').click(function(){
         console.log("select cilcked");
         hideOptions();
-        canvas.defaultCursor = "url('/images/cursors/select.png'), auto";
+        canvas.defaultCursor = "url('images/cursors/select.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/select.png'), auto";
         fabric.Object.prototype.selectable = true; 
     });
 });
