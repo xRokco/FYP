@@ -211,12 +211,12 @@ var myAppModule = (function () {
             id: 'image',
             left: 0,
             top: 0,
-            angle: 0,
-            selectable: true
+            angle: 0
         });
 
         canvas.add(cImg);
         updateLayers();
+        $('#select-mode').click();
     };
 
     var onloadFile = function (e) {
@@ -255,6 +255,7 @@ $(document).ready(function(){
     document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
     var divPos = {};
     var offset = $("#c").offset();
+    var ctrlDown = false;
 
     $(document).mousemove(function(e){
         divPos = {
@@ -390,7 +391,29 @@ $(document).ready(function(){
         hideOptions();
         canvas.defaultCursor = "url('images/cursors/select.png'), auto";
         canvas.hoverCursor = "url('images/cursors/select.png'), auto";
+        canvas.moveCursor = "url('images/cursors/select.png'), auto";
         fabric.Object.prototype.selectable = true; 
+    });
+
+    $(document).keypress(function( event ) {
+        if(canvas.getActiveObject()) {
+            if(event.keyCode == 127) {
+                canvas.getActiveObject().remove();
+                updateLayers();
+            }
+        }
+    });
+
+    $(document).bind('copy', function() {
+        console.log('copy behaviour detected!')
+    }); 
+
+    $(document).bind('paste', function() {
+        console.log('paste behaviour detected!')
+    });
+     
+    $(document).bind('cut', function() {
+        console.log('cut behaviour detected!')
     });
 });
 
