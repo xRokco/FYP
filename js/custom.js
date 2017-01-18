@@ -165,7 +165,19 @@ function hideLayer(index) {
 var canvas = new fabric.Canvas('c');
 canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
+canvas.setHeight(500);
+canvas.setWidth(800);
 canvas.renderAll();
+
+function newCanvas(width, height) {
+    canvas.clear()
+    canvas.backgroundColor="white";
+    fabric.Object.prototype.selectable = false;
+    canvas.setHeight(height);
+    canvas.setWidth(width);
+    $('.close').click();
+    document.getElementById('canvasWrapper').style.width = width + "px";
+}
 
 //Free drawing-mode
 document.getElementById("drawing-mode").onclick = function() {
@@ -405,40 +417,62 @@ $(document).ready(function(){
     });
 
     $(document).bind('copy', function() {
-        console.log('copy behaviour detected!')
+        console.log('copied')
+        canvas.clipboard = canvas.getActiveObject();
     }); 
 
     $(document).bind('paste', function() {
-        console.log('paste behaviour detected!')
+        console.log('pasted')
+        var object = fabric.util.object.clone(canvas.clipboard);
+        object.set("top", object.top+15);
+        object.set("left", object.left+15);
+        canvas.add(object);
+        updateLayers();
     });
-     
+
     $(document).bind('cut', function() {
-        console.log('cut behaviour detected!')
+        console.log('cut')
+        canvas.clipboard = canvas.getActiveObject();
+        canvas.getActiveObject().remove();
+        updateLayers();
     });
+
 });
 
-// Get the modal
-var modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
+//Export Modal
+$('#exportButton').click(function(){
+    document.getElementById('exportModal').style.display = "block";
+});
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
+$('.close').click(function() {
+    document.getElementById('exportModal').style.display = "none";
+});
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+$(window).click(function(event) {
+    if (event.target == document.getElementById('exportModal')) {
+        document.getElementById('exportModal').style.display = "none";
     }
-}
+});
+
+//Export Modal
+$('#newCanvasButton').click(function(){
+    document.getElementById('newCanvasModal').style.display = "block";
+});
+
+// When the user clicks on <span> (x), close the modal
+$('.close').click(function() {
+    document.getElementById('newCanvasModal').style.display = "none";
+});
+
+// When the user clicks anywhere outside of the modal, close it
+$(window).click(function(event) {
+    if (event.target == document.getElementById('newCanvasModal')) {
+        document.getElementById('newCanvasModal').style.display = "none";
+    }
+});
+
+$('.form').submit(function(e) {
+    e.preventDefault();
+});

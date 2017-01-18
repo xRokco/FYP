@@ -45,7 +45,7 @@
                         <div id="fileMenu" class="popover">
                             <ul class="popover-list">
                                 <li class="popover-item">
-                                    <a class="popover-link" href="#grid">New</a>
+                                    <a class="popover-link" href="javascript:void(0)" id="newCanvasButton">New</a>
                                 </li>
                                 <li class="popover-item">
                                     <a class="popover-link" href="#grid">Open</a>
@@ -54,7 +54,7 @@
                                     <a class="popover-link" href="#grid">Save</a>
                                 </li>
                                 <li class="popover-item">
-                                    <a href="javascript:void(0)" class="popover-link" id="myBtn">Export</a>
+                                    <a href="javascript:void(0)" class="popover-link" id="exportButton">Export</a>
                                 </li>
                             </ul>
                         </div>
@@ -146,13 +146,11 @@
 
         
             <div id="canvasWrapper">
-                <canvas id="c" width="800" height="500" style="border:1px solid silver"></canvas>
+                <canvas id="c" style="border:1px solid silver"></canvas>
             </div>
         </div>
 
-       
-
-        <div id="myModal" class="modal">
+        <div id="exportModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
                 <!--<div class="modal-close-icon">-->
@@ -166,6 +164,27 @@
                 </ul>
 
                 <pre><code id="json"></code></pre>
+            </div>
+        </div>
+
+        <div id="newCanvasModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--<div class="modal-close-icon">-->
+                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
+                <h4>New canvas...</h4>
+                <form class="form">
+                    <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
+                        <div class="six columns">
+                            <label for="width">Width: </label> <input type="number" name="width" id="width"><br>
+                        </div>
+                        <div class="six columns">
+                            <label for="height">Height: </label><input type="number" name="height" id="height"><br>
+                        </div>
+                    </div>
+
+                    <input class="button-primary" onclick="newCanvas(document.getElementById('width').value,document.getElementById('height').value)" value="Create" type="submit">
+                </form>
             </div>
         </div>
 
