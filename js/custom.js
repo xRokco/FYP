@@ -169,7 +169,7 @@ canvas.setHeight(500);
 canvas.setWidth(800);
 canvas.renderAll();
 
-function newCanvas(width, height) {
+function newCanvas(width, height, image) {
     canvas.clear()
     canvas.backgroundColor="white";
     fabric.Object.prototype.selectable = false;
@@ -215,10 +215,6 @@ var myAppModule = (function () {
     };
 
     var onloadImage = function () {
-        //cCanvas = new fabric.Canvas('myCanvas');
-        //canvas.setWidth(img.width);
-        //canvas.setHeight(img.height);
-
         cImg = new fabric.Image(img, {
             id: 'image',
             left: 0,
@@ -226,9 +222,16 @@ var myAppModule = (function () {
             angle: 0
         });
 
-        canvas.add(cImg);
-        updateLayers();
-        $('#select-mode').click();
+        if(canvas.background) {
+            canvas.setWidth(img.width);
+            canvas.setHeight(img.height);
+            canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
+            canvas.background = false;
+        } else {
+            canvas.add(cImg);
+            updateLayers();
+            $('#select-mode').click();
+        }
     };
 
     var onloadFile = function (e) {
@@ -263,8 +266,26 @@ function handleFileSelect(evt) {
     }
 }
 
+function handleFileSelect2(evt) {
+    var files = evt.target.files;
+    var output = [];
+    canvas.background = true;
+    if (!files[0].type.match('image.*')) {
+        return;
+    }
+
+    var reader = new FileReader();
+
+    myAppModule.init(files[0], reader);
+
+    reader.onload = myAppModule.OnloadFile;
+
+    reader.readAsDataURL(files[0]);
+}
+
 $(document).ready(function(){
     document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
+    document.getElementById("background").addEventListener('change', handleFileSelect2, false);
     var divPos = {};
     var offset = $("#c").offset();
     var ctrlDown = false;
