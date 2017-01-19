@@ -49,7 +49,7 @@
                                 </li>
                                 <li class="popover-item">
                                     <label for="background">
-                                        <p class="popover-link" href="#">Open</p>
+                                        <p class="popover-link" href="javascript:void(0)">Open</p>
                                     </label>
                                     <input id="background" type="file"/>
                                 </li>
@@ -105,8 +105,8 @@
                 <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png">
                 <img id="circle-mode" class="tool" src="images/tools/circle.png">
                 <img id="select-mode" class="tool" src="images/tools/select.png">
-                <img class="tool" onclick="canvas.getActiveObject().remove()" src="images/tools/pencil.png">
-                <img class="tool" onclick="canvas.getActiveObject().add()" src="images/tools/fill.png">
+                <img id="text-mode" class="tool" src="images/tools/pencil.png">
+                <img class="tool" src="images/tools/fill.png">
                 <img class="tool" src="images/tools/image.png">
                 <img class="tool" src="images/tools/fill.png">
                 <img class="tool" src="images/tools/pencil.png">
@@ -124,6 +124,9 @@
                     <input type="range" value="10" min="0" max="150" id="shape-line-width"><br>
                     <label for="shape-fill">Fill:</label>
                     <input type="checkbox" id="shape-fill"/><br/>
+                </div>
+                <div style="display: none;" id="text-mode-options" class="options">
+                    <label for="text">Text:</label><input type="text" name="text" id="text">
                 </div>
             </div>
 
@@ -177,12 +180,20 @@
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>New canvas...</h4>
                 <form class="form">
-                    <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
+                    <div class="row">
                         <div class="six columns">
                             <label for="width">Width: </label> <input type="number" name="width" id="width"><br>
                         </div>
                         <div class="six columns">
                             <label for="height">Height: </label><input type="number" name="height" id="height"><br>
+                        </div>
+                    </div>
+                    <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
+                        <div class="six columns">
+                            <label for="bgcolour">Background colour: </label> <input type="text" name="bgcolour" id="bgcolour">
+                        </div>
+                        <div class="six columns">
+                            <label for="transparent">Transparent background: </label><input type="checkbox" name="transparent" id="transparent">
                         </div>
                     </div>
 

@@ -31,6 +31,9 @@ $(document).ready(function() {
         $("#hvalue").val(Math.round(h * 100) / 100);
         $("#svalue").val(Math.round(s * 100) / 100);
         $("#lvalue").val(Math.round(l * 100) / 100);
+        if(document.getElementById('newCanvasModal').style.display != "none"){
+            $('#bgcolour').val($.farbtastic('#colorpicker').color);
+        }
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
 
@@ -48,6 +51,7 @@ $(document).ready(function() {
         hexb = ("00" + b.toString(16)).substr(-2);
 
         $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
+        $('#bgcolour').val($.farbtastic('#colorpicker').color);
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
 
@@ -62,6 +66,7 @@ $(document).ready(function() {
 
         $.farbtastic('#colorpicker').setHSL([h,s,l]);
         console.log($.farbtastic('#colorpicker').hsl);
+        $('#bgcolour').val($.farbtastic('#colorpicker').color);
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
 
@@ -104,7 +109,6 @@ function hideOptions() {
     document.getElementById("drawing-mode-options").style.display = 'none';
     document.getElementById("shape-mode-options").style.display = 'none';
     fabric.Object.prototype.selectable = false;
-    //document.getElementById("circle-mode-options").style.display = 'none';
 }
 
 function updateLayers() {
@@ -169,9 +173,21 @@ canvas.setHeight(500);
 canvas.setWidth(800);
 canvas.renderAll();
 
-function newCanvas(width, height, image) {
+function newCanvas(width, height) {
+    width = width || canvas.width;
+    height = height || canvas.height;
+    bg = canvas.backgroundColor
     canvas.clear()
-    canvas.backgroundColor="white";
+    if(document.getElementById('transparent').checked){
+        canvas.backgroundColor=null;
+    } else {
+        if(document.getElementById('bgcolour').value!=''){
+            canvas.backgroundColor=document.getElementById('bgcolour').value;
+        } else {
+            canvas.backgroundColor = bg;
+        }
+    }
+    
     fabric.Object.prototype.selectable = false;
     canvas.setHeight(height);
     canvas.setWidth(width);
@@ -327,6 +343,16 @@ $(document).ready(function(){
         canvas.circleDrawing = true;
     });
 
+    $('#text-mode').click(function () {
+        console.log("text mode clicked");
+
+        hideOptions();
+        document.getElementById("text-mode-options").style.display = '';
+        canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
+        canvas.textDrawing = true;
+    });
+
     //Setting the mouse events
     canvas.on('mouse:down',function(event){   
         //Defining the procedure
@@ -407,6 +433,21 @@ $(document).ready(function(){
             obj[obj.length - 1].id = "line";
         }
 
+        if(canvas.textDrawing) {
+            console.log("adding");
+            var text = new fabric.Text('foo', { 
+                left: divPos.left, 
+                top: divPos.top
+            });
+            canvas.add(text);
+            canvas.setActiveObject(text);
+            console.log(canvas.getActiveObject());
+            canvas.textDrawing = false;
+            canvas.defaultCursor = "url('images/cursors/select.png'), auto";
+            canvas.hoverCursor = "url('images/cursors/select.png'), auto";
+            canvas.moveCursor = "url('images/cursors/select.png'), auto";
+        }
+
         updateLayers();
 
         if(canvas.rectDrawing) {
@@ -416,7 +457,14 @@ $(document).ready(function(){
         if(canvas.circleDrawing) {
             console.log("circle update");
         }
+
+        $('#select-mode').click();
     });
+
+    document.getElementById('text').onkeyup = function() {
+        canvas.getActiveObject().text = document.getElementById('text').value;
+        canvas.renderAll();
+    }
 
     //Select tool
     $('#select-mode').click(function(){
@@ -434,7 +482,12 @@ $(document).ready(function(){
                 canvas.getActiveObject().remove();
                 updateLayers();
             }
-        }
+        } else if(canvas.getActiveGroup()) {
+            if(event.keyCode == 127) {
+                canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+                updateLayers();
+            }
+        }        
     });
 
     $(document).bind('copy', function() {
@@ -479,6 +532,7 @@ $(window).click(function(event) {
 
 //Export Modal
 $('#newCanvasButton').click(function(){
+    document.getElementById('bgcolour').value='';
     document.getElementById('newCanvasModal').style.display = "block";
 });
 

@@ -3,6 +3,9 @@
   margin-right: auto;
   margin-top: 50px;
   width: 800px;
+  background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
 .navbar-list {
@@ -117,7 +120,7 @@ html {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    z-index: 5; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -150,11 +153,15 @@ html {
 }
 
 .popover{
-  z-index: 999;
+  z-index: 4;
 }
 
 .drag {
-  z-index: 998;
+  z-index: 3;
+}
+
+.colorwrapper {
+  z-index: 6;
 }
 
 input[type="file"] {
@@ -176,7 +183,7 @@ input[type="file"] {
   width: 100%;
   height: 6.5rem;
   background: #fff;
-  z-index: 99;
+  z-index: 2;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
