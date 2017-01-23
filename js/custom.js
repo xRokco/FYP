@@ -320,6 +320,7 @@ $(document).ready(function(){
         //Declaring the variables
         canvas.isMouseDown=false;
         var refRect;
+        canvas.selectionColor = "rgba(0,0,0,0)";
 
         
         document.getElementById("shape-mode-options").style.display = '';
@@ -443,9 +444,6 @@ $(document).ready(function(){
             canvas.setActiveObject(text);
             console.log(canvas.getActiveObject());
             canvas.textDrawing = false;
-            canvas.defaultCursor = "url('images/cursors/select.png'), auto";
-            canvas.hoverCursor = "url('images/cursors/select.png'), auto";
-            canvas.moveCursor = "url('images/cursors/select.png'), auto";
         }
 
         updateLayers();
@@ -461,10 +459,10 @@ $(document).ready(function(){
         $('#select-mode').click();
     });
 
-    document.getElementById('text').onkeyup = function() {
+    $('#text').on('change keydown paste input', function() {
         canvas.getActiveObject().text = document.getElementById('text').value;
         canvas.renderAll();
-    }
+    });
 
     //Select tool
     $('#select-mode').click(function(){
@@ -492,23 +490,43 @@ $(document).ready(function(){
 
     $(document).bind('copy', function() {
         console.log('copied')
-        canvas.clipboard = canvas.getActiveObject();
+        if(canvas.getActiveObject()) {
+            canvas.clipboard = canvas.getActiveObject();
+        } else if(canvas.getActiveGroup()) {
+            canvas.clipboard = canvas.getActiveGroup();
+        }
     }); 
 
     $(document).bind('paste', function() {
-        console.log('pasted')
-        var object = fabric.util.object.clone(canvas.clipboard);
-        object.set("top", object.top+15);
-        object.set("left", object.left+15);
-        canvas.add(object);
-        updateLayers();
+        if(canvas.getActiveObject()) {
+            console.log('pasted')
+            var object = fabric.util.object.clone(canvas.clipboard);
+            object.set("top", object.top+15);
+            object.set("left", object.left+15);
+            canvas.add(object);
+            updateLayers();
+        } else if(canvas.getActiveGroup()) {
+            canvas.clipboard.forEachObject(function(o) {
+                var object = fabric.util.object.clone(o);
+                object.set("top", object.top+15);
+                object.set("left", object.left+15);
+                canvas.add(object);
+                updateLayers();
+            })
+        }
     });
 
     $(document).bind('cut', function() {
         console.log('cut')
-        canvas.clipboard = canvas.getActiveObject();
-        canvas.getActiveObject().remove();
-        updateLayers();
+        if(canvas.getActiveObject()) {
+            canvas.clipboard = canvas.getActiveObject();
+            canvas.getActiveObject().remove();
+            updateLayers();
+        } else if(canvas.getActiveGroup()) {
+            canvas.clipboard = canvas.getActiveGroup();
+            canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+            updateLayers();
+        }
     });
 
 });

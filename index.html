@@ -97,15 +97,15 @@
         </header>
         <div id="mask">
             <div class="tools drag">
-                <img id="drawing-mode" class="tool" src="images/tools/pencil.png">
-                <label for="selectFile">
+                <img id="drawing-mode" class="tool" src="images/tools/pencil.png" title="brush tool">
+                <label for="selectFile" title="image upload">
                     <img class="tool" onclick="hideOptions()" src="images/tools/image.png"/>
                 </label>
                 <input id="selectFile" type="file"/>
-                <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png">
-                <img id="circle-mode" class="tool" src="images/tools/circle.png">
-                <img id="select-mode" class="tool" src="images/tools/select.png">
-                <img id="text-mode" class="tool" src="images/tools/pencil.png">
+                <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png" title="rectangle draw tool">
+                <img id="circle-mode" class="tool" src="images/tools/circle.png" title="circle draw tool">
+                <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
+                <img id="text-mode" class="tool" src="images/tools/pencil.png" title="text tool">
                 <img class="tool" src="images/tools/fill.png">
                 <img class="tool" src="images/tools/image.png">
                 <img class="tool" src="images/tools/fill.png">
@@ -163,9 +163,9 @@
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Export as...</h4>
                 <ul>
-                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'png' }))"">PNG</a></li>
-                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'jpeg' }))"">JPG</a></li>
-                    <li><a href="javascript:void(0)" onclick="document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)">JSON</a></li>
+                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'png' }))"">PNG</a> - This format is capable of displaying transparency, and is good for images with text or other fine details, but will result in larger file sizes.</li>
+                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'jpeg' }))"">JPG</a> - This format is good for photos or images without fine details. Any transparent areas will be made black, though.</li>
+                    <li><a href="javascript:void(0)" onclick="document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)">JSON</a> - This is a specially formatted text file which allows you to save your image editing progress to pick it up later.</li>
                     <li><a onclick="">SVG</a></li>
                 </ul>
 
