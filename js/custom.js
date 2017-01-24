@@ -365,6 +365,10 @@ $(document).ready(function(){
             var fill = '';
         }
 
+        startPointLeft = divPos.left;
+        startPointTop = divPos.top;
+        //canvas.ellipse = true;
+
         //Getting yhe mouse Co-ordinates
         //Creating the rectangle object
         if(canvas.rectDrawing) {
@@ -378,21 +382,38 @@ $(document).ready(function(){
                 strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                 fill:fill
             });
-                
+            
             canvas.add(rect);
             refRect=rect;  //**Reference of rectangle object
         }
 
         if(canvas.circleDrawing) {
-            var circle = new fabric.Circle({
-                id: 'circle',
-                left:divPos.left,
-                top:divPos.top,                
-                radius:6,
-                stroke: $.farbtastic('#colorpicker').color,
-                strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
-                fill:fill
-             });
+            if(document.getElementById('ellipse').checked){
+                circle = new fabric.Ellipse({
+                    id: 'ellipse',
+                    left: startPointLeft,
+                    top: startPointTop,
+                    originX:divPos.left,
+                    originY:divPos.top,
+                    rx: divPos.left-startPointLeft,
+                    ry: divPos.top-startPointTop,
+                    angle: 0,
+                    fill: '',
+                    stroke: $.farbtastic('#colorpicker').color,
+                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                    fill:fill
+                });
+            } else {
+                var circle = new fabric.Circle({
+                    id: 'circle',
+                    left:divPos.left,
+                    top:divPos.top,                
+                    radius:6,
+                    stroke: $.farbtastic('#colorpicker').color,
+                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                    fill:fill
+                 });
+            }
             
             canvas.add(circle);
             refCircle=circle;  //**Reference of rectangle object
@@ -410,8 +431,19 @@ $(document).ready(function(){
             var posX=divPos.left;
             var posY=divPos.top;
 
-            refRect.setWidth(Math.abs((posX-refRect.get('left'))));
-            refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+            if(startPointLeft > posX) {
+                refRect.setWidth(Math.abs((posX-startPointLeft)));
+                refRect.left = posX;
+            } else {
+                refRect.setWidth(Math.abs((posX-refRect.get('left'))));
+            }
+
+            if(startPointTop > posY) {
+                refRect.setHeight(Math.abs((posY-startPointTop)));
+                refRect.top = posY;
+            } else {
+                refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+            }
             refRect.setCoords();
             canvas.renderAll(); 
         }
@@ -420,7 +452,51 @@ $(document).ready(function(){
             var posX=divPos.left;
             var posY=divPos.top;
 
-            refCircle.set('radius',Math.abs((posX-refCircle.get('left'))));
+            if(document.getElementById('ellipse').checked) {
+                var rx = Math.abs(startPointLeft - posX)/2;
+                var ry = Math.abs(startPointTop - posY)/2;
+                refCircle.set({ rx: rx, ry: ry});
+            } else {
+                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
+                refCircle.set({ radius: radius});
+            }
+            
+            if(startPointLeft>posX){
+                refCircle.set({originX: 'right' });
+            } else {
+                refCircle.set({originX: 'left' });
+            }
+            if(startPointTop>posY){
+                refCircle.set({originY: 'bottom'  });
+            } else {
+                refCircle.set({originY: 'top'  });
+            }
+            canvas.renderAll();
+
+            //if(startPointLeft > posX || startPointTop > posY) {
+            //    if(Math.abs(startPointLeft - posX) > Math.abs(startPointTop - posY)) {
+             //       refCircle.left = posX;
+            //        refCircle.top = Math.abs(startPointTop - Math.abs(startPointLeft-posX));
+            //        refCircle.set('radius',Math.abs((posX-startPointLeft))/1.57);
+            //        console.log("1");
+            //    } else if (Math.abs(startPointLeft - posX) < Math.abs(startPointTop - posY)) {
+            //        refCircle.top = posY;
+            //        refCircle.left = Math.abs(startPointLeft - Math.abs(startPointTop-posY));
+            //        refCircle.set('radius',Math.abs((posY-startPointTop))/1.57);
+            //        console.log("2");
+            //    }
+            //} else {
+            //    refCircle.set('radius',Math.abs((posX-refCircle.get('left')))/1.57);
+            //}
+
+            //if(startPointTop > posY) {
+                //refRect.setHeight(Math.abs((posY-startPointTop)));
+            //    refCircle.top = posY;
+            //    refCircle.set('radius',Math.abs((posY-startPointTop)));
+            //} else {
+            //    refCircle.set('radius',Math.abs((posY-refCircle.get('top'))));
+            //}
+            
             refCircle.setCoords();
             canvas.renderAll(); 
         }
