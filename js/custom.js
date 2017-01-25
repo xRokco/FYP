@@ -35,6 +35,7 @@ $(document).ready(function() {
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
+        $("#colorvalue").change();
     });
 
     $(".rgbvalue").change(function() {
@@ -53,6 +54,7 @@ $(document).ready(function() {
         $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
+        $("#colorvalue").change();
     });
 
     $(".hslvalue").change(function() {
@@ -68,6 +70,7 @@ $(document).ready(function() {
         console.log($.farbtastic('#colorpicker').hsl);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
+        $("#colorvalue").change();
     });
 
     // Variables
@@ -348,7 +351,6 @@ $(document).ready(function(){
         console.log("text mode clicked");
 
         hideOptions();
-        document.getElementById("text-mode-options").style.display = '';
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
         canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
         canvas.textDrawing = true;
@@ -367,7 +369,6 @@ $(document).ready(function(){
 
         startPointLeft = divPos.left;
         startPointTop = divPos.top;
-        //canvas.ellipse = true;
 
         //Getting yhe mouse Co-ordinates
         //Creating the rectangle object
@@ -432,6 +433,7 @@ $(document).ready(function(){
             var posY=divPos.top;
 
             if(document.getElementById('lock').checked){
+                refRect.id = 'square';
                 if(startPointLeft > posX) {
                     refRect.set({originX: 'right' });
                     refRect.setWidth(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));  
@@ -507,13 +509,16 @@ $(document).ready(function(){
 
         if(canvas.textDrawing) {
             console.log("adding");
-            var text = new fabric.Text('foo', { 
+            var text = new fabric.Text('text', {
+                id: 'text',
                 left: divPos.left, 
-                top: divPos.top
+                top: divPos.top,
+                fontFamily: "Raleway",
+                fill: $.farbtastic('#colorpicker').color
             });
             canvas.add(text);
             canvas.setActiveObject(text);
-            console.log(canvas.getActiveObject());
+            document.getElementById("text-mode-options").style.display = '';
             canvas.textDrawing = false;
         }
 
@@ -532,6 +537,28 @@ $(document).ready(function(){
 
     $('#text').on('change keydown paste input', function() {
         canvas.getActiveObject().text = document.getElementById('text').value;
+        if (document.getElementById('text').value == "") {
+            canvas.getActiveObject().id = "text";
+            updateLayers();
+        } else {
+            canvas.getActiveObject().id = document.getElementById('text').value;
+        }
+        updateLayers();
+        canvas.renderAll();
+    });
+
+    $('#font').on('change', function() {
+        console.log("font changed");
+        canvas.getActiveObject().fontFamily = this.value;
+        canvas.renderAll();
+    });
+
+    $('#colorvalue').change(function() {
+        if(canvas.getActiveObject().hasOwnProperty('text')){
+            canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
+        } else if (canvas.getActiveObject().id == 'circle' || canvas.getActiveObject().id == 'ellipse' || canvas.getActiveObject().id == 'square' || canvas.getActiveObject().id == 'rectangle') {
+            canvas.getActiveObject().stroke = $.farbtastic('#colorpicker').color;
+        }
         canvas.renderAll();
     });
 

@@ -92,9 +92,6 @@ html {
   float: left;
   line-height: normal;
   background-color: #EEE;
-}
-
-#layers {
   text-align: center;
   max-height: 300px;
   overflow: auto;
@@ -106,8 +103,11 @@ html {
 }
 
 #layers span {
+  display: inline-block;
   font-size: 1.2em;
   text-align: center;
+  max-width: 110px;
+  overflow-x: hidden;
 }
 
 #layers img {
