@@ -105,6 +105,7 @@ function hideOptions() {
     canvas.isDrawingMode = false;
     canvas.rectDrawing = false;
     canvas.circleDrawing = false;
+    canvas.selectionColor = "rgba(0,0,0,0)";
 
     document.getElementById("drawing-mode-options").style.display = 'none';
     document.getElementById("shape-mode-options").style.display = 'none';
@@ -305,6 +306,7 @@ $(document).ready(function(){
     var divPos = {};
     var offset = $("#c").offset();
     var ctrlDown = false;
+    canvas.selectionColor = "rgba(0,0,0,0)";
 
     $(document).mousemove(function(e){
         divPos = {
@@ -320,8 +322,6 @@ $(document).ready(function(){
         //Declaring the variables
         canvas.isMouseDown=false;
         var refRect;
-        canvas.selectionColor = "rgba(0,0,0,0)";
-
         
         document.getElementById("shape-mode-options").style.display = '';
         canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
@@ -388,7 +388,17 @@ $(document).ready(function(){
         }
 
         if(canvas.circleDrawing) {
-            if(document.getElementById('ellipse').checked){
+            if(document.getElementById('lock').checked){
+                var circle = new fabric.Circle({
+                    id: 'circle',
+                    left:divPos.left,
+                    top:divPos.top,                
+                    radius:6,
+                    stroke: $.farbtastic('#colorpicker').color,
+                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
+                    fill:fill
+                 });
+            } else {
                 circle = new fabric.Ellipse({
                     id: 'ellipse',
                     left: startPointLeft,
@@ -403,16 +413,6 @@ $(document).ready(function(){
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
                 });
-            } else {
-                var circle = new fabric.Circle({
-                    id: 'circle',
-                    left:divPos.left,
-                    top:divPos.top,                
-                    radius:6,
-                    stroke: $.farbtastic('#colorpicker').color,
-                    strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
-                    fill:fill
-                 });
             }
             
             canvas.add(circle);
@@ -431,18 +431,38 @@ $(document).ready(function(){
             var posX=divPos.left;
             var posY=divPos.top;
 
-            if(startPointLeft > posX) {
-                refRect.setWidth(Math.abs((posX-startPointLeft)));
-                refRect.left = posX;
-            } else {
-                refRect.setWidth(Math.abs((posX-refRect.get('left'))));
-            }
+            if(document.getElementById('lock').checked){
+                if(startPointLeft > posX) {
+                    refRect.set({originX: 'right' });
+                    refRect.setWidth(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));  
+                } else {
+                    refRect.set({originX: 'left' });
+                    refRect.setWidth(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));  
+                }
 
-            if(startPointTop > posY) {
-                refRect.setHeight(Math.abs((posY-startPointTop)));
-                refRect.top = posY;
+                if(startPointTop > posY) {
+                    refRect.set({originY: 'bottom' });
+                    refRect.setHeight(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));
+                } else {
+                    refRect.set({originY: 'top' });
+                    refRect.setHeight(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));
+                }
             } else {
-                refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+                if(startPointLeft > posX) {
+                    refRect.set({originX: 'right' });
+                    refRect.setWidth(Math.abs((posX-startPointLeft)));
+                } else {
+                    refRect.set({originX: 'left' });
+                    refRect.setWidth(Math.abs((posX-refRect.get('left'))));
+                }
+
+                if(startPointTop > posY) {
+                    refRect.set({originY: 'bottom' });
+                    refRect.setHeight(Math.abs(posY-startPointTop));
+                } else {
+                    refRect.set({originY: 'top' });
+                    refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+                }
             }
             refRect.setCoords();
             canvas.renderAll(); 
@@ -452,13 +472,13 @@ $(document).ready(function(){
             var posX=divPos.left;
             var posY=divPos.top;
 
-            if(document.getElementById('ellipse').checked) {
+            if(document.getElementById('lock').checked) {
+                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
+                refCircle.set({ radius: radius});
+            } else {
                 var rx = Math.abs(startPointLeft - posX)/2;
                 var ry = Math.abs(startPointTop - posY)/2;
                 refCircle.set({ rx: rx, ry: ry});
-            } else {
-                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
-                refCircle.set({ radius: radius});
             }
             
             if(startPointLeft>posX){
@@ -471,31 +491,6 @@ $(document).ready(function(){
             } else {
                 refCircle.set({originY: 'top'  });
             }
-            canvas.renderAll();
-
-            //if(startPointLeft > posX || startPointTop > posY) {
-            //    if(Math.abs(startPointLeft - posX) > Math.abs(startPointTop - posY)) {
-             //       refCircle.left = posX;
-            //        refCircle.top = Math.abs(startPointTop - Math.abs(startPointLeft-posX));
-            //        refCircle.set('radius',Math.abs((posX-startPointLeft))/1.57);
-            //        console.log("1");
-            //    } else if (Math.abs(startPointLeft - posX) < Math.abs(startPointTop - posY)) {
-            //        refCircle.top = posY;
-            //        refCircle.left = Math.abs(startPointLeft - Math.abs(startPointTop-posY));
-            //        refCircle.set('radius',Math.abs((posY-startPointTop))/1.57);
-            //        console.log("2");
-            //    }
-            //} else {
-            //    refCircle.set('radius',Math.abs((posX-refCircle.get('left')))/1.57);
-            //}
-
-            //if(startPointTop > posY) {
-                //refRect.setHeight(Math.abs((posY-startPointTop)));
-            //    refCircle.top = posY;
-            //    refCircle.set('radius',Math.abs((posY-startPointTop)));
-            //} else {
-            //    refCircle.set('radius',Math.abs((posY-refCircle.get('top'))));
-            //}
             
             refCircle.setCoords();
             canvas.renderAll(); 
@@ -544,6 +539,7 @@ $(document).ready(function(){
     $('#select-mode').click(function(){
         console.log("select cilcked");
         hideOptions();
+        canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
         canvas.defaultCursor = "url('images/cursors/select.png'), auto";
         canvas.hoverCursor = "url('images/cursors/select.png'), auto";
         canvas.moveCursor = "url('images/cursors/select.png'), auto";
@@ -605,6 +601,7 @@ $(document).ready(function(){
         }
     });
 
+    $('#select-mode').click();
 });
 
 //Export Modal
