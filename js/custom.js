@@ -34,7 +34,6 @@ $(document).ready(function() {
         if(document.getElementById('newCanvasModal').style.display != "none"){
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }
-        canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
         $("#colorvalue").change();
     });
 
@@ -53,7 +52,6 @@ $(document).ready(function() {
 
         $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
         $("#colorvalue").change();
     });
 
@@ -69,7 +67,6 @@ $(document).ready(function() {
         $.farbtastic('#colorpicker').setHSL([h,s,l]);
         console.log($.farbtastic('#colorpicker').hsl);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
         $("#colorvalue").change();
     });
 
@@ -112,6 +109,7 @@ function hideOptions() {
 
     document.getElementById("drawing-mode-options").style.display = 'none';
     document.getElementById("shape-mode-options").style.display = 'none';
+    document.getElementById("text-mode-options").style.display = 'none';
     fabric.Object.prototype.selectable = false;
 }
 
@@ -197,6 +195,20 @@ function newCanvas(width, height) {
     canvas.setWidth(width);
     $('.close').click();
     document.getElementById('canvasWrapper').style.width = width + "px";
+}
+
+function getSelectedType() {
+    if (canvas.getActiveGroup()){
+        return "group";
+    } else if(canvas.getActiveObject()){
+        if (canvas.getActiveObject().hasOwnProperty('text')){
+            return "text";
+        } else {
+            return canvas.getActiveObject().id;
+        }
+    } else {
+        return null;
+    }
 }
 
 //Free drawing-mode
@@ -324,9 +336,10 @@ $(document).ready(function(){
         hideOptions();
         //Declaring the variables
         canvas.isMouseDown=false;
-        var refRect;
+        var refShape;
         
         document.getElementById("shape-mode-options").style.display = '';
+        document.getElementById("locklab").style.display = '';
         canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
         canvas.hoverCursor = "url('images/cursors/rectangle.png'), auto";
         canvas.rectDrawing = true;
@@ -338,10 +351,11 @@ $(document).ready(function(){
 
         //Declaring the variables
         canvas.isMouseDown=false;
-        var refCircle;
+        var refShape;
 
         hideOptions();
         document.getElementById("shape-mode-options").style.display = '';
+        document.getElementById("locklab").style.display = '';
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
         canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
         canvas.circleDrawing = true;
@@ -385,7 +399,7 @@ $(document).ready(function(){
             });
             
             canvas.add(rect);
-            refRect=rect;  //**Reference of rectangle object
+            refShape=rect;  //**Reference of rectangle object
         }
 
         if(canvas.circleDrawing) {
@@ -417,7 +431,7 @@ $(document).ready(function(){
             }
             
             canvas.add(circle);
-            refCircle=circle;  //**Reference of rectangle object
+            refShape=circle;  //**Reference of rectangle object
         }
     });
 
@@ -433,40 +447,40 @@ $(document).ready(function(){
             var posY=divPos.top;
 
             if(document.getElementById('lock').checked){
-                refRect.id = 'square';
+                refShape.id = 'square';
                 if(startPointLeft > posX) {
-                    refRect.set({originX: 'right' });
-                    refRect.setWidth(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));  
+                    refShape.set({originX: 'right' });
+                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
                 } else {
-                    refRect.set({originX: 'left' });
-                    refRect.setWidth(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));  
+                    refShape.set({originX: 'left' });
+                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
                 }
 
                 if(startPointTop > posY) {
-                    refRect.set({originY: 'bottom' });
-                    refRect.setHeight(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));
+                    refShape.set({originY: 'bottom' });
+                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
                 } else {
-                    refRect.set({originY: 'top' });
-                    refRect.setHeight(Math.max(Math.abs(posX-refRect.get('left')), Math.abs(posY-refRect.get('top'))));
+                    refShape.set({originY: 'top' });
+                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
                 }
             } else {
                 if(startPointLeft > posX) {
-                    refRect.set({originX: 'right' });
-                    refRect.setWidth(Math.abs((posX-startPointLeft)));
+                    refShape.set({originX: 'right' });
+                    refShape.setWidth(Math.abs((posX-startPointLeft)));
                 } else {
-                    refRect.set({originX: 'left' });
-                    refRect.setWidth(Math.abs((posX-refRect.get('left'))));
+                    refShape.set({originX: 'left' });
+                    refShape.setWidth(Math.abs((posX-refShape.get('left'))));
                 }
 
                 if(startPointTop > posY) {
-                    refRect.set({originY: 'bottom' });
-                    refRect.setHeight(Math.abs(posY-startPointTop));
+                    refShape.set({originY: 'bottom' });
+                    refShape.setHeight(Math.abs(posY-startPointTop));
                 } else {
-                    refRect.set({originY: 'top' });
-                    refRect.setHeight(Math.abs((posY-refRect.get('top'))));
+                    refShape.set({originY: 'top' });
+                    refShape.setHeight(Math.abs((posY-refShape.get('top'))));
                 }
             }
-            refRect.setCoords();
+            refShape.setCoords();
             canvas.renderAll(); 
         }
 
@@ -476,25 +490,25 @@ $(document).ready(function(){
 
             if(document.getElementById('lock').checked) {
                 var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
-                refCircle.set({ radius: radius});
+                refShape.set({ radius: radius});
             } else {
                 var rx = Math.abs(startPointLeft - posX)/2;
                 var ry = Math.abs(startPointTop - posY)/2;
-                refCircle.set({ rx: rx, ry: ry});
+                refShape.set({ rx: rx, ry: ry});
             }
             
             if(startPointLeft>posX){
-                refCircle.set({originX: 'right' });
+                refShape.set({originX: 'right' });
             } else {
-                refCircle.set({originX: 'left' });
+                refShape.set({originX: 'left' });
             }
             if(startPointTop>posY){
-                refCircle.set({originY: 'bottom'  });
+                refShape.set({originY: 'bottom'  });
             } else {
-                refCircle.set({originY: 'top'  });
+                refShape.set({originY: 'top'  });
             }
             
-            refCircle.setCoords();
+            refShape.setCoords();
             canvas.renderAll(); 
         }
     });
@@ -522,17 +536,11 @@ $(document).ready(function(){
             canvas.textDrawing = false;
         }
 
+        if(canvas.circleDrawing || canvas.rectDrawing){
+            canvas.setActiveObject(refShape);    
+        }
+        
         updateLayers();
-
-        if(canvas.rectDrawing) {
-            console.log("rect update");
-        }
-
-        if(canvas.circleDrawing) {
-            console.log("circle update");
-        }
-
-        $('#select-mode').click();
     });
 
     $('#text').on('change keydown paste input', function() {
@@ -554,9 +562,9 @@ $(document).ready(function(){
     });
 
     $('#colorvalue').change(function() {
-        if(canvas.getActiveObject().hasOwnProperty('text')){
+        if(getSelectedType() == 'text'){
             canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
-        } else if (canvas.getActiveObject().id == 'circle' || canvas.getActiveObject().id == 'ellipse' || canvas.getActiveObject().id == 'square' || canvas.getActiveObject().id == 'rectangle') {
+        } else if (getSelectedType() != 'image') {
             canvas.getActiveObject().stroke = $.farbtastic('#colorpicker').color;
         }
         canvas.renderAll();
@@ -571,6 +579,17 @@ $(document).ready(function(){
         canvas.hoverCursor = "url('images/cursors/select.png'), auto";
         canvas.moveCursor = "url('images/cursors/select.png'), auto";
         fabric.Object.prototype.selectable = true; 
+    });
+
+    canvas.on('object:selected', function() {
+        if(getSelectedType() == 'text'){
+            hideOptions();
+            document.getElementById("text-mode-options").style.display = 'block';
+        } else if (getSelectedType() == 'rectangle' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
+            hideOptions();
+            document.getElementById("shape-mode-options").style.display = 'block';
+            document.getElementById("locklab").style.display = 'none';
+        }
     });
 
     $(document).keypress(function( event ) {
