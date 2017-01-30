@@ -564,7 +564,7 @@ $(document).ready(function(){
     $('#colorvalue').change(function() {
         if(getSelectedType() == 'text'){
             canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
-        } else if (getSelectedType() != 'image') {
+        } else if (getSelectedType() != 'image' && getSelectedType() != null) {
             canvas.getActiveObject().stroke = $.farbtastic('#colorpicker').color;
         }
         canvas.renderAll();
@@ -589,6 +589,26 @@ $(document).ready(function(){
             hideOptions();
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
+        }
+    });
+
+    $('#rasterize').click(function(){
+        if(getSelectedType() != 'image'){
+            fabric.Image.fromURL(canvas.toDataURL({
+                format: 'png',
+                left: canvas.getActiveObject().left,
+                top: canvas.getActiveObject().top,
+                width: canvas.getActiveObject().width + canvas.getActiveObject().strokeWidth,
+                height: canvas.getActiveObject().height + canvas.getActiveObject().strokeWidth
+            }), function(oImg){
+                oImg.id = 'rasterized';
+                oImg.left = canvas.getActiveObject().left;
+                oImg.top = canvas.getActiveObject().top;
+                canvas.add(oImg);
+                canvas.getActiveObject().remove();
+                canvas.renderAll();
+                updateLayers();
+            });
         }
     });
 
