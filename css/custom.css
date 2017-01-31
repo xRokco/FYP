@@ -48,6 +48,10 @@ html {
   background-color: #EEE;
 }
 
+.toolOptions textarea, .toolOptions select {
+  width: 145px;
+}
+
 .tool {
   margin: 5px;
   cursor: pointer;
@@ -85,7 +89,7 @@ html {
   border: 1px solid silver;
   border-top: 20px solid silver;
   min-width: 200px;
-  min-height: 80px; 
+  min-height: 108px; 
   margin-left: -155px;
   margin-right: 5px;
   top: 500px;
@@ -107,7 +111,9 @@ html {
   font-size: 1.2em;
   text-align: center;
   max-width: 110px;
-  overflow-x: hidden;
+  height: 25px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 #layers img {

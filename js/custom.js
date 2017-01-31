@@ -115,7 +115,6 @@ function hideOptions() {
 
 function updateLayers() {
     var obj = canvas.getObjects();
-    console.log(obj);
     var text = "";
     for(i=obj.length - 1; i >= 0;i--){
         if(i == obj.length - 1){
@@ -213,7 +212,7 @@ function getSelectedType() {
 
 //Free drawing-mode
 document.getElementById("drawing-mode").onclick = function() {
-    console.log("drawing cilcked");
+    console.log("entering line drawing");
     hideOptions();
     canvas.isDrawingMode = true;
     canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
@@ -332,7 +331,7 @@ $(document).ready(function(){
 
     //Rectangle drawing
     $('#rectangle-mode').click(function(){
-        console.log("Button 2 cilcked");
+        console.log("entering rectangle mode");
         hideOptions();
         //Declaring the variables
         canvas.isMouseDown=false;
@@ -347,7 +346,7 @@ $(document).ready(function(){
 
     //Circle Drawing
     $('#circle-mode').click(function(){
-        console.log("Button 2 cilcked");
+        console.log("entering circle mode");
 
         //Declaring the variables
         canvas.isMouseDown=false;
@@ -362,7 +361,7 @@ $(document).ready(function(){
     });
 
     $('#text-mode').click(function () {
-        console.log("text mode clicked");
+        console.log("entering text mode");
 
         hideOptions();
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
@@ -514,7 +513,6 @@ $(document).ready(function(){
     });
 
     canvas.on('mouse:up',function(){
-        //alert("mouse up!");
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
             var obj = canvas.getObjects()
@@ -522,7 +520,7 @@ $(document).ready(function(){
         }
 
         if(canvas.textDrawing) {
-            console.log("adding");
+            console.log("adding text");
             var text = new fabric.Text('text', {
                 id: 'text',
                 left: divPos.left, 
@@ -532,6 +530,7 @@ $(document).ready(function(){
             });
             canvas.add(text);
             canvas.setActiveObject(text);
+            $('#select-mode').click();
             document.getElementById("text-mode-options").style.display = '';
             canvas.textDrawing = false;
         }
@@ -544,12 +543,13 @@ $(document).ready(function(){
     });
 
     $('#text').on('change keydown paste input', function() {
+        console.log("text changed");
         canvas.getActiveObject().text = document.getElementById('text').value;
         if (document.getElementById('text').value == "") {
             canvas.getActiveObject().id = "text";
             updateLayers();
         } else {
-            canvas.getActiveObject().id = document.getElementById('text').value;
+            canvas.getActiveObject().id = document.getElementById('text').value.replace(/(\r\n|\n|\r)/gm," ");
         }
         updateLayers();
         canvas.renderAll();
@@ -562,17 +562,40 @@ $(document).ready(function(){
     });
 
     $('#colorvalue').change(function() {
+        console.log("object colour changed");
         if(getSelectedType() == 'text'){
             canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
         } else if (getSelectedType() != 'image' && getSelectedType() != null) {
+            if(document.getElementById('shape-fill').checked) {
+                canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
+            }
             canvas.getActiveObject().stroke = $.farbtastic('#colorpicker').color;
         }
         canvas.renderAll();
     });
 
+    $('#shape-line-width').on('input', function(){
+        if(getSelectedType() != 'text' && getSelectedType() != 'image'){
+            canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("shape-line-width").value, 10) || 1;
+            canvas.renderAll();
+        }
+    });
+
+    $('#shape-fill').change(function(){
+        if(getSelectedType() != 'text' && getSelectedType() != 'image'){
+            if(document.getElementById('shape-fill').checked) {
+                var fill = $.farbtastic('#colorpicker').color;
+            } else {
+                var fill = '';
+            }
+            canvas.getActiveObject().fill = fill;
+            canvas.renderAll();
+        }
+    });
+
     //Select tool
     $('#select-mode').click(function(){
-        console.log("select cilcked");
+        console.log("entering select");
         hideOptions();
         canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
         canvas.defaultCursor = "url('images/cursors/select.png'), auto";
@@ -583,12 +606,19 @@ $(document).ready(function(){
 
     canvas.on('object:selected', function() {
         if(getSelectedType() == 'text'){
+            $('#select-mode').click();
             hideOptions();
             document.getElementById("text-mode-options").style.display = 'block';
         } else if (getSelectedType() == 'rectangle' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
-            hideOptions();
+            $('#select-mode').click();
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
+        }
+    });
+
+    canvas.on('selection:cleared', function() {
+        if( !canvas.isDrawingMode ){
+            $('#select-mode').click();
         }
     });
 
