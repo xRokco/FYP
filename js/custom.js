@@ -623,22 +623,45 @@ $(document).ready(function(){
     });
 
     $('#rasterize').click(function(){
-        if(getSelectedType() != 'image'){
+        if(canvas.getActiveObject() || canvas.getActiveGroup()) {
+            var obj = canvas.getObjects();
+            var keepHidden = [];
+            console.log(obj);
+            for(i=obj.length - 1; i >= 0;i--){
+                if(obj[i].active == false){
+                    if(obj[i].visible == false){
+                        keepHidden.push(obj[i]);
+                    } else {
+                        obj[i].visible = false;
+                    }
+                }
+            }
+            canvas.renderAll();
+            
             fabric.Image.fromURL(canvas.toDataURL({
                 format: 'png',
-                left: canvas.getActiveObject().left,
-                top: canvas.getActiveObject().top,
-                width: canvas.getActiveObject().width + canvas.getActiveObject().strokeWidth,
-                height: canvas.getActiveObject().height + canvas.getActiveObject().strokeWidth
+                left: 0,
+                top: 0,
+                width: canvas.width,
+                height: canvas.height
             }), function(oImg){
-                oImg.id = 'rasterized';
-                oImg.left = canvas.getActiveObject().left;
-                oImg.top = canvas.getActiveObject().top;
-                canvas.add(oImg);
-                canvas.getActiveObject().remove();
-                canvas.renderAll();
-                updateLayers();
+                canvas.setBackgroundImage(oImg, canvas.renderAll.bind(canvas));
             });
+            if(canvas.getActiveObject()) {
+                canvas.getActiveObject().remove();
+            } else if(canvas.getActiveGroup()) {
+                canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+            }
+            var obj = canvas.getObjects();
+            for(i=obj.length - 1; i >= 0;i--){
+                if(!keepHidden.includes(obj[i])){
+                    obj[i].visible = true;
+                }
+            }
+            canvas.renderAll();
+            updateLayers();
+        } else {
+            alert('You need to select an object or group of objects to collapse them to the background')
         }
     });
 
