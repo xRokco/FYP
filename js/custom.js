@@ -105,6 +105,7 @@ function hideOptions() {
     canvas.isDrawingMode = false;
     canvas.rectDrawing = false;
     canvas.circleDrawing = false;
+    canvas.textDrawing = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
 
     document.getElementById("drawing-mode-options").style.display = 'none';
@@ -117,6 +118,10 @@ function updateLayers() {
     var obj = canvas.getObjects();
     var text = "";
     for(i=obj.length - 1; i >= 0;i--){
+        if(obj[i].id == "erase"){
+            canvas.sendToBack(canvas.item(i));
+            //continue;
+        }
         if(i == obj.length - 1){
             var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
         } else {
@@ -172,7 +177,9 @@ canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
 canvas.setHeight(500);
 canvas.setWidth(800);
+//canvas.enableRetinaScaling = false;
 canvas.renderAll();
+console.log(canvas);
 
 function newCanvas(width, height) {
     width = width || canvas.width;
@@ -321,6 +328,7 @@ $(document).ready(function(){
     var offset = $("#c").offset();
     var ctrlDown = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
+    var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
 
     $(document).mousemove(function(e){
         divPos = {
@@ -516,7 +524,11 @@ $(document).ready(function(){
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
             var obj = canvas.getObjects()
-            obj[obj.length - 1].id = "line";
+            if(canvas.eraser == true){
+                obj[obj.length - 1].id = "erase";
+            } else {
+                obj[obj.length - 1].id = "line";
+            }
         }
 
         if(canvas.textDrawing) {
@@ -604,6 +616,52 @@ $(document).ready(function(){
         fabric.Object.prototype.selectable = true; 
     });
 
+    $('#erase-mode').click(function() {
+        hideOptions();
+        console.log("entering erase mode"); 
+
+        canvas.eraser = true;
+        canvas.isDrawingMode = true;
+        canvas.freeDrawingBrush.color = canvas.backgroundColor;
+        canvas.freeDrawingBrush.width = 10;
+        // define a custom fillCircle method
+        /*context.fillCircle = function(x, y, radius, fillColor) {
+            this.fillStyle = fillColor;
+            this.beginPath();
+            this.moveTo(x, y);
+            this.arc(x, y, radius, 0, Math.PI * 2, false);
+            this.fill();
+        };
+
+        //context.clearTo = function(fillColor) {
+        //    context.fillStyle = fillColor;
+            //context.fillRect(0, 0, width, height);
+        //};
+        //context.clearTo("#ddd");
+
+        // bind mouse events
+        canvas.on('mouse:move',function(e){
+            if (!canvas.isDrawing) {
+               return;
+            }
+            console.log("moving");
+            var x = e.pageX - this.offsetLeft;
+            var y = e.pageY - this.offsetTop;
+            var radius = 10; // or whatever
+            var fillColor = 'red';
+            //context.globalCompositeOperation = 'destination-out';
+            context.fillCircle(x, y, radius, fillColor);
+        });
+
+        canvas.on('mouse:down',function(){
+            canvas.isDrawing = true;
+        });
+
+        canvas.on('mouse:up',function(){
+            canvas.isDrawing = false;
+        });*/
+    });
+
     canvas.on('object:selected', function() {
         if(getSelectedType() == 'text'){
             $('#select-mode').click();
@@ -624,9 +682,9 @@ $(document).ready(function(){
 
     $('#rasterize').click(function(){
         if(canvas.getActiveObject() || canvas.getActiveGroup()) {
+            console.log("attempting to collapse");
             var obj = canvas.getObjects();
             var keepHidden = [];
-            console.log(obj);
             for(i=obj.length - 1; i >= 0;i--){
                 if(obj[i].active == false){
                     if(obj[i].visible == false){
@@ -638,13 +696,22 @@ $(document).ready(function(){
             }
             canvas.renderAll();
             
-            fabric.Image.fromURL(canvas.toDataURL({
+            var url = canvas.toDataURL({
                 format: 'png',
                 left: 0,
                 top: 0,
                 width: canvas.width,
-                height: canvas.height
-            }), function(oImg){
+                height: canvas.height,
+                multiplier: 1/window.devicePixelRatio
+            });
+
+            //var tempImg = new Image();
+            //tempImg.setAttribute('crossOrigin', 'anonymous'); //set this attribute to get around cross origin canvas security stuff.
+            //tempImg.src = url;
+            //context.drawImage(tempImg,0,0);
+            //console.log(context);
+
+            fabric.Image.fromURL(url, function(oImg){
                 canvas.setBackgroundImage(oImg, canvas.renderAll.bind(canvas));
             });
             if(canvas.getActiveObject()) {
@@ -658,6 +725,7 @@ $(document).ready(function(){
                     obj[i].visible = true;
                 }
             }
+            canvas.deactivateAll();
             canvas.renderAll();
             updateLayers();
         } else {
@@ -665,8 +733,28 @@ $(document).ready(function(){
         }
     });
 
-    $(document).keypress(function( event ) {
+    $(document).on('keydown keypress', function( event ) {
         if(canvas.getActiveObject()) {
+            if(event.which == 37) {
+                var obj = canvas.getActiveObject();
+                obj.set("left", obj.left-1);
+                canvas.renderAll();
+            }
+            if(event.which == 38) {
+                var obj = canvas.getActiveObject();
+                obj.set("top", obj.top-1);
+                canvas.renderAll();
+            }
+            if(event.which == 39) {
+                var obj = canvas.getActiveObject();
+                obj.set("left", obj.left+1);
+                canvas.renderAll();
+            }
+            if(event.which == 40) {
+                var obj = canvas.getActiveObject();
+                obj.set("top", obj.top+1);
+                canvas.renderAll();
+            }
             if(event.keyCode == 127) {
                 canvas.getActiveObject().remove();
                 updateLayers();
