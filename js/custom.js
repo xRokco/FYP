@@ -329,7 +329,7 @@ $(document).ready(function(){
     var ctrlDown = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
     var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
-
+    var shiftDown = false;
     $(document).mousemove(function(e){
         divPos = {
             left: e.pageX - offset.left,
@@ -733,38 +733,108 @@ $(document).ready(function(){
         }
     });
 
-    $(document).on('keydown keypress', function( event ) {
-        if(canvas.getActiveObject()) {
-            if(event.which == 37) {
-                var obj = canvas.getActiveObject();
-                obj.set("left", obj.left-1);
-                canvas.renderAll();
-            }
-            if(event.which == 38) {
-                var obj = canvas.getActiveObject();
-                obj.set("top", obj.top-1);
-                canvas.renderAll();
-            }
-            if(event.which == 39) {
-                var obj = canvas.getActiveObject();
-                obj.set("left", obj.left+1);
-                canvas.renderAll();
-            }
-            if(event.which == 40) {
-                var obj = canvas.getActiveObject();
-                obj.set("top", obj.top+1);
-                canvas.renderAll();
-            }
-            if(event.keyCode == 127) {
+    $(document).on('keypress', function( event ) {
+        console.log(event.which);
+        /*keycodes
+        left arrow - 37
+        up arrow - 38
+        right arrow - 39
+        down arrow - 40
+        delete - 127
+        num line equals key - 187
+        num line underscore - 198
+        num line zero - 48
+        backspace - 8
+        hash key*/
+        if(event.keyCode == 127) {
+            if(canvas.getActiveObject()) {
                 canvas.getActiveObject().remove();
                 updateLayers();
-            }
-        } else if(canvas.getActiveGroup()) {
-            if(event.keyCode == 127) {
+            } else if(canvas.getActiveGroup()) {
                 canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
                 updateLayers();
             }
-        }        
+        }
+    });
+
+    $(document).on('keydown', function( event ) {
+        console.log(event.which);
+        if(event.ctrlKey==true && event.which == 187){
+            event.preventDefault();
+            canvas.setZoom(canvas.getZoom() * 1.01 ); //zoom in
+        }
+        if(event.ctrlKey==true && event.which == 189){
+            event.preventDefault();
+            canvas.setZoom(canvas.getZoom() / 1.01 ); //zoom out
+        }
+        if(event.ctrlKey==true && event.which == 48){
+            event.preventDefault();
+            canvas.setZoom(1); //reset zoom
+        }
+        if(event.ctrlKey==true && event.which == 8) {
+            var delta = new fabric.Point(0,0) ;
+            canvas.absolutePan(delta);
+        }
+        if(event.which == 37) {
+            if(event.ctrlKey==true){
+                var delta = new fabric.Point(-10,0) ;
+                canvas.relativePan(delta);
+            } else {
+                if(canvas.getActiveObject()) {
+                    var obj = canvas.getActiveObject();
+                    obj.set("left", obj.left-1);
+                    canvas.renderAll();
+                }
+            }
+        }
+        if(event.which == 38) {
+            if(event.ctrlKey==true){
+                var delta = new fabric.Point(0,-10) ;
+                canvas.relativePan(delta);
+            } else {
+                if(canvas.getActiveObject()) {
+                    var obj = canvas.getActiveObject();
+                    obj.set("top", obj.top-1);
+                    canvas.renderAll();
+                }
+            }
+        }
+        if(event.which == 39) {
+            if(event.ctrlKey==true){
+                var delta = new fabric.Point(10,0) ;
+                canvas.relativePan(delta);
+            } else {
+                if(canvas.getActiveObject()) {
+                    var obj = canvas.getActiveObject();
+                    obj.set("left", obj.left+1);
+                    canvas.renderAll();
+                }
+            }
+        }
+        if(event.which == 40) {
+            if(event.ctrlKey==true){  
+                var delta = new fabric.Point(0,10) ;
+                canvas.relativePan(delta);
+            } else {
+                if(canvas.getActiveObject()) {
+                    var obj = canvas.getActiveObject();
+                    obj.set("top", obj.top+1);
+                    canvas.renderAll();
+                }
+            }
+        }
+    });
+
+    $(window).bind('mousewheel DOMMouseScroll', function (event) {
+            if (event.ctrlKey == true) {
+                if (event.originalEvent.wheelDelta >= 0) {
+                    event.preventDefault();
+                    canvas.setZoom(canvas.getZoom() * 1.01 ); //zoom in
+                } else {
+                    event.preventDefault();
+                    canvas.setZoom(canvas.getZoom() / 1.01 ); //zoom in
+                }
+            }
     });
 
     $(document).bind('copy', function() {
