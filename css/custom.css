@@ -27,11 +27,17 @@ html {
   overflow: hidden;
 }
 
+#zoom{
+  position: absolute;
+  top:6.5rem;
+  right:30px;
+}
+
 .tools {
   border: 1px solid silver;
   border-top: 20px solid silver;
   width: 84px;
-  height: 252px;
+  height: 168px;
   margin-left:5px;
   margin-top: 5px; 
   float: left;
@@ -47,7 +53,7 @@ html {
   min-height: 150px; 
   margin-left: -84px;
   margin-right: 5px;
-  top: 300px;
+  top: 240px;
   float: left;
   line-height: normal;
   background-color: #EEE;
@@ -83,7 +89,7 @@ html {
 }
 
 .rgbvalue, .hslvalue {
-  width:25%;
+  width:80%;
 }
 
 .colorwrapper label {
@@ -97,7 +103,7 @@ html {
   min-height: 108px; 
   margin-left: -155px;
   margin-right: 5px;
-  top: 500px;
+  top: 440px;
   float: left;
   line-height: normal;
   background-color: #EEE;

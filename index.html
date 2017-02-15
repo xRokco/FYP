@@ -24,7 +24,8 @@
         <link rel="stylesheet" href="css/skeleton.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="stylesheet" href="css/farbtastic.css" type="text/css">
-
+        <!--<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>-->
+        
         <!-- Scripts
         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -109,10 +110,6 @@
                 <img id="text-mode" class="tool" src="images/tools/pencil.png" title="text tool">
                 <img id="rasterize" class="tool" src="images/tools/fill.png">
                 <img id="erase-mode" class="tool" src="images/tools/image.png">
-                <img class="tool" src="images/tools/fill.png">
-                <img class="tool" src="images/tools/pencil.png">
-                <img class="tool" src="images/tools/image.png">
-                <img class="tool" src="images/tools/man.png">
             </div>
 
             <div class="drag toolOptions">
@@ -140,19 +137,21 @@
                 </div>
             </div>
 
+            <div id="zoom" title="Ctrl+= to zoom in, Ctrl+- to zoom out, Ctrl+0 to reset zoom.">Zoom level: 1</div>
+
             <div class="colorwrapper drag">
                 <div id="colorpicker"></div>
                 <br/>
-                <form><input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" /></form>
-                <form>
-                    <label>r: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
-                    <label>g: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
-                    <label>b: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
+                <form style="margin-bottom:10px"><input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" /></form>
+                <form class="row">
+                    <label class="four columns">r: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
+                    <label class="four columns">g: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
+                    <label class="four columns">b: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
                 </form>
-                <form>
-                    <label>h: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
-                    <label>s: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
-                    <label>l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
+                <form class="row">
+                    <label class="four columns" class="four columns">h: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
+                    <label class="four columns">s: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
+                    <label class="four columns">l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
                 </form>
             </div>
 

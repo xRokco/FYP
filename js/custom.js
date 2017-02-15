@@ -100,6 +100,10 @@ $( function() {
     $( ".drag" ).draggable();
 });
 
+$( function() {
+    $( ".resize" ).resizable();
+});
+
 //hide options
 function hideOptions() {
     canvas.isDrawingMode = false;
@@ -220,6 +224,8 @@ function getSelectedType() {
 //Free drawing-mode
 document.getElementById("drawing-mode").onclick = function() {
     console.log("entering line drawing");
+    canvas.deactivateAll().renderAll();
+
     hideOptions();
     canvas.isDrawingMode = true;
     canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
@@ -325,26 +331,32 @@ $(document).ready(function(){
     document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
     document.getElementById("background").addEventListener('change', handleFileSelect2, false);
     var divPos = {};
-    var offset = $("#c").offset();
+    canvas.offset = $("#c").offset();
     var ctrlDown = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
     var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
     var shiftDown = false;
     $(document).mousemove(function(e){
         divPos = {
-            left: e.pageX - offset.left,
-            top: e.pageY - offset.top
+            left: e.pageX - canvas.offset.left,
+            top: e.pageY - canvas.offset.top
         };
+    });
+
+    $(window).resize(function() {
+        canvas.offset = $("#c").offset();
     });
 
     //Rectangle drawing
     $('#rectangle-mode').click(function(){
         console.log("entering rectangle mode");
-        hideOptions();
+        canvas.deactivateAll().renderAll();
+        
         //Declaring the variables
         canvas.isMouseDown=false;
         var refShape;
         
+        hideOptions();
         document.getElementById("shape-mode-options").style.display = '';
         document.getElementById("locklab").style.display = '';
         canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
@@ -355,6 +367,7 @@ $(document).ready(function(){
     //Circle Drawing
     $('#circle-mode').click(function(){
         console.log("entering circle mode");
+        canvas.deactivateAll().renderAll();
 
         //Declaring the variables
         canvas.isMouseDown=false;
@@ -370,6 +383,7 @@ $(document).ready(function(){
 
     $('#text-mode').click(function () {
         console.log("entering text mode");
+        canvas.deactivateAll().renderAll();
 
         hideOptions();
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
@@ -761,15 +775,18 @@ $(document).ready(function(){
         console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() * 1.01 ); //zoom in
+            canvas.setZoom(canvas.getZoom() + 0.01 ); //zoom in
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
         if(event.ctrlKey==true && event.which == 189){
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() / 1.01 ); //zoom out
+            canvas.setZoom(canvas.getZoom() - 0.01 ); //zoom out
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
         if(event.ctrlKey==true && event.which == 48){
             event.preventDefault();
             canvas.setZoom(1); //reset zoom
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
         if(event.ctrlKey==true && event.which == 8) {
             var delta = new fabric.Point(0,0) ;
@@ -780,7 +797,7 @@ $(document).ready(function(){
                 var delta = new fabric.Point(-10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject()) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
                     var obj = canvas.getActiveObject();
                     obj.set("left", obj.left-1);
                     canvas.renderAll();
@@ -792,7 +809,7 @@ $(document).ready(function(){
                 var delta = new fabric.Point(0,-10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject()) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
                     var obj = canvas.getActiveObject();
                     obj.set("top", obj.top-1);
                     canvas.renderAll();
@@ -804,7 +821,7 @@ $(document).ready(function(){
                 var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject()) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
                     var obj = canvas.getActiveObject();
                     obj.set("left", obj.left+1);
                     canvas.renderAll();
@@ -816,7 +833,7 @@ $(document).ready(function(){
                 var delta = new fabric.Point(0,10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject()) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
                     var obj = canvas.getActiveObject();
                     obj.set("top", obj.top+1);
                     canvas.renderAll();
