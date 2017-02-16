@@ -75,8 +75,8 @@ $(document).ready(function() {
     $document = $(document)
 
     function init() {
-        $popoverLink.on('click', openPopover)
-        $document.on('click', closePopover)
+        $popoverLink.click(openPopover);
+        $document.click(closePopover);
     }
 
     function openPopover(e) {
@@ -222,7 +222,7 @@ function getSelectedType() {
 }
 
 //Free drawing-mode
-document.getElementById("drawing-mode").onclick = function() {
+$('#drawing-mode').click(function() {
     console.log("entering line drawing");
     canvas.deactivateAll().renderAll();
 
@@ -230,15 +230,15 @@ document.getElementById("drawing-mode").onclick = function() {
     canvas.isDrawingMode = true;
     canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
     document.getElementById("drawing-mode-options").style.display = '';
-};
+});
 
-document.getElementById("colorvalue").onchange = function() {
+$('#colorvalue').change(function() {
     canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
-};
+});
 
-document.getElementById("drawing-line-width").onchange = function() {
+$('#drawing-line-width').change(function() {
     canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
-};
+});
 
 if (canvas.freeDrawingBrush) {
     canvas.freeDrawingBrush.color = document.getElementById("colorvalue").value;
@@ -386,8 +386,8 @@ $(document).ready(function(){
         canvas.deactivateAll().renderAll();
 
         hideOptions();
-        canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
-        canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
+        canvas.defaultCursor = "url('images/cursors/text.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/text.png'), auto";
         canvas.textDrawing = true;
     });
 
@@ -546,12 +546,25 @@ $(document).ready(function(){
         }
 
         if(canvas.textDrawing) {
+            if(document.getElementById('italic').checked) {
+                var italic = 'italic';
+            } else {
+                var italic = 'normal';
+            }
+
+            if(document.getElementById('bold').checked) {
+                var bold = 700;
+            } else {
+                var bold = 400;
+            }
             console.log("adding text");
             var text = new fabric.Text('text', {
                 id: 'text',
                 left: divPos.left, 
                 top: divPos.top,
                 fontFamily: "Raleway",
+                fontWeight: bold,
+                fontStyle: italic,
                 fill: $.farbtastic('#colorpicker').color
             });
             canvas.add(text);
@@ -581,9 +594,29 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
-    $('#font').on('change', function() {
+    $('#font').change(function() {
         console.log("font changed");
         canvas.getActiveObject().fontFamily = this.value;
+        canvas.renderAll();
+    });
+
+    $('#bold').change(function() {
+        console.log("bold changed");
+        if(document.getElementById('bold').checked) {
+            canvas.getActiveObject().fontWeight = 700;
+        } else {
+            canvas.getActiveObject().fontWeight = 400;
+        }
+        canvas.renderAll();
+    });
+
+    $('#italic').change(function() {
+        console.log("italic changed");
+        if(document.getElementById('italic').checked) {
+            canvas.getActiveObject().fontStyle = 'italic';
+        } else {
+            canvas.getActiveObject().fontStyle = 'normal';
+        }
         canvas.renderAll();
     });
 
@@ -843,15 +876,16 @@ $(document).ready(function(){
     });
 
     $(window).bind('mousewheel DOMMouseScroll', function (event) {
-            if (event.ctrlKey == true) {
-                if (event.originalEvent.wheelDelta >= 0) {
-                    event.preventDefault();
-                    canvas.setZoom(canvas.getZoom() * 1.01 ); //zoom in
-                } else {
-                    event.preventDefault();
-                    canvas.setZoom(canvas.getZoom() / 1.01 ); //zoom in
-                }
+        if (event.ctrlKey == true) {
+            if (event.originalEvent.wheelDelta >= 0) {
+                event.preventDefault();
+                canvas.setZoom(canvas.getZoom() + 0.01 ); //zoom in
+            } else {
+                event.preventDefault();
+                canvas.setZoom(canvas.getZoom() - 0.01 ); //zoom in
             }
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+        }
     });
 
     $(document).bind('copy', function() {
@@ -895,24 +929,22 @@ $(document).ready(function(){
         }
     });
 
+    /*$(window).on('beforeunload', function (e) {
+        if(canvas.getObjects().length > 0){
+            var confirmationMessage = 'It looks like you have been editing an image. '
+                            + 'If you leave before saving, your changes will be lost.';
+
+            //(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        }
+    });*/
+
     $('#select-mode').click();
 });
 
 //Export Modal
 $('#exportButton').click(function(){
     document.getElementById('exportModal').style.display = "block";
-});
-
-// When the user clicks on <span> (x), close the modal
-$('.close').click(function() {
-    document.getElementById('exportModal').style.display = "none";
-});
-
-// When the user clicks anywhere outside of the modal, close it
-$(window).click(function(event) {
-    if (event.target == document.getElementById('exportModal')) {
-        document.getElementById('exportModal').style.display = "none";
-    }
 });
 
 //Export Modal
@@ -924,10 +956,14 @@ $('#newCanvasButton').click(function(){
 // When the user clicks on <span> (x), close the modal
 $('.close').click(function() {
     document.getElementById('newCanvasModal').style.display = "none";
+    document.getElementById('exportModal').style.display = "none";
 });
 
 // When the user clicks anywhere outside of the modal, close it
 $(window).click(function(event) {
+    if (event.target == document.getElementById('exportModal')) {
+        document.getElementById('exportModal').style.display = "none";
+    }
     if (event.target == document.getElementById('newCanvasModal')) {
         document.getElementById('newCanvasModal').style.display = "none";
     }

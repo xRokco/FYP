@@ -53,19 +53,30 @@ html {
   min-height: 150px; 
   margin-left: -84px;
   margin-right: 5px;
-  top: 240px;
+  top: 210px;
   float: left;
   line-height: normal;
   background-color: #EEE;
 }
 
-.toolOptions textarea, .toolOptions select {
-  width: 145px;
+.toolOptions label {
+  padding-left: 5px;
 }
 
 .tool {
   margin: 5px;
   cursor: pointer;
+}
+
+.inline{
+  display: inline;
+}
+
+#text, #font, #shape-line-width, #drawing-line-width {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 145px;
 }
 
 .colorwrapper {

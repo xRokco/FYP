@@ -107,7 +107,7 @@
                 <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png" title="rectangle draw tool">
                 <img id="circle-mode" class="tool" src="images/tools/circle.png" title="circle draw tool">
                 <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
-                <img id="text-mode" class="tool" src="images/tools/pencil.png" title="text tool">
+                <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
                 <img id="rasterize" class="tool" src="images/tools/fill.png">
                 <img id="erase-mode" class="tool" src="images/tools/image.png">
             </div>
@@ -120,19 +120,29 @@
                 <div style="display: none;" id="shape-mode-options" class="options">
                     <label for="shape-line-width">Line width:</label>
                     <input type="range" value="10" min="0" max="150" id="shape-line-width"><br>
-                    <label for="shape-fill">Fill:</label>
+                    <label class="inline" for="shape-fill">Fill:</label>
                     <input type="checkbox" id="shape-fill"/><br/>
-                    <div id="locklab"><label for="lock">Lock aspect ratio:</label>
+                    <div id="locklab"><label for="lock" class="inline">Lock aspect ratio:</label>
                     <input type="checkbox" id="lock"/></div><br/>
                 </div>
                 <div style="display: none;" id="text-mode-options" class="options">
                     <label for="text">Text:</label><textarea name="text" id="text"></textarea>
+                    </br>
+                    <label for="italic" class="inline">Italic: </label><input id="italic" type="checkbox" name="italic"/>
+                    <label for="bold" class="inline">Bold: </label><input id="bold" type="checkbox" name="bold"/>
                     <label for="font">Font:</label>
                     <select id="font">
                         <option value="Raleway">Raleway</option>
                         <option value="Arial">Arial</option>
+                        <option value="Arial Black">Arial Black</option>
                         <option value="Times New Roman">Times New Roman</option>
                         <option value="Courier New">Courier New</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Lucida Console, Monaco, monospace">Lucida Console</option>
+                        <option value="Webdings">Webdings</option>
                     </select>
                 </div>
             </div>
