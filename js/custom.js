@@ -943,15 +943,11 @@ $(document).ready(function(){
     $('#select-mode').click();
 });
 
-//Export Modal
+//Keyboard shortcut Modal
 $('#keyboard-icon').hover(function(){
-    //document.getElementById('keyboardModal').style.display = "block";
-    //document.getElementById('keyboardModal').style.opacity = 1;
     $('#keyboardModal').fadeIn(800);
     $('#keyboardModal .modal-content').fadeIn(800);
 },function(){
-    //document.getElementById('keyboardModal').style.display = "none";
-    //document.getElementById('keyboardModal').style.opacity = 0;
     $('#keyboardModal').fadeOut(800);
     $('#keyboardModal .modal-content').fadeOut(800);
 });
