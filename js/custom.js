@@ -329,7 +329,8 @@ function handleFileSelect2(evt) {
 
 $(document).ready(function(){
     document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
-    document.getElementById("background").addEventListener('change', handleFileSelect2, false);
+    //document.getElementById("background").addEventListener('change', handleFileSelect2, false);
+    $('#background').change(handleFileSelect2);
     var divPos = {};
     canvas.offset = $("#c").offset();
     var ctrlDown = false;
@@ -827,7 +828,7 @@ $(document).ready(function(){
         }
         if(event.which == 37) {
             if(event.ctrlKey==true){
-                var delta = new fabric.Point(-10,0) ;
+                var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
             } else {
                 if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
@@ -839,7 +840,7 @@ $(document).ready(function(){
         }
         if(event.which == 38) {
             if(event.ctrlKey==true){
-                var delta = new fabric.Point(0,-10) ;
+                var delta = new fabric.Point(0,10) ;
                 canvas.relativePan(delta);
             } else {
                 if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
@@ -851,7 +852,7 @@ $(document).ready(function(){
         }
         if(event.which == 39) {
             if(event.ctrlKey==true){
-                var delta = new fabric.Point(10,0) ;
+                var delta = new fabric.Point(-10,0) ;
                 canvas.relativePan(delta);
             } else {
                 if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
@@ -863,7 +864,7 @@ $(document).ready(function(){
         }
         if(event.which == 40) {
             if(event.ctrlKey==true){  
-                var delta = new fabric.Point(0,10) ;
+                var delta = new fabric.Point(0,-10) ;
                 canvas.relativePan(delta);
             } else {
                 if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
@@ -940,6 +941,19 @@ $(document).ready(function(){
     });*/
 
     $('#select-mode').click();
+});
+
+//Export Modal
+$('#keyboard-icon').hover(function(){
+    //document.getElementById('keyboardModal').style.display = "block";
+    //document.getElementById('keyboardModal').style.opacity = 1;
+    $('#keyboardModal').fadeIn(800);
+    $('#keyboardModal .modal-content').fadeIn(800);
+},function(){
+    //document.getElementById('keyboardModal').style.display = "none";
+    //document.getElementById('keyboardModal').style.opacity = 0;
+    $('#keyboardModal').fadeOut(800);
+    $('#keyboardModal .modal-content').fadeOut(800);
 });
 
 //Export Modal

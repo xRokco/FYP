@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="css/skeleton.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="stylesheet" href="css/farbtastic.css" type="text/css">
+        <link rel="stylesheet" href="css/keys.css" type="text/css">
         <!--<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>-->
         
         <!-- Scripts
@@ -51,7 +52,7 @@
                                 </li>
                                 <li class="popover-item">
                                     <label for="background">
-                                        <p class="popover-link" href="javascript:void(0)">Open</p>
+                                        <p id="open-label" class="popover-link">Open</p>
                                     </label>
                                     <input id="background" type="file"/>
                                 </li>
@@ -97,83 +98,84 @@
                 </ul>
             </nav>
         </header>
-        <div id="mask">
-            <div class="tools drag">
-                <img id="drawing-mode" class="tool" src="images/tools/pencil.png" title="brush tool">
-                <label for="selectFile" title="image upload">
-                    <img class="tool" onclick="hideOptions()" src="images/tools/image.png"/>
-                </label>
-                <input id="selectFile" type="file"/>
-                <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png" title="rectangle draw tool">
-                <img id="circle-mode" class="tool" src="images/tools/circle.png" title="circle draw tool">
-                <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
-                <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
-                <img id="rasterize" class="tool" src="images/tools/fill.png">
-                <img id="erase-mode" class="tool" src="images/tools/image.png">
-            </div>
-
-            <div class="drag toolOptions">
-                <div style="display: none;" id="drawing-mode-options" class="options">
-                    <label for="drawing-line-width">Line width:</label>
-                    <input type="range" value="10" min="0" max="150" id="drawing-line-width"><br>
-                </div>
-                <div style="display: none;" id="shape-mode-options" class="options">
-                    <label for="shape-line-width">Line width:</label>
-                    <input type="range" value="10" min="0" max="150" id="shape-line-width"><br>
-                    <label class="inline" for="shape-fill">Fill:</label>
-                    <input type="checkbox" id="shape-fill"/><br/>
-                    <div id="locklab"><label for="lock" class="inline">Lock aspect ratio:</label>
-                    <input type="checkbox" id="lock"/></div><br/>
-                </div>
-                <div style="display: none;" id="text-mode-options" class="options">
-                    <label for="text">Text:</label><textarea name="text" id="text"></textarea>
-                    </br>
-                    <label for="italic" class="inline">Italic: </label><input id="italic" type="checkbox" name="italic"/>
-                    <label for="bold" class="inline">Bold: </label><input id="bold" type="checkbox" name="bold"/>
-                    <label for="font">Font:</label>
-                    <select id="font">
-                        <option value="Raleway">Raleway</option>
-                        <option value="Arial">Arial</option>
-                        <option value="Arial Black">Arial Black</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Comic Sans MS">Comic Sans MS</option>
-                        <option value="Impact">Impact</option>
-                        <option value="Verdana">Verdana</option>
-                        <option value="Trebuchet MS">Trebuchet MS</option>
-                        <option value="Lucida Console, Monaco, monospace">Lucida Console</option>
-                        <option value="Webdings">Webdings</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="zoom" title="Ctrl+= to zoom in, Ctrl+- to zoom out, Ctrl+0 to reset zoom.">Zoom level: 1</div>
-
-            <div class="colorwrapper drag">
-                <div id="colorpicker"></div>
-                <br/>
-                <form style="margin-bottom:10px"><input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" /></form>
-                <form class="row">
-                    <label class="four columns">r: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
-                    <label class="four columns">g: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
-                    <label class="four columns">b: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
-                </form>
-                <form class="row">
-                    <label class="four columns" class="four columns">h: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
-                    <label class="four columns">s: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
-                    <label class="four columns">l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
-                </form>
-            </div>
-
-            <div id="layers" class="drag">
-                
-            </div>
-
-        
-            <div id="canvasWrapper">
-                <canvas id="c" style="border:1px solid silver"></canvas>
-            </div>
+        <div class="tools drag">
+            <img id="drawing-mode" class="tool" src="images/tools/pencil.png" title="brush tool">
+            <label for="selectFile" title="image upload">
+                <img class="tool" onclick="hideOptions()" src="images/tools/image.png"/>
+            </label>
+            <input id="selectFile" type="file"/>
+            <img id="rectangle-mode" class="tool" src="images/tools/rectangle.png" title="rectangle draw tool">
+            <img id="circle-mode" class="tool" src="images/tools/circle.png" title="circle draw tool">
+            <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
+            <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
+            <img id="rasterize" class="tool" src="images/tools/fill.png">
+            <img id="erase-mode" class="tool" src="images/tools/image.png">
         </div>
+
+        <div class="drag toolOptions">
+            <div style="display: none;" id="drawing-mode-options" class="options">
+                <label for="drawing-line-width">Line width:</label>
+                <input type="range" value="10" min="0" max="150" id="drawing-line-width"><br>
+            </div>
+            <div style="display: none;" id="shape-mode-options" class="options">
+                <label for="shape-line-width">Line width:</label>
+                <input type="range" value="10" min="0" max="150" id="shape-line-width"><br>
+                <label class="inline" for="shape-fill">Fill:</label>
+                <input type="checkbox" id="shape-fill"/><br/>
+                <div id="locklab"><label for="lock" class="inline">Lock aspect ratio:</label>
+                <input type="checkbox" id="lock"/></div><br/>
+            </div>
+            <div style="display: none;" id="text-mode-options" class="options">
+                <label for="text">Text:</label><textarea name="text" id="text"></textarea>
+                </br>
+                <label for="italic" class="inline">Italic: </label><input id="italic" type="checkbox" name="italic"/>
+                <label for="bold" class="inline">Bold: </label><input id="bold" type="checkbox" name="bold"/>
+                <label for="font">Font:</label>
+                <select id="font">
+                    <option value="Raleway">Raleway</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Arial Black">Arial Black</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Lucida Console, Monaco, monospace">Lucida Console</option>
+                    <option value="Webdings">Webdings</option>
+                </select>
+            </div>
+            <p id="keyboardModalButton">test</p>
+        </div>
+
+        <div id="zoom" title="Ctrl+= to zoom in, Ctrl+- to zoom out, Ctrl+0 to reset zoom.">Zoom level: 1</div>
+
+        <div class="colorwrapper drag">
+            <div id="colorpicker"></div>
+            <br/>
+            <form style="margin-bottom:10px"><input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" /></form>
+            <form class="row">
+                <label class="four columns">r: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">g: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">b: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
+            </form>
+            <form class="row">
+                <label class="four columns" class="four columns">h: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">s: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
+            </form>
+        </div>
+
+        <div id="layers" class="drag">
+            
+        </div>
+
+    
+        <div id="canvasWrapper">
+            <canvas id="c" style="border:1px solid silver"></canvas>
+        </div>
+
+        <img id="keyboard-icon" src="images/keyboard.png">
 
         <div id="exportModal" class="modal">
             <!-- Modal content -->
@@ -218,6 +220,39 @@
 
                     <input class="button-primary" onclick="newCanvas(document.getElementById('width').value,document.getElementById('height').value)" value="Create" type="submit">
                 </form>
+            </div>
+        </div>
+
+        <div id="keyboardModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--<div class="modal-close-icon">-->
+                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
+                <h4>Keyboard shortcuts...</h4>
+                <div class="row">
+                    <div class="six columns">
+                        <p><kbd>ctrl</kbd> + <kbd>=</kbd> - zoom in.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>-</kbd> - zoom out.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>0</kbd> - reset zoom to 100%.</p>
+                        <p><kbd>del</kbd> - delete selected object or group.</p>
+                        <p><kbd>&uarr;</kbd> - move selected object up.</p>
+                        <p><kbd>&darr;</kbd> - move selected object down.</p>
+                        <p><kbd>&larr;</kbd> - move selected object left.</p>
+                        <p><kbd>&rarr;</kbd> - move selected object right.</p>
+                    </div>
+                    <div class="six columns">
+                        <p><kbd>ctrl</kbd> + <kbd>&uarr;</kbd> - pan canvas up.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>&darr;</kbd> - pan canvas down.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>&larr;</kbd> - pan canvas left.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>&rarr;</kbd> - pan canvas right.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>backspace</kbd> - reset pan to center.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>S</kbd> - export image.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>N</kbd> - new canvas.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>C</kbd> - copy select object or group.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>X</kbd> - cut select object or group.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>V</kbd> - pasted object or group.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
