@@ -112,6 +112,8 @@ function hideOptions() {
     canvas.textDrawing = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
 
+    $('.tool').css("border", "1px solid #EEE");
+
     document.getElementById("drawing-mode-options").style.display = 'none';
     document.getElementById("shape-mode-options").style.display = 'none';
     document.getElementById("text-mode-options").style.display = 'none';
@@ -220,17 +222,6 @@ function getSelectedType() {
         return null;
     }
 }
-
-//Free drawing-mode
-$('#drawing-mode').click(function() {
-    console.log("entering line drawing");
-    canvas.deactivateAll().renderAll();
-
-    hideOptions();
-    canvas.isDrawingMode = true;
-    canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
-    document.getElementById("drawing-mode-options").style.display = '';
-});
 
 $('#colorvalue').change(function() {
     canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
@@ -348,6 +339,33 @@ $(document).ready(function(){
         canvas.offset = $("#c").offset();
     });
 
+    //Select tool
+    $('#select-mode').click(function(){
+        console.log("entering select");
+
+        hideOptions();
+        $('#select-mode').css("border", "1px solid silver");
+
+        canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
+        canvas.defaultCursor = "url('images/cursors/select.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/select.png'), auto";
+        canvas.moveCursor = "url('images/cursors/select.png'), auto";
+        fabric.Object.prototype.selectable = true; 
+    });
+
+    //Free drawing-mode
+    $('#drawing-mode').click(function() {
+        console.log("entering line drawing");
+        canvas.deactivateAll().renderAll();
+
+        hideOptions();
+        $('#drawing-mode').css("border", "1px solid silver");
+
+        canvas.isDrawingMode = true;
+        canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
+        document.getElementById("drawing-mode-options").style.display = '';
+    });
+
     //Rectangle drawing
     $('#rectangle-mode').click(function(){
         console.log("entering rectangle mode");
@@ -358,6 +376,8 @@ $(document).ready(function(){
         var refShape;
         
         hideOptions();
+        $('#rectangle-mode').css("border", "1px solid silver");
+
         document.getElementById("shape-mode-options").style.display = '';
         document.getElementById("locklab").style.display = '';
         canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
@@ -375,6 +395,8 @@ $(document).ready(function(){
         var refShape;
 
         hideOptions();
+        $('#circle-mode').css("border", "1px solid silver");
+
         document.getElementById("shape-mode-options").style.display = '';
         document.getElementById("locklab").style.display = '';
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
@@ -385,8 +407,10 @@ $(document).ready(function(){
     $('#text-mode').click(function () {
         console.log("entering text mode");
         canvas.deactivateAll().renderAll();
-
+        
         hideOptions();
+        $('#text-mode').css("border", "1px solid silver");
+
         canvas.defaultCursor = "url('images/cursors/text.png'), auto";
         canvas.hoverCursor = "url('images/cursors/text.png'), auto";
         canvas.textDrawing = true;
@@ -653,17 +677,6 @@ $(document).ready(function(){
         }
     });
 
-    //Select tool
-    $('#select-mode').click(function(){
-        console.log("entering select");
-        hideOptions();
-        canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
-        canvas.defaultCursor = "url('images/cursors/select.png'), auto";
-        canvas.hoverCursor = "url('images/cursors/select.png'), auto";
-        canvas.moveCursor = "url('images/cursors/select.png'), auto";
-        fabric.Object.prototype.selectable = true; 
-    });
-
     $('#erase-mode').click(function() {
         hideOptions();
         console.log("entering erase mode"); 
@@ -826,6 +839,14 @@ $(document).ready(function(){
             var delta = new fabric.Point(0,0) ;
             canvas.absolutePan(delta);
         }
+        if(event.ctrlKey==true && event.which == 83) { //save/export
+            event.preventDefault();
+            $('#exportButton').click();
+        }
+        if(event.ctrlKey==true && event.which == 78) { //new
+            event.preventDefault();
+            $('#newCanvasButton').click();
+        }
         if(event.which == 37) {
             if(event.ctrlKey==true){
                 var delta = new fabric.Point(10,0) ;
@@ -957,16 +978,38 @@ $('#exportButton').click(function(){
     document.getElementById('exportModal').style.display = "block";
 });
 
+$('.export').click(function(){
+    if($(this).attr("value")=="json"){
+        document.getElementById('jsonModal').style.display = "block";
+        document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)
+    } else {
+        window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
+    }
+});
+
+$('#select').click(function(){
+    var range = document.createRange();
+    range.selectNode(document.getElementById('json'));
+    window.getSelection().addRange(range);
+});
+
 //Export Modal
 $('#newCanvasButton').click(function(){
-    document.getElementById('bgcolour').value='';
     document.getElementById('newCanvasModal').style.display = "block";
+});
+
+$('#newCanvas').click(function(){
+    newCanvas(document.getElementById('width').value,document.getElementById('height').value);
 });
 
 // When the user clicks on <span> (x), close the modal
 $('.close').click(function() {
     document.getElementById('newCanvasModal').style.display = "none";
     document.getElementById('exportModal').style.display = "none";
+});
+
+$('.closeJSON').click(function() {
+    document.getElementById('jsonModal').style.display = "none";
 });
 
 // When the user clicks anywhere outside of the modal, close it
@@ -976,6 +1019,9 @@ $(window).click(function(event) {
     }
     if (event.target == document.getElementById('newCanvasModal')) {
         document.getElementById('newCanvasModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('jsonModal')) {
+        document.getElementById('jsonModal').style.display = "none";
     }
 });
 

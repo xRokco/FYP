@@ -183,13 +183,20 @@
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Export as...</h4>
                 <ul>
-                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'png' }))"">PNG</a> - This format is capable of displaying transparency, and is good for images with text or other fine details, but will result in larger file sizes.</li>
-                    <li><a href="javascript:void(0)" onclick="window.open(canvas.toDataURL( {format: 'jpeg' }))"">JPG</a> - This format is good for photos or images without fine details. Any transparent areas will be made black, though.</li>
-                    <li><a href="javascript:void(0)" onclick="document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)">JSON</a> - This is a specially formatted text file which allows you to save your image editing progress to pick it up later.</li>
-                    <li><a onclick="">SVG</a></li>
+                    <li><a href="javascript:void(0)" class="export" value="png">PNG</a> - This format is capable of displaying transparency, and is good for images with text or other fine details, but will result in larger file sizes.</li>
+                    <li><a href="javascript:void(0)" class="export" value="jpeg">JPG</a> - This format is good for photos or images without fine details. Any transparent areas will be made black, though.</li>
+                    <li><a href="javascript:void(0)" class="export" value="json">JSON</a> - This is a specially formatted text file which allows you to save your image editing progress to pick it up later.</li>
                 </ul>
+                
+            </div>
+        </div>
 
+        <div id="jsonModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <a href="javascript:void(0)" class="closeJSON"><i class="fa fa-times"></i></a>
                 <pre><code id="json"></code></pre>
+                <input class="button-primary" id="select" value="Select all" type="submit">
             </div>
         </div>
 
@@ -217,7 +224,7 @@
                         </div>
                     </div>
 
-                    <input class="button-primary" onclick="newCanvas(document.getElementById('width').value,document.getElementById('height').value)" value="Create" type="submit">
+                    <input class="button-primary" id="newCanvas" value="Create" type="submit">
                 </form>
             </div>
         </div>
@@ -226,7 +233,6 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <!--<div class="modal-close-icon">-->
-                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Keyboard shortcuts...</h4>
                 <div class="row">
                     <div class="six columns">
