@@ -1,333 +1,24 @@
-$(document).ready(function() {
-    $('#colorpicker').farbtastic('#colorvalue');
-
-    $('.farbtastic').click(function() {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec($('#colorvalue').val());
-        r = parseInt(result[1], 16);
-        g = parseInt(result[2], 16);
-        b = parseInt(result[3], 16);
-        $("#rvalue").val(r);
-        $("#gvalue").val(g);
-        $("#bvalue").val(b);
-
-        console.log([r, g, b]);
-        r /= 255, g /= 255, b /= 255;
-        var max = Math.max(r, g, b), min = Math.min(r, g, b);
-        var h, s, l = (max + min) / 2;
-
-        if(max == min){
-            h = s = 0; // achromatic
-        }else{
-            var d = max - min;
-            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            switch(max){
-                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
-            }
-            h /= 6;
-        }
-
-        $("#hvalue").val(Math.round(h * 100) / 100);
-        $("#svalue").val(Math.round(s * 100) / 100);
-        $("#lvalue").val(Math.round(l * 100) / 100);
-        if(document.getElementById('newCanvasModal').style.display != "none"){
-            $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        }
-        $("#colorvalue").change();
-    });
-
-    $(".rgbvalue").change(function() {
-        if(parseInt($(this).val()) < 0 || parseInt($(this).val()) > 255) {
-            return;
-        }
-
-        r = parseInt($("#rvalue").val());
-        g = parseInt($("#gvalue").val());
-        b = parseInt($("#bvalue").val());
-
-        hexr = ("00" + r.toString(16)).substr(-2);
-        hexg = ("00" + g.toString(16)).substr(-2);
-        hexb = ("00" + b.toString(16)).substr(-2);
-
-        $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
-        $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        $("#colorvalue").change();
-    });
-
-    $(".hslvalue").change(function() {
-        if(parseFloat($(this).val()) < 0 || parseFloat($(this).val()) > 1) {
-            return;
-        }
-
-        h = parseFloat($("#hvalue").val());
-        s = parseFloat($("#svalue").val());
-        l = parseFloat($("#lvalue").val());
-
-        $.farbtastic('#colorpicker').setHSL([h,s,l]);
-        console.log($.farbtastic('#colorpicker').hsl);
-        $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        $("#colorvalue").change();
-    });
-
-    // Variables
-    var $popoverLink = $('[data-popover]'),
-    $document = $(document)
-
-    function init() {
-        $popoverLink.click(openPopover);
-        $document.click(closePopover);
-    }
-
-    function openPopover(e) {
-        e.preventDefault()
-        closePopover();
-        var popover = $($(this).data('popover'));
-        popover.toggleClass('open')
-        e.stopImmediatePropagation();
-    }
-
-    function closePopover(e) {
-        if($('.popover.open').length > 0) {
-            $('.popover').removeClass('open')
-        }
-    }
-
-    init();
-});
-
-$( function() {
-    $( ".drag" ).draggable();
-});
-
-$( function() {
-    $( ".resize" ).resizable();
-});
-
-//hide options
-function hideOptions() {
-    canvas.isDrawingMode = false;
-    canvas.rectDrawing = false;
-    canvas.circleDrawing = false;
-    canvas.textDrawing = false;
-    canvas.selectionColor = "rgba(0,0,0,0)";
-
-    $('.tool').css("border", "1px solid #EEE");
-
-    document.getElementById("drawing-mode-options").style.display = 'none';
-    document.getElementById("shape-mode-options").style.display = 'none';
-    document.getElementById("text-mode-options").style.display = 'none';
-    fabric.Object.prototype.selectable = false;
-}
-
-function updateLayers() {
-    var obj = canvas.getObjects();
-    var text = "";
-    for(i=obj.length - 1; i >= 0;i--){
-        if(obj[i].id == "erase"){
-            canvas.sendToBack(canvas.item(i));
-            //continue;
-        }
-        if(i == obj.length - 1){
-            var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
-        } else {
-            var up = "<img src=\"images/up.png\" onclick=\"moveForwards(" + i + ")\">"
-        }
-
-        if(i == 0) {
-            var down = "<img src=\"images/down.png\" style=\"opacity:0.1\">";
-        } else {
-            var down = "<img src=\"images/down.png\" onclick=\"moveBack(" + i + ")\">";
-        }
-     
-        var image = "";
-        if(obj[i].visible == false) {
-            var image = "-white";
-        }
-
-        text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
-    }
-    document.getElementById("layers").innerHTML = text;
-}
-
-function moveBack(index) {
-    canvas.sendBackwards(canvas.item(index));
-    updateLayers();
-}
-
-function moveForwards(index) {
-    canvas.bringForward(canvas.item(index));
-    updateLayers();
-}
-
-function selectLayer(index) {
-    hideOptions();
-    fabric.Object.prototype.selectable = true; 
-    canvas.setActiveObject(canvas.item(index));
-}
-
-function hideLayer(index) {
-    if (canvas.item(index).visible==false) {
-        canvas.item(index).visible=true;
-        document.getElementById("image" + index).src="images/eye.png";
-    } else {
-        canvas.item(index).visible=false;
-        document.getElementById("image" + index).src="images/eye-white.png";
-    }
-    canvas.renderAll(); 
-}
-
-//Canvac creation
-var canvas = new fabric.Canvas('c');
-canvas.backgroundColor="white";
-fabric.Object.prototype.selectable = false;
-canvas.setHeight(500);
-canvas.setWidth(800);
-//canvas.enableRetinaScaling = false;
-canvas.renderAll();
-console.log(canvas);
-
-function newCanvas(width, height) {
-    width = width || canvas.width;
-    height = height || canvas.height;
-    bg = canvas.backgroundColor
-    canvas.clear()
-    if(document.getElementById('transparent').checked){
-        canvas.backgroundColor=null;
-    } else {
-        if(document.getElementById('bgcolour').value!=''){
-            canvas.backgroundColor=document.getElementById('bgcolour').value;
-        } else {
-            canvas.backgroundColor = bg;
-        }
-    }
-    
-    fabric.Object.prototype.selectable = false;
-    canvas.setHeight(height);
-    canvas.setWidth(width);
-    $('.close').click();
-    document.getElementById('canvasWrapper').style.width = width + "px";
-}
-
-function getSelectedType() {
-    if (canvas.getActiveGroup()){
-        return "group";
-    } else if(canvas.getActiveObject()){
-        if (canvas.getActiveObject().hasOwnProperty('text')){
-            return "text";
-        } else {
-            return canvas.getActiveObject().id;
-        }
-    } else {
-        return null;
-    }
-}
-
-$('#colorvalue').change(function() {
-    canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
-});
-
-$('#drawing-line-width').change(function() {
-    canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
-});
-
-if (canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.color = document.getElementById("colorvalue").value;
-    canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
-    canvas.freeDrawingBrush.shadowBlur = 0;
-}
-
-//Image uploading
-var myAppModule = (function () {
-    var outObj = {};
-
-    var file, fileReader, img;
-    var cImg;
-
-    var init = function (newFile, newFileReader) {
-        file = newFile;
-        fileReader = newFileReader;
-    };
-
-    var onloadImage = function () {
-        cImg = new fabric.Image(img, {
-            id: 'image',
-            left: 0,
-            top: 0,
-            angle: 0
-        });
-
-        if(canvas.background) {
-            canvas.setWidth(img.width);
-            canvas.setHeight(img.height);
-            canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
-            canvas.background = false;
-        } else {
-            canvas.add(cImg);
-            updateLayers();
-            $('#select-mode').click();
-        }
-    };
-
-    var onloadFile = function (e) {
-        img = new Image();
-        img.onload = onloadImage;
-        img.src = fileReader.result;
-    };
-
-    outObj.init = init;
-    outObj.OnloadFile = onloadFile;
-
-    return outObj;
-})();
-
-function handleFileSelect(evt) {
-    var files = evt.target.files;
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-
-        if (!f.type.match('image.*')) {
-            continue;
-        }
-
-        var reader = new FileReader();
-
-        myAppModule.init(f, reader);
-
-        reader.onload = myAppModule.OnloadFile;
-
-        reader.readAsDataURL(f);
-
-    }
-}
-
-function handleFileSelect2(evt) {
-    var files = evt.target.files;
-    var output = [];
-    canvas.background = true;
-    if (!files[0].type.match('image.*')) {
-        return;
-    }
-
-    var reader = new FileReader();
-
-    myAppModule.init(files[0], reader);
-
-    reader.onload = myAppModule.OnloadFile;
-
-    reader.readAsDataURL(files[0]);
-}
-
+/*
+* When page has finished loading -
+* - create the position coordinates object,
+* - get the canvas offset 
+* - remove the canvas selection box
+*/
 $(document).ready(function(){
-    document.getElementById("selectFile").addEventListener('change', handleFileSelect, false);
-    //document.getElementById("background").addEventListener('change', handleFileSelect2, false);
-    $('#background').change(handleFileSelect2);
     var divPos = {};
     canvas.offset = $("#c").offset();
-    var ctrlDown = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
-    var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
-    var shiftDown = false;
+    //var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
+
+    /*
+    * Call the file upload functions when the relevant icon is clicked
+    */
+    $('#selectFile').change(handleFileSelect);
+    $('#background').change(handleFileSelect2);
+
+    /*
+    * Update the coordinates object as the mousemoves with the pointer coordinates
+    */
     $(document).mousemove(function(e){
         divPos = {
             left: e.pageX - canvas.offset.left,
@@ -335,11 +26,19 @@ $(document).ready(function(){
         };
     });
 
+    /*
+    * Recalculate the offset when the coordinates change due to window resize
+    */
     $(window).resize(function() {
         canvas.offset = $("#c").offset();
     });
 
-    //Select tool
+    /*
+    * Enter object selection mode when the icon is clicked
+    * Change the cursor to the hand
+    * Hide all options
+    * Set all objects to selectable
+    */
     $('#select-mode').click(function(){
         console.log("entering select");
 
@@ -353,7 +52,12 @@ $(document).ready(function(){
         fabric.Object.prototype.selectable = true; 
     });
 
-    //Free drawing-mode
+    /*
+    * Enter free drawing mode when the icon is clicked
+    * Set the line width
+    * Change the cursor to the pencil
+    * Display the relevant options while hiding non-relevant
+    */
     $('#drawing-mode').click(function() {
         console.log("entering line drawing");
         canvas.deactivateAll().renderAll();
@@ -362,11 +66,32 @@ $(document).ready(function(){
         $('#drawing-mode').css("border", "1px solid silver");
 
         canvas.isDrawingMode = true;
+        canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
         canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
         document.getElementById("drawing-mode-options").style.display = '';
     });
 
-    //Rectangle drawing
+    /*
+    * Change the freeDrawingBrush color value when the colorpicker text field changes value
+    */
+    $('#colorvalue').change(function() {
+        canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
+    });
+
+    /*
+    * Change the freeDrawingBrush width value when the slider changes
+    */
+    $('#drawing-line-width').change(function() {
+        canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
+    });
+
+
+    /*
+    * Enter rectangle drawing mode when the icon is clicked
+    * Init the shape variable
+    * Change the cursor to the rectangle
+    * Display the relevant options while hiding non-relevant
+    */
     $('#rectangle-mode').click(function(){
         console.log("entering rectangle mode");
         canvas.deactivateAll().renderAll();
@@ -385,7 +110,12 @@ $(document).ready(function(){
         canvas.rectDrawing = true;
     });
 
-    //Circle Drawing
+    /*
+    * Enter circle/ellipse drawing mode when the icon is clicked
+    * Init the shape variable
+    * Change the cursor to the circle
+    * Display the relevant options while hiding non-relevant
+    */
     $('#circle-mode').click(function(){
         console.log("entering circle mode");
         canvas.deactivateAll().renderAll();
@@ -404,6 +134,11 @@ $(document).ready(function(){
         canvas.circleDrawing = true;
     });
 
+    /*
+    * Enter text insertion mode when the icon is clicked
+    * Change the cursor to the text
+    * Display the relevant options while hiding non-relevant
+    */
     $('#text-mode').click(function () {
         console.log("entering text mode");
         canvas.deactivateAll().renderAll();
@@ -416,7 +151,15 @@ $(document).ready(function(){
         canvas.textDrawing = true;
     });
 
-    //Setting the mouse events
+    /*
+    * When mouse is clicked down on the canvas -
+    * - set the isMouseDown variable to true
+    * - get the color for the shape fill if the option is checked
+    * - store the initial coordinates in variables
+    * - if rectangle mode is set create and add a rectangle object
+    * - if circle mode is set create an ellipse object or create a circle object if the lock aspect ratio is checked and add them 
+    * @param {Event} event Event object
+    */
     canvas.on('mouse:down',function(event){   
         //Defining the procedure
         canvas.isMouseDown=true;
@@ -430,7 +173,6 @@ $(document).ready(function(){
         startPointLeft = divPos.left;
         startPointTop = divPos.top;
 
-        //Getting yhe mouse Co-ordinates
         //Creating the rectangle object
         if(canvas.rectDrawing) {
             var rect=new fabric.Rect({
@@ -445,10 +187,11 @@ $(document).ready(function(){
             });
             
             canvas.add(rect);
-            refShape=rect;  //**Reference of rectangle object
+            refShape=rect;  //Reference of rectangle object
         }
 
         if(canvas.circleDrawing) {
+            //create the circle object if the lock checkbox is checked
             if(document.getElementById('lock').checked){
                 var circle = new fabric.Circle({
                     id: 'circle',
@@ -460,6 +203,7 @@ $(document).ready(function(){
                     fill:fill
                  });
             } else {
+                //otherwise create an ellipse object
                 circle = new fabric.Ellipse({
                     id: 'ellipse',
                     left: startPointLeft,
@@ -477,10 +221,17 @@ $(document).ready(function(){
             }
             
             canvas.add(circle);
-            refShape=circle;  //**Reference of rectangle object
+            refShape=circle;  //Reference of circle/ellipse object
         }
     });
 
+    /*
+    * When mouse is moved across the canvas -
+    * - check if isMouseDown variable is set to true and if not return
+    * - if rectangle mode is set, modify/generate the rectangle object based on mouse coords
+    * - if circle mode is set, do the same for the circle/ellipse
+    * @param {Event} event Event object
+    */
     canvas.on('mouse:move', function(event){
         // Defining the procedure
         if(!canvas.isMouseDown) {
@@ -559,6 +310,14 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When mouse is clicked up from the canvas -
+    * - set isMouseDown variable to false
+    * - if free drawing mode is set, change the id attribute of the line just added (from 'undefined' to 'line')
+    * - if text drawing mode is set, add a text object at the mouse coordinates, select the object and display relevant options
+    * - if circle mode or rectangle mode is set, select the object
+    * - call the updateLayers function
+    */
     canvas.on('mouse:up',function(){
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
@@ -606,6 +365,12 @@ $(document).ready(function(){
         updateLayers();
     });
 
+    /*
+    * When the text field in the text object options gets an input, keydown, a paste or a change -
+    * - change the text attribute of the object
+    * - change the id value of the object
+    * - call the updateLayers function
+    */
     $('#text').on('change keydown paste input', function() {
         console.log("text changed");
         canvas.getActiveObject().text = document.getElementById('text').value;
@@ -619,12 +384,18 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    /*
+    * When the font option changes change the font of the text on the select text object
+    */
     $('#font').change(function() {
         console.log("font changed");
         canvas.getActiveObject().fontFamily = this.value;
         canvas.renderAll();
     });
 
+    /*
+    * When the bold checkbox is checked, toggle between bold and normal font on the object
+    */
     $('#bold').change(function() {
         console.log("bold changed");
         if(document.getElementById('bold').checked) {
@@ -635,6 +406,9 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    /*
+    * When the italic checkbox is checked, toggle between italic and normal font on the object
+    */
     $('#italic').change(function() {
         console.log("italic changed");
         if(document.getElementById('italic').checked) {
@@ -645,6 +419,9 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    /*
+    * When the color value from the color picker changes, change the color of the selected object (rect, circle, ellipse, line, text)
+    */
     $('#colorvalue').change(function() {
         console.log("object colour changed");
         if(getSelectedType() == 'text'){
@@ -658,6 +435,9 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    /*
+    * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
+    */
     $('#shape-line-width').on('input', function(){
         if(getSelectedType() != 'text' && getSelectedType() != 'image'){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("shape-line-width").value, 10) || 1;
@@ -665,6 +445,9 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When the fill checkbox is checked, toggle between solid and hollow center on the object (rect, circle, ellipse)
+    */
     $('#shape-fill').change(function(){
         if(getSelectedType() != 'text' && getSelectedType() != 'image'){
             if(document.getElementById('shape-fill').checked) {
@@ -723,6 +506,11 @@ $(document).ready(function(){
         });*/
     });
 
+    /*
+    * When an object is selected
+    * - simulate a click on the select icon
+    * - display the relevant options
+    */
     canvas.on('object:selected', function() {
         if(getSelectedType() == 'text'){
             $('#select-mode').click();
@@ -735,6 +523,9 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When objects stop being selected, unless in free drawing mode, simulate a select icon click
+    */
     canvas.on('selection:cleared', function() {
         if( !canvas.isDrawingMode ){
             $('#select-mode').click();
@@ -794,6 +585,10 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When a key is pressed call this function
+    * @param {Event} event Event object
+    */
     $(document).on('keypress', function( event ) {
         console.log(event.which);
         /*keycodes
@@ -807,7 +602,7 @@ $(document).ready(function(){
         num line zero - 48
         backspace - 8
         hash key*/
-        if(event.keyCode == 127) {
+        if(event.keyCode == 127) { //delete object
             if(canvas.getActiveObject()) {
                 canvas.getActiveObject().remove();
                 updateLayers();
@@ -818,24 +613,29 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When a key is pushed down, call this function
+    * - only perform certain actions if the control key was held down when the function gets called
+    * @param {Event} event Event object
+    */
     $(document).on('keydown', function( event ) {
         console.log(event.which);
-        if(event.ctrlKey==true && event.which == 187){
+        if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() + 0.01 ); //zoom in
+            canvas.setZoom(canvas.getZoom() + 0.01 );
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
-        if(event.ctrlKey==true && event.which == 189){
+        if(event.ctrlKey==true && event.which == 189){ //zoom out
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() - 0.01 ); //zoom out
+            canvas.setZoom(canvas.getZoom() - 0.01 );
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
-        if(event.ctrlKey==true && event.which == 48){
+        if(event.ctrlKey==true && event.which == 48){ //reset zoom
             event.preventDefault();
-            canvas.setZoom(1); //reset zoom
+            canvas.setZoom(1);
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
-        if(event.ctrlKey==true && event.which == 8) {
+        if(event.ctrlKey==true && event.which == 8) { //reset pan
             var delta = new fabric.Point(0,0) ;
             canvas.absolutePan(delta);
         }
@@ -843,52 +643,52 @@ $(document).ready(function(){
             event.preventDefault();
             $('#exportButton').click();
         }
-        if(event.ctrlKey==true && event.which == 78) { //new
+        if(event.ctrlKey==true && event.which == 78) { //new **DOESN'T WORK ON CHROME USUALLY**
             event.preventDefault();
             $('#newCanvasButton').click();
         }
-        if(event.which == 37) {
-            if(event.ctrlKey==true){
+        if(event.which == 37) { //left arrow
+            if(event.ctrlKey==true){ //pan left
                 var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object left
                     var obj = canvas.getActiveObject();
                     obj.set("left", obj.left-1);
                     canvas.renderAll();
                 }
             }
         }
-        if(event.which == 38) {
-            if(event.ctrlKey==true){
+        if(event.which == 38) { //up arrow
+            if(event.ctrlKey==true){ //pan up
                 var delta = new fabric.Point(0,10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object up
                     var obj = canvas.getActiveObject();
                     obj.set("top", obj.top-1);
                     canvas.renderAll();
                 }
             }
         }
-        if(event.which == 39) {
-            if(event.ctrlKey==true){
+        if(event.which == 39) { //right arrow
+            if(event.ctrlKey==true){ //pan right
                 var delta = new fabric.Point(-10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object right
                     var obj = canvas.getActiveObject();
                     obj.set("left", obj.left+1);
                     canvas.renderAll();
                 }
             }
         }
-        if(event.which == 40) {
-            if(event.ctrlKey==true){  
+        if(event.which == 40) { //down arrow
+            if(event.ctrlKey==true){ //pan down
                 var delta = new fabric.Point(0,-10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) {
+                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object down
                     var obj = canvas.getActiveObject();
                     obj.set("top", obj.top+1);
                     canvas.renderAll();
@@ -897,6 +697,11 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * When mouse whele is scrolled, call this function and -
+    * - if ctrl is help while scrolling, zoom based on direction
+    * @param {Event} event Event object
+    */
     $(window).bind('mousewheel DOMMouseScroll', function (event) {
         if (event.ctrlKey == true) {
             if (event.originalEvent.wheelDelta >= 0) {
@@ -910,6 +715,9 @@ $(document).ready(function(){
         }
     });
 
+    /*
+    * Override copy behaviour to copy the selected object or group to clipboard
+    */
     $(document).bind('copy', function() {
         console.log('copied')
         if(canvas.getActiveObject()) {
@@ -919,6 +727,25 @@ $(document).ready(function(){
         }
     }); 
 
+    /*
+    * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
+    */
+    $(document).bind('cut', function() {
+        console.log('cut')
+        if(canvas.getActiveObject()) {
+            canvas.clipboard = canvas.getActiveObject();
+            canvas.getActiveObject().remove();
+            updateLayers();
+        } else if(canvas.getActiveGroup()) {
+            canvas.clipboard = canvas.getActiveGroup();
+            canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+            updateLayers();
+        }
+    });
+
+    /*
+    * Override paste behaviour to paste/clone the copied/cut object or group to the canvas
+    */
     $(document).bind('paste', function() {
         if(canvas.getActiveObject()) {
             console.log('pasted')
@@ -938,93 +765,8 @@ $(document).ready(function(){
         }
     });
 
-    $(document).bind('cut', function() {
-        console.log('cut')
-        if(canvas.getActiveObject()) {
-            canvas.clipboard = canvas.getActiveObject();
-            canvas.getActiveObject().remove();
-            updateLayers();
-        } else if(canvas.getActiveGroup()) {
-            canvas.clipboard = canvas.getActiveGroup();
-            canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-            updateLayers();
-        }
-    });
-
-    /*$(window).on('beforeunload', function (e) {
-        if(canvas.getObjects().length > 0){
-            var confirmationMessage = 'It looks like you have been editing an image. '
-                            + 'If you leave before saving, your changes will be lost.';
-
-            //(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
-        }
-    });*/
-
+    /*
+    * Simulate a select icon click to init the function
+    */
     $('#select-mode').click();
-});
-
-//Keyboard shortcut Modal
-$('#keyboard-icon').hover(function(){
-    $('#keyboardModal').fadeIn(800);
-    $('#keyboardModal .modal-content').fadeIn(800);
-},function(){
-    $('#keyboardModal').fadeOut(800);
-    $('#keyboardModal .modal-content').fadeOut(800);
-});
-
-//Export Modal
-$('#exportButton').click(function(){
-    document.getElementById('exportModal').style.display = "block";
-});
-
-$('.export').click(function(){
-    if($(this).attr("value")=="json"){
-        document.getElementById('jsonModal').style.display = "block";
-        document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)
-    } else {
-        window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
-    }
-});
-
-$('#select').click(function(){
-    var range = document.createRange();
-    range.selectNode(document.getElementById('json'));
-    window.getSelection().addRange(range);
-});
-
-//Export Modal
-$('#newCanvasButton').click(function(){
-    document.getElementById('newCanvasModal').style.display = "block";
-});
-
-$('#newCanvas').click(function(){
-    newCanvas(document.getElementById('width').value,document.getElementById('height').value);
-});
-
-// When the user clicks on <span> (x), close the modal
-$('.close').click(function() {
-    document.getElementById('newCanvasModal').style.display = "none";
-    document.getElementById('exportModal').style.display = "none";
-});
-
-$('.closeJSON').click(function() {
-    document.getElementById('jsonModal').style.display = "none";
-});
-
-// When the user clicks anywhere outside of the modal, close it
-$(window).click(function(event) {
-    if (event.target == document.getElementById('exportModal')) {
-        document.getElementById('exportModal').style.display = "none";
-    }
-    if (event.target == document.getElementById('newCanvasModal')) {
-        document.getElementById('newCanvasModal').style.display = "none";
-    }
-    if (event.target == document.getElementById('jsonModal')) {
-        document.getElementById('jsonModal').style.display = "none";
-    }
-});
-
-$('.form').submit(function(e) {
-    e.preventDefault();
 });
