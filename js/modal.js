@@ -1,4 +1,13 @@
-//Keyboard shortcut Modal
+/* These functions control the modals and functions within the modals
+ *
+ * Author: Matt Carrick
+ * Website: http://matt.netsoc.co/FYP
+ */
+
+/*
+ * On hover of the keyboard icon fade in the modal background and content box
+ * On mouseout, fade them both out
+ */
 $('#keyboard-icon').hover(function(){
     $('#keyboardModal').fadeIn(800);
     $('#keyboardModal .modal-content').fadeIn(800);
@@ -7,11 +16,18 @@ $('#keyboard-icon').hover(function(){
     $('#keyboardModal .modal-content').fadeOut(800);
 });
 
-//Export Modal
+/*
+ * On click on the export button in the file menu, display the export modal
+ */
 $('#exportButton').click(function(){
     document.getElementById('exportModal').style.display = "block";
 });
 
+/*
+ * When any of the export buttons are clicked, either -
+ * display the JSON modal and fill the code box with JSON, or
+ * open the image on the canvas in a new tab/window
+ */
 $('.export').click(function(){
     if($(this).attr("value")=="json"){
         document.getElementById('jsonModal').style.display = "block";

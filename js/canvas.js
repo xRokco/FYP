@@ -1,9 +1,16 @@
+/* These functions control almost everything that occurs on the canvas, such as creating it, adding shapes, changing colours of tools
+ *
+ * Author: Matt Carrick
+ * Website: http://matt.netsoc.co/FYP
+ */
+
+
 /*
-* When page has finished loading -
-* - create the position coordinates object,
-* - get the canvas offset 
-* - remove the canvas selection box
-*/
+ * When page has finished loading -
+ * - create the position coordinates object,
+ * - get the canvas offset 
+ * - remove the canvas selection box
+ */
 $(document).ready(function(){
     var divPos = {};
     canvas.offset = $("#c").offset();
@@ -11,14 +18,14 @@ $(document).ready(function(){
     //var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
 
     /*
-    * Call the file upload functions when the relevant icon is clicked
-    */
+     * Call the file upload functions when the relevant icon is clicked
+     */
     $('#selectFile').change(handleFileSelect);
     $('#background').change(handleFileSelect2);
 
     /*
-    * Update the coordinates object as the mousemoves with the pointer coordinates
-    */
+     * Update the coordinates object as the mousemoves with the pointer coordinates
+     */
     $(document).mousemove(function(e){
         divPos = {
             left: e.pageX - canvas.offset.left,
@@ -27,18 +34,18 @@ $(document).ready(function(){
     });
 
     /*
-    * Recalculate the offset when the coordinates change due to window resize
-    */
+     * Recalculate the offset when the coordinates change due to window resize
+     */
     $(window).resize(function() {
         canvas.offset = $("#c").offset();
     });
 
     /*
-    * Enter object selection mode when the icon is clicked
-    * Change the cursor to the hand
-    * Hide all options
-    * Set all objects to selectable
-    */
+     * Enter object selection mode when the icon is clicked
+     * Change the cursor to the hand
+     * Hide all options
+     * Set all objects to selectable
+     */
     $('#select-mode').click(function(){
         console.log("entering select");
 
@@ -53,11 +60,11 @@ $(document).ready(function(){
     });
 
     /*
-    * Enter free drawing mode when the icon is clicked
-    * Set the line width
-    * Change the cursor to the pencil
-    * Display the relevant options while hiding non-relevant
-    */
+     * Enter free drawing mode when the icon is clicked
+     * Set the line width
+     * Change the cursor to the pencil
+     * Display the relevant options while hiding non-relevant
+     */
     $('#drawing-mode').click(function() {
         console.log("entering line drawing");
         canvas.deactivateAll().renderAll();
@@ -72,26 +79,26 @@ $(document).ready(function(){
     });
 
     /*
-    * Change the freeDrawingBrush color value when the colorpicker text field changes value
-    */
+     * Change the freeDrawingBrush color value when the colorpicker text field changes value
+     */
     $('#colorvalue').change(function() {
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
 
     /*
-    * Change the freeDrawingBrush width value when the slider changes
-    */
+     * Change the freeDrawingBrush width value when the slider changes
+     */
     $('#drawing-line-width').change(function() {
         canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
     });
 
 
     /*
-    * Enter rectangle drawing mode when the icon is clicked
-    * Init the shape variable
-    * Change the cursor to the rectangle
-    * Display the relevant options while hiding non-relevant
-    */
+     * Enter rectangle drawing mode when the icon is clicked
+     * Init the shape variable
+     * Change the cursor to the rectangle
+     * Display the relevant options while hiding non-relevant
+     */
     $('#rectangle-mode').click(function(){
         console.log("entering rectangle mode");
         canvas.deactivateAll().renderAll();
@@ -111,11 +118,11 @@ $(document).ready(function(){
     });
 
     /*
-    * Enter circle/ellipse drawing mode when the icon is clicked
-    * Init the shape variable
-    * Change the cursor to the circle
-    * Display the relevant options while hiding non-relevant
-    */
+     * Enter circle/ellipse drawing mode when the icon is clicked
+     * Init the shape variable
+     * Change the cursor to the circle
+     * Display the relevant options while hiding non-relevant
+     */
     $('#circle-mode').click(function(){
         console.log("entering circle mode");
         canvas.deactivateAll().renderAll();
@@ -135,10 +142,10 @@ $(document).ready(function(){
     });
 
     /*
-    * Enter text insertion mode when the icon is clicked
-    * Change the cursor to the text
-    * Display the relevant options while hiding non-relevant
-    */
+     * Enter text insertion mode when the icon is clicked
+     * Change the cursor to the text
+     * Display the relevant options while hiding non-relevant
+     */
     $('#text-mode').click(function () {
         console.log("entering text mode");
         canvas.deactivateAll().renderAll();
@@ -152,14 +159,14 @@ $(document).ready(function(){
     });
 
     /*
-    * When mouse is clicked down on the canvas -
-    * - set the isMouseDown variable to true
-    * - get the color for the shape fill if the option is checked
-    * - store the initial coordinates in variables
-    * - if rectangle mode is set create and add a rectangle object
-    * - if circle mode is set create an ellipse object or create a circle object if the lock aspect ratio is checked and add them 
-    * @param {Event} event Event object
-    */
+     * When mouse is clicked down on the canvas -
+     * - set the isMouseDown variable to true
+     * - get the color for the shape fill if the option is checked
+     * - store the initial coordinates in variables
+     * - if rectangle mode is set create and add a rectangle object
+     * - if circle mode is set create an ellipse object or create a circle object if the lock aspect ratio is checked and add them 
+     * @param {Event} event Event object
+     */
     canvas.on('mouse:down',function(event){   
         //Defining the procedure
         canvas.isMouseDown=true;
@@ -226,12 +233,12 @@ $(document).ready(function(){
     });
 
     /*
-    * When mouse is moved across the canvas -
-    * - check if isMouseDown variable is set to true and if not return
-    * - if rectangle mode is set, modify/generate the rectangle object based on mouse coords
-    * - if circle mode is set, do the same for the circle/ellipse
-    * @param {Event} event Event object
-    */
+     * When mouse is moved across the canvas -
+     * - check if isMouseDown variable is set to true and if not return
+     * - if rectangle mode is set, modify/generate the rectangle object based on mouse coords
+     * - if circle mode is set, do the same for the circle/ellipse
+     * @param {Event} event Event object
+     */
     canvas.on('mouse:move', function(event){
         // Defining the procedure
         if(!canvas.isMouseDown) {
@@ -311,13 +318,13 @@ $(document).ready(function(){
     });
 
     /*
-    * When mouse is clicked up from the canvas -
-    * - set isMouseDown variable to false
-    * - if free drawing mode is set, change the id attribute of the line just added (from 'undefined' to 'line')
-    * - if text drawing mode is set, add a text object at the mouse coordinates, select the object and display relevant options
-    * - if circle mode or rectangle mode is set, select the object
-    * - call the updateLayers function
-    */
+     * When mouse is clicked up from the canvas -
+     * - set isMouseDown variable to false
+     * - if free drawing mode is set, change the id attribute of the line just added (from 'undefined' to 'line')
+     * - if text drawing mode is set, add a text object at the mouse coordinates, select the object and display relevant options
+     * - if circle mode or rectangle mode is set, select the object
+     * - call the updateLayers function
+     */
     canvas.on('mouse:up',function(){
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
@@ -366,11 +373,11 @@ $(document).ready(function(){
     });
 
     /*
-    * When the text field in the text object options gets an input, keydown, a paste or a change -
-    * - change the text attribute of the object
-    * - change the id value of the object
-    * - call the updateLayers function
-    */
+     * When the text field in the text object options gets an input, keydown, a paste or a change -
+     * - change the text attribute of the object
+     * - change the id value of the object
+     * - call the updateLayers function
+     */
     $('#text').on('change keydown paste input', function() {
         console.log("text changed");
         canvas.getActiveObject().text = document.getElementById('text').value;
@@ -385,8 +392,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the font option changes change the font of the text on the select text object
-    */
+     * When the font option changes change the font of the text on the select text object
+     */
     $('#font').change(function() {
         console.log("font changed");
         canvas.getActiveObject().fontFamily = this.value;
@@ -394,8 +401,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the bold checkbox is checked, toggle between bold and normal font on the object
-    */
+     * When the bold checkbox is checked, toggle between bold and normal font on the object
+     */
     $('#bold').change(function() {
         console.log("bold changed");
         if(document.getElementById('bold').checked) {
@@ -407,8 +414,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the italic checkbox is checked, toggle between italic and normal font on the object
-    */
+     * When the italic checkbox is checked, toggle between italic and normal font on the object
+     */
     $('#italic').change(function() {
         console.log("italic changed");
         if(document.getElementById('italic').checked) {
@@ -420,8 +427,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the color value from the color picker changes, change the color of the selected object (rect, circle, ellipse, line, text)
-    */
+     * When the color value from the color picker changes, change the color of the selected object (rect, circle, ellipse, line, text)
+     */
     $('#colorvalue').change(function() {
         console.log("object colour changed");
         if(getSelectedType() == 'text'){
@@ -436,8 +443,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
-    */
+     * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
+     */
     $('#shape-line-width').on('input', function(){
         if(getSelectedType() != 'text' && getSelectedType() != 'image'){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("shape-line-width").value, 10) || 1;
@@ -446,8 +453,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When the fill checkbox is checked, toggle between solid and hollow center on the object (rect, circle, ellipse)
-    */
+     * When the fill checkbox is checked, toggle between solid and hollow center on the object (rect, circle, ellipse)
+     */
     $('#shape-fill').change(function(){
         if(getSelectedType() != 'text' && getSelectedType() != 'image'){
             if(document.getElementById('shape-fill').checked) {
@@ -507,10 +514,10 @@ $(document).ready(function(){
     });
 
     /*
-    * When an object is selected
-    * - simulate a click on the select icon
-    * - display the relevant options
-    */
+     * When an object is selected
+     * - simulate a click on the select icon
+     * - display the relevant options
+     */
     canvas.on('object:selected', function() {
         if(getSelectedType() == 'text'){
             $('#select-mode').click();
@@ -524,8 +531,8 @@ $(document).ready(function(){
     });
 
     /*
-    * When objects stop being selected, unless in free drawing mode, simulate a select icon click
-    */
+     * When objects stop being selected, unless in free drawing mode, simulate a select icon click
+     */
     canvas.on('selection:cleared', function() {
         if( !canvas.isDrawingMode ){
             $('#select-mode').click();
@@ -586,9 +593,9 @@ $(document).ready(function(){
     });
 
     /*
-    * When a key is pressed call this function
-    * @param {Event} event Event object
-    */
+     * When a key is pressed call this function
+     * @param {Event} event Event object
+     */
     $(document).on('keypress', function( event ) {
         console.log(event.which);
         /*keycodes
@@ -614,10 +621,10 @@ $(document).ready(function(){
     });
 
     /*
-    * When a key is pushed down, call this function
-    * - only perform certain actions if the control key was held down when the function gets called
-    * @param {Event} event Event object
-    */
+     * When a key is pushed down, call this function
+     * - only perform certain actions if the control key was held down when the function gets called
+     * @param {Event} event Event object
+     */
     $(document).on('keydown', function( event ) {
         console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
@@ -698,10 +705,10 @@ $(document).ready(function(){
     });
 
     /*
-    * When mouse whele is scrolled, call this function and -
-    * - if ctrl is help while scrolling, zoom based on direction
-    * @param {Event} event Event object
-    */
+     * When mouse whele is scrolled, call this function and -
+     * - if ctrl is help while scrolling, zoom based on direction
+     * @param {Event} event Event object
+     */
     $(window).bind('mousewheel DOMMouseScroll', function (event) {
         if (event.ctrlKey == true) {
             if (event.originalEvent.wheelDelta >= 0) {
@@ -716,8 +723,8 @@ $(document).ready(function(){
     });
 
     /*
-    * Override copy behaviour to copy the selected object or group to clipboard
-    */
+     * Override copy behaviour to copy the selected object or group to clipboard
+     */
     $(document).bind('copy', function() {
         console.log('copied')
         if(canvas.getActiveObject()) {
@@ -728,8 +735,8 @@ $(document).ready(function(){
     }); 
 
     /*
-    * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
-    */
+     * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
+     */
     $(document).bind('cut', function() {
         console.log('cut')
         if(canvas.getActiveObject()) {
@@ -744,8 +751,8 @@ $(document).ready(function(){
     });
 
     /*
-    * Override paste behaviour to paste/clone the copied/cut object or group to the canvas
-    */
+     * Override paste behaviour to paste/clone the copied/cut object or group to the canvas
+     */
     $(document).bind('paste', function() {
         if(canvas.getActiveObject()) {
             console.log('pasted')
@@ -766,7 +773,7 @@ $(document).ready(function(){
     });
 
     /*
-    * Simulate a select icon click to init the function
-    */
+     * Simulate a select icon click to init the functions
+     */
     $('#select-mode').click();
 });
