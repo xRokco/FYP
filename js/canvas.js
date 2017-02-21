@@ -15,7 +15,8 @@ $(document).ready(function(){
     var divPos = {};
     canvas.offset = $("#c").offset();
     canvas.selectionColor = "rgba(0,0,0,0)";
-    //var context = document.getElementsByClassName("upper-canvas")[0].getContext('2d');
+    canvas.selectionBorderColor = "rgba(0,0,0,0)";
+    var context = document.getElementById("c").getContext('2d');
 
     /*
      * Call the file upload functions when the relevant icon is clicked
@@ -53,6 +54,7 @@ $(document).ready(function(){
         $('#select-mode').css("border", "1px solid silver");
 
         canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
+        canvas.selectionBorderColor = "rgba(255, 255, 255, 0.3)";
         canvas.defaultCursor = "url('images/cursors/select.png'), auto";
         canvas.hoverCursor = "url('images/cursors/select.png'), auto";
         canvas.moveCursor = "url('images/cursors/select.png'), auto";
@@ -159,10 +161,28 @@ $(document).ready(function(){
     });
 
     /*
+     * Enter eyedropper mode when the icon is clicked
+     * Change the cursor to the eyedropper
+     * Hide options
+     */
+    $('#eyedropper-mode').click(function (){
+        console.log("entering eyedropper mode");
+        canvas.deactivateAll().renderAll();
+
+        hideOptions();
+        $('#eyedropper-mode').css("border", "1px solid silver");
+
+        canvas.defaultCursor = "url('images/cursors/eyedropper.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/eyedropper.png'), auto";
+        canvas.eyedropper = true;
+    });
+
+    /*
      * When mouse is clicked down on the canvas -
      * - set the isMouseDown variable to true
      * - get the color for the shape fill if the option is checked
      * - store the initial coordinates in variables
+     * - if eyedropper mode is set get image data from pixel
      * - if rectangle mode is set create and add a rectangle object
      * - if circle mode is set create an ellipse object or create a circle object if the lock aspect ratio is checked and add them 
      * @param {Event} event Event object
@@ -179,6 +199,21 @@ $(document).ready(function(){
 
         startPointLeft = divPos.left;
         startPointTop = divPos.top;
+
+        if(canvas.eyedropper) {
+            // calculate the x and y coordinates of the cursor
+            var imagesdata = context.getImageData(divPos.left, divPos.top, 1, 1 );
+            var new_color = [ imagesdata.data[0],
+                            imagesdata.data[1],
+                            imagesdata.data[2] ];
+            
+            hexr = ("00" + imagesdata.data[0].toString(16)).substr(-2);
+            hexg = ("00" + imagesdata.data[1].toString(16)).substr(-2);
+            hexb = ("00" + imagesdata.data[2].toString(16)).substr(-2);
+
+            $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
+            $('.farbtastic').click();
+        }
 
         //Creating the rectangle object
         if(canvas.rectDrawing) {
@@ -241,8 +276,27 @@ $(document).ready(function(){
      */
     canvas.on('mouse:move', function(event){
         // Defining the procedure
+        //console.log(divPos.left + 'vs' + canvas.getPointer().x);
+        //console.log(divPos.top + 'vs' + canvas.getPointer().y);
+
+
         if(!canvas.isMouseDown) {
             return;
+        }
+
+        if(canvas.eyedropper) {
+            // calculate the x and y coordinates of the cursor
+            var imagesdata = context.getImageData(divPos.left, divPos.top, 1, 1 );
+            var new_color = [ imagesdata.data[0],
+                            imagesdata.data[1],
+                            imagesdata.data[2] ];
+            
+            hexr = ("00" + imagesdata.data[0].toString(16)).substr(-2);
+            hexg = ("00" + imagesdata.data[1].toString(16)).substr(-2);
+            hexb = ("00" + imagesdata.data[2].toString(16)).substr(-2);
+
+            $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
+            $('.farbtastic').click();
         }
         
         //Getting the mouse Co-ordinates
@@ -285,6 +339,7 @@ $(document).ready(function(){
                 }
             }
             refShape.setCoords();
+            console.log(refShape);
             canvas.renderAll(); 
         }
 
@@ -430,10 +485,11 @@ $(document).ready(function(){
      * When the color value from the color picker changes, change the color of the selected object (rect, circle, ellipse, line, text)
      */
     $('#colorvalue').change(function() {
-        console.log("object colour changed");
         if(getSelectedType() == 'text'){
+            console.log("text colour changed");
             canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
         } else if (getSelectedType() != 'image' && getSelectedType() != null) {
+            console.log("rect, circle, ellipse colour changed");
             if(document.getElementById('shape-fill').checked) {
                 canvas.getActiveObject().fill = $.farbtastic('#colorpicker').color;
             }
@@ -456,14 +512,16 @@ $(document).ready(function(){
      * When the fill checkbox is checked, toggle between solid and hollow center on the object (rect, circle, ellipse)
      */
     $('#shape-fill').change(function(){
-        if(getSelectedType() != 'text' && getSelectedType() != 'image'){
-            if(document.getElementById('shape-fill').checked) {
-                var fill = $.farbtastic('#colorpicker').color;
-            } else {
-                var fill = '';
+        if(canvas.getActiveObject()){
+            if(getSelectedType() != 'text' && getSelectedType() != 'image'){
+                if(document.getElementById('shape-fill').checked) {
+                    var fill = $.farbtastic('#colorpicker').color;
+                } else {
+                    var fill = '';
+                }
+                canvas.getActiveObject().fill = fill;
+                canvas.renderAll();
             }
-            canvas.getActiveObject().fill = fill;
-            canvas.renderAll();
         }
     });
 

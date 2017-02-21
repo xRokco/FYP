@@ -10,7 +10,7 @@ $(document).ready(function() {
         $("#gvalue").val(g);
         $("#bvalue").val(b);
 
-        console.log([r, g, b]);
+        //console.log([r, g, b]);
         r /= 255, g /= 255, b /= 255;
         var max = Math.max(r, g, b), min = Math.min(r, g, b);
         var h, s, l = (max + min) / 2;

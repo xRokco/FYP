@@ -1,12 +1,13 @@
 //Canvac creation
 var canvas = new fabric.Canvas('c');
+canvas.enableRetinaScaling = false;
 canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
 canvas.setHeight(500);
 canvas.setWidth(800);
-//canvas.enableRetinaScaling = false;
+
 canvas.renderAll();
-console.log(canvas);
+
 
 $( function() {
     $( ".drag" ).draggable();
@@ -14,11 +15,13 @@ $( function() {
 
 //hide options
 function hideOptions() {
+    canvas.eyedropper = false;
     canvas.isDrawingMode = false;
     canvas.rectDrawing = false;
     canvas.circleDrawing = false;
     canvas.textDrawing = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
+    canvas.selectionBorderColor = "rgba(0,0,0,0)";
 
     $('.tool').css("border", "1px solid #EEE");
 
@@ -103,6 +106,7 @@ function newCanvas(width, height) {
     fabric.Object.prototype.selectable = false;
     canvas.setHeight(height);
     canvas.setWidth(width);
+    $(window).resize();
     $('.close').click();
     document.getElementById('canvasWrapper').style.width = width + "px";
 }
@@ -146,6 +150,9 @@ var myAppModule = (function () {
             canvas.setHeight(img.height);
             canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
             canvas.background = false;
+            document.getElementById('canvasWrapper').style.width = img.width + "px";
+            $(window).resize();
+            $('#select-mode').click();
         } else {
             canvas.add(cImg);
             updateLayers();
