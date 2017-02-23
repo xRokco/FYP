@@ -29,19 +29,51 @@ $('#exportButton').click(function(){
  * open the image on the canvas in a new tab/window
  */
 $('.export').click(function(){
+    document.getElementById('load').style.display='block';
     if($(this).attr("value")=="json"){
+        document.getElementById('json').innerHTML = 'Loading...';
         document.getElementById('jsonModal').style.display = "block";
-        document.getElementById('json').innerHTML = JSON.stringify(canvas, null, 4)
+        setTimeout(function() {
+            document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id']), null, 4);
+        }, 0);
     } else {
         window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
     }
+    document.getElementById('load').style.display = "none";
 });
 
 $('#select').click(function(){
-    var range = document.createRange();
-    range.selectNode(document.getElementById('json'));
-    window.getSelection().addRange(range);
+    var text = document.getElementById('json');
+    if (document.body.createTextRange) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else {
+        var selection = window.getSelection();
+        var range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } 
 });
+
+$('#importButton').click(function(){
+    document.getElementById('importModal').style.display = 'block';
+});
+
+$('#import').click(function(){
+    var json = document.getElementById('importJSON').value;
+    var object = JSON.parse(json);
+    console.log("importing")
+    canvas.loadFromJSON(json, function(){
+        canvas.renderAll.bind(canvas);
+        canvas.setWidth(object.width);
+        canvas.setHeight(object.height);
+        document.getElementById('canvasWrapper').style.width = object.width + "px";
+        updateLayers();
+        $('.close').click();
+    });
+})
 
 //Export Modal
 $('#newCanvasButton').click(function(){
@@ -56,6 +88,7 @@ $('#newCanvas').click(function(){
 $('.close').click(function() {
     document.getElementById('newCanvasModal').style.display = "none";
     document.getElementById('exportModal').style.display = "none";
+    document.getElementById('importModal').style.display = "none";
 });
 
 $('.closeJSON').click(function() {
@@ -72,6 +105,9 @@ $(window).click(function(event) {
     }
     if (event.target == document.getElementById('jsonModal')) {
         document.getElementById('jsonModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('importModal')) {
+        document.getElementById('importModal').style.display = "none";
     }
 });
 

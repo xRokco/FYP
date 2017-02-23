@@ -12,34 +12,14 @@
  * - remove the canvas selection box
  */
 $(document).ready(function(){
-    var divPos = {};
-    canvas.offset = $("#c").offset();
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
     var context = document.getElementById("c").getContext('2d');
-
     /*
      * Call the file upload functions when the relevant icon is clicked
      */
     $('#selectFile').change(handleFileSelect);
     $('#background').change(handleFileSelect2);
-
-    /*
-     * Update the coordinates object as the mousemoves with the pointer coordinates
-     */
-    $(document).mousemove(function(e){
-        divPos = {
-            left: e.pageX - canvas.offset.left,
-            top: e.pageY - canvas.offset.top
-        };
-    });
-
-    /*
-     * Recalculate the offset when the coordinates change due to window resize
-     */
-    $(window).resize(function() {
-        canvas.offset = $("#c").offset();
-    });
 
     /*
      * Enter object selection mode when the icon is clicked
@@ -197,12 +177,12 @@ $(document).ready(function(){
             var fill = '';
         }
 
-        startPointLeft = divPos.left;
-        startPointTop = divPos.top;
+        startPointLeft = canvas.getPointer().x;
+        startPointTop = canvas.getPointer().y;
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
-            var imagesdata = context.getImageData(divPos.left, divPos.top, 1, 1 );
+            var imagesdata = context.getImageData(canvas.getPointer().x, canvas.getPointer().y, 1, 1 );
             var new_color = [ imagesdata.data[0],
                             imagesdata.data[1],
                             imagesdata.data[2] ];
@@ -219,8 +199,8 @@ $(document).ready(function(){
         if(canvas.rectDrawing) {
             var rect=new fabric.Rect({
                 id: 'rectangle',
-                left:divPos.left,
-                top:divPos.top,
+                left:canvas.getPointer().x,
+                top:canvas.getPointer().y,
                 width:5,
                 height:5,
                 stroke: $.farbtastic('#colorpicker').color,
@@ -237,8 +217,8 @@ $(document).ready(function(){
             if(document.getElementById('lock').checked){
                 var circle = new fabric.Circle({
                     id: 'circle',
-                    left:divPos.left,
-                    top:divPos.top,                
+                    left:canvas.getPointer().x,
+                    top:canvas.getPointer().y,                
                     radius:6,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
@@ -250,10 +230,10 @@ $(document).ready(function(){
                     id: 'ellipse',
                     left: startPointLeft,
                     top: startPointTop,
-                    originX:divPos.left,
-                    originY:divPos.top,
-                    rx: divPos.left-startPointLeft,
-                    ry: divPos.top-startPointTop,
+                    originX:canvas.getPointer().x,
+                    originY:canvas.getPointer().y,
+                    rx: canvas.getPointer().x-startPointLeft,
+                    ry: canvas.getPointer().y-startPointTop,
                     angle: 0,
                     fill: '',
                     stroke: $.farbtastic('#colorpicker').color,
@@ -276,8 +256,8 @@ $(document).ready(function(){
      */
     canvas.on('mouse:move', function(event){
         // Defining the procedure
-        //console.log(divPos.left + 'vs' + canvas.getPointer().x);
-        //console.log(divPos.top + 'vs' + canvas.getPointer().y);
+        //console.log(canvas.getPointer().x + 'vs' + canvas.getPointer().x);
+        //console.log(canvas.getPointer().y + 'vs' + canvas.getPointer().y);
 
 
         if(!canvas.isMouseDown) {
@@ -286,7 +266,7 @@ $(document).ready(function(){
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
-            var imagesdata = context.getImageData(divPos.left, divPos.top, 1, 1 );
+            var imagesdata = context.getImageData(canvas.getPointer().x, canvas.getPointer().y, 1, 1 );
             var new_color = [ imagesdata.data[0],
                             imagesdata.data[1],
                             imagesdata.data[2] ];
@@ -301,8 +281,8 @@ $(document).ready(function(){
         
         //Getting the mouse Co-ordinates
         if(canvas.rectDrawing) {
-            var posX=divPos.left;
-            var posY=divPos.top;
+            var posX=canvas.getPointer().x;
+            var posY=canvas.getPointer().y;
 
             if(document.getElementById('lock').checked){
                 refShape.id = 'square';
@@ -339,13 +319,12 @@ $(document).ready(function(){
                 }
             }
             refShape.setCoords();
-            console.log(refShape);
             canvas.renderAll(); 
         }
 
         if(canvas.circleDrawing) {
-            var posX=divPos.left;
-            var posY=divPos.top;
+            var posX=canvas.getPointer().x;
+            var posY=canvas.getPointer().y;
 
             if(document.getElementById('lock').checked) {
                 var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
@@ -406,8 +385,8 @@ $(document).ready(function(){
             console.log("adding text");
             var text = new fabric.Text('text', {
                 id: 'text',
-                left: divPos.left, 
-                top: divPos.top,
+                left: canvas.getPointer().x, 
+                top: canvas.getPointer().y,
                 fontFamily: "Raleway",
                 fontWeight: bold,
                 fontStyle: italic,
@@ -619,7 +598,7 @@ $(document).ready(function(){
                 top: 0,
                 width: canvas.width,
                 height: canvas.height,
-                multiplier: 1/window.devicePixelRatio
+                multiplier: 1
             });
 
             //var tempImg = new Image();
@@ -784,11 +763,13 @@ $(document).ready(function(){
      * Override copy behaviour to copy the selected object or group to clipboard
      */
     $(document).bind('copy', function() {
-        console.log('copied')
-        if(canvas.getActiveObject()) {
-            canvas.clipboard = canvas.getActiveObject();
-        } else if(canvas.getActiveGroup()) {
-            canvas.clipboard = canvas.getActiveGroup();
+        if(!$("input,textarea,select").is(":focus")) {
+            console.log('copied')
+            if(canvas.getActiveObject()) {
+                canvas.clipboard = canvas.getActiveObject();
+            } else if(canvas.getActiveGroup()) {
+                canvas.clipboard = canvas.getActiveGroup();
+            } 
         }
     }); 
 
@@ -796,37 +777,48 @@ $(document).ready(function(){
      * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
      */
     $(document).bind('cut', function() {
-        console.log('cut')
-        if(canvas.getActiveObject()) {
-            canvas.clipboard = canvas.getActiveObject();
-            canvas.getActiveObject().remove();
-            updateLayers();
-        } else if(canvas.getActiveGroup()) {
-            canvas.clipboard = canvas.getActiveGroup();
-            canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-            updateLayers();
+        if(!$("input,textarea,select").is(":focus")) {
+            console.log('cut')
+            if(canvas.getActiveObject()) {
+                canvas.clipboard = canvas.getActiveObject();
+                canvas.getActiveObject().remove();
+                updateLayers();
+            } else if(canvas.getActiveGroup()) {
+                canvas.clipboard = canvas.getActiveGroup();
+                canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+                updateLayers();
+            }
         }
     });
 
     /*
      * Override paste behaviour to paste/clone the copied/cut object or group to the canvas
      */
-    $(document).bind('paste', function() {
-        if(canvas.getActiveObject()) {
+    $(document).bind('paste', function(e) {
+        if(!$("input,textarea,select").is(":focus")) {
             console.log('pasted')
-            var object = fabric.util.object.clone(canvas.clipboard);
-            object.set("top", object.top+15);
-            object.set("left", object.left+15);
-            canvas.add(object);
-            updateLayers();
-        } else if(canvas.getActiveGroup()) {
-            canvas.clipboard.forEachObject(function(o) {
-                var object = fabric.util.object.clone(o);
+            if(canvas.getActiveObject()) {
+                var object = fabric.util.object.clone(canvas.clipboard);
                 object.set("top", object.top+15);
                 object.set("left", object.left+15);
                 canvas.add(object);
                 updateLayers();
-            })
+            } else if(canvas.getActiveGroup()) {
+                canvas.clipboard.forEachObject(function(o) {
+                    var object = fabric.util.object.clone(o);
+                    object.set("top", object.top+15);
+                    object.set("left", object.left+15);
+                    canvas.add(object);
+                    updateLayers();
+                })
+            }
+        } else if($("#importJSON").is(":focus")) {
+            e.preventDefault();
+            $('#importJSON').val("Loading...");
+            var data = e.originalEvent.clipboardData.getData('text');
+            setTimeout(function() {
+                $('#importJSON').val(data);
+            }, 0, data);
         }
     });
 

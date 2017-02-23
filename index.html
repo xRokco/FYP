@@ -57,7 +57,7 @@
                                     <input id="background" type="file"/>
                                 </li>
                                 <li class="popover-item">
-                                    <a class="popover-link" href="#grid">Save</a>
+                                    <a class="popover-link" href="javascript:void(0)" id="importButton">Import</a>
                                 </li>
                                 <li class="popover-item">
                                     <a href="javascript:void(0)" class="popover-link" id="exportButton">Export</a>
@@ -109,7 +109,7 @@
             <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
             <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
             <img id="eyedropper-mode" class="tool" src="images/tools/eyedropper.png">
-            <img id="erase-mode" class="tool" src="images/tools/image.png">
+            <img id="rasterize" class="tool" src="images/tools/image.png">
         </div>
 
         <div class="drag toolOptions">
@@ -195,6 +195,7 @@
             <!-- Modal content -->
             <div class="modal-content">
                 <a href="javascript:void(0)" class="closeJSON"><i class="fa fa-times"></i></a>
+                <h4>JSON...</h4>
                 <pre><code id="json"></code></pre>
                 <input class="button-primary" id="select" value="Select all" type="submit">
             </div>
@@ -260,6 +261,23 @@
                 </div>
             </div>
         </div>
+
+        <div id="importModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--<div class="modal-close-icon">-->
+                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
+                <h4>Import from JSON...</h4>
+                <div class="row">
+                    <div class="twelve columns">
+                        <textarea id="importJSON"></textarea>
+                    </div>
+                    <input class="button-primary" id="import" value="Import" type="submit">
+                </div>
+            </div>
+        </div>
+
+        <div id="load"><img src="images/loading.gif"/></div>
 
         <footer>
             <!-- More Scripts

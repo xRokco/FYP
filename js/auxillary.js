@@ -35,10 +35,6 @@ function updateLayers() {
     var obj = canvas.getObjects();
     var text = "";
     for(i=obj.length - 1; i >= 0;i--){
-        if(obj[i].id == "erase"){
-            canvas.sendToBack(canvas.item(i));
-            //continue;
-        }
         if(i == obj.length - 1){
             var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
         } else {
@@ -92,7 +88,7 @@ function newCanvas(width, height) {
     width = width || canvas.width;
     height = height || canvas.height;
     bg = canvas.backgroundColor
-    canvas.clear()
+    canvas.clear();
     if(document.getElementById('transparent').checked){
         canvas.backgroundColor=null;
     } else {
@@ -106,7 +102,7 @@ function newCanvas(width, height) {
     fabric.Object.prototype.selectable = false;
     canvas.setHeight(height);
     canvas.setWidth(width);
-    $(window).resize();
+    updateLayers();
     $('.close').click();
     document.getElementById('canvasWrapper').style.width = width + "px";
 }
@@ -146,6 +142,7 @@ var myAppModule = (function () {
         });
 
         if(canvas.background) {
+            canvas.clear();
             canvas.setWidth(img.width);
             canvas.setHeight(img.height);
             canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
