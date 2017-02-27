@@ -67,6 +67,18 @@ $(document).ready(function(){
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
 
+    $('#rotateCW').click(function() {
+        rotate(90);
+    });
+
+    $('#rotateCCW').click(function() {
+        rotate(-90);
+    });
+
+    //canvas.on('object:rotating', function(e) {
+    //    console.log(canvas.getActiveGroup());
+    //});
+
     /*
      * Change the freeDrawingBrush width value when the slider changes
      */
@@ -557,8 +569,8 @@ $(document).ready(function(){
      */
     canvas.on('object:selected', function() {
         if(getSelectedType() == 'text'){
-            $('#select-mode').click();
             hideOptions();
+            $('#select-mode').click();
             document.getElementById("text-mode-options").style.display = 'block';
         } else if (getSelectedType() == 'rectangle' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             $('#select-mode').click();

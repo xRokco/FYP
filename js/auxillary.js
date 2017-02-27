@@ -3,9 +3,10 @@ var canvas = new fabric.Canvas('c');
 canvas.enableRetinaScaling = false;
 canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
-canvas.setHeight(500);
-canvas.setWidth(800);
-
+canvas.setHeight(200);
+canvas.setWidth(300);
+document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+var angle = 0;
 canvas.renderAll();
 
 
@@ -55,6 +56,60 @@ function updateLayers() {
         text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
+}
+
+function rotate(a) {
+
+    var width = canvas.getWidth();
+    var height = canvas.getHeight();
+    canvas.setWidth(height);
+    canvas.setHeight(width);
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+
+    var group = new fabric.Group();
+    var origItems = canvas._objects;
+
+    if(a > 0){
+        group.set({width: canvas.width, height: canvas.height, left: canvas.width, top: 0, originX: 'center', originY: 'center', centeredRotation: true})        
+    } else {
+        group.set({width: canvas.width, height: canvas.height, left: 0, top: canvas.height, originX: 'center', originY: 'center', centeredRotation: true})            
+    }
+    
+
+    var obj = canvas.getObjects();
+    for(i=obj.length - 1; i >= 0;i--){
+        group.add(obj[i]);
+    }
+    canvas.add(group);
+    group.set({angle: a});
+    angle = (angle + a) % 360;
+    console.log(angle);
+    canvas.backgroundImage.setAngle(angle);
+
+    if(angle == 0) {
+        canvas.backgroundImage.top = 0;
+        canvas.backgroundImage.left = 0;
+    } else if(angle == 90 || angle == -270){
+        canvas.backgroundImage.top = 0;
+        canvas.backgroundImage.left = canvas.width;
+    } else if(angle == 180 || angle == -180) {
+        canvas.backgroundImage.top = canvas.height;
+        canvas.backgroundImage.left = canvas.width;
+    } else if(angle == 270 || angle == -90){
+        canvas.backgroundImage.top = canvas.height;
+        canvas.backgroundImage.left = 0;
+    }
+
+    canvas.renderAll();
+
+    items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+
+    for (var i = 0; i < items.length; i++) {
+        canvas.add(items[i]);
+        canvas.remove(origItems[i]);
+    }
 }
 
 function moveBack(index) {
