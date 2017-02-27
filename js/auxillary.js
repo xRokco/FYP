@@ -82,22 +82,26 @@ function rotate(a) {
     }
     canvas.add(group);
     group.set({angle: a});
-    angle = (angle + a) % 360;
-    console.log(angle);
-    canvas.backgroundImage.setAngle(angle);
 
-    if(angle == 0) {
-        canvas.backgroundImage.top = 0;
-        canvas.backgroundImage.left = 0;
-    } else if(angle == 90 || angle == -270){
-        canvas.backgroundImage.top = 0;
-        canvas.backgroundImage.left = canvas.width;
-    } else if(angle == 180 || angle == -180) {
-        canvas.backgroundImage.top = canvas.height;
-        canvas.backgroundImage.left = canvas.width;
-    } else if(angle == 270 || angle == -90){
-        canvas.backgroundImage.top = canvas.height;
-        canvas.backgroundImage.left = 0;
+    if(canvas.backgroundImage){
+        angle = (angle + a) % 360;
+        console.log(angle);
+        
+        canvas.backgroundImage.setAngle(angle);
+
+        if(angle == 0) {
+            canvas.backgroundImage.top = 0;
+            canvas.backgroundImage.left = 0;
+        } else if(angle == 90 || angle == -270){
+            canvas.backgroundImage.top = 0;
+            canvas.backgroundImage.left = canvas.width;
+        } else if(angle == 180 || angle == -180) {
+            canvas.backgroundImage.top = canvas.height;
+            canvas.backgroundImage.left = canvas.width;
+        } else if(angle == 270 || angle == -90){
+            canvas.backgroundImage.top = canvas.height;
+            canvas.backgroundImage.left = 0;
+        }
     }
 
     canvas.renderAll();
