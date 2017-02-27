@@ -75,6 +75,14 @@ $(document).ready(function(){
         rotate(-90);
     });
 
+    $('#flipY').click(function() {
+        flipY();
+    });
+
+    $('#flipX').click(function() {
+        flipX();
+    });
+
     //canvas.on('object:rotating', function(e) {
     //    console.log(canvas.getActiveGroup());
     //});

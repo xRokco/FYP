@@ -7,6 +7,8 @@ canvas.setHeight(200);
 canvas.setWidth(300);
 document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
 var angle = 0;
+var backgroundFlipY = false;
+var backgroundFlipX = false;
 canvas.renderAll();
 
 
@@ -86,7 +88,7 @@ function rotate(a) {
     if(canvas.backgroundImage){
         angle = (angle + a) % 360;
         console.log(angle);
-        
+
         canvas.backgroundImage.setAngle(angle);
 
         if(angle == 0) {
@@ -101,6 +103,102 @@ function rotate(a) {
         } else if(angle == 270 || angle == -90){
             canvas.backgroundImage.top = canvas.height;
             canvas.backgroundImage.left = 0;
+        }
+    }
+
+    canvas.renderAll();
+
+    items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+
+    for (var i = 0; i < items.length; i++) {
+        canvas.add(items[i]);
+        canvas.remove(origItems[i]);
+    }
+}
+
+function flipY() {
+    var group = new fabric.Group();
+    var origItems = canvas._objects;
+
+    group.set({width: canvas.width, height: canvas.height, left: canvas.width, top: 0, originX: 'center', originY: 'center', centeredRotation: true})        
+    
+    var obj = canvas.getObjects();
+    for(i=obj.length - 1; i >= 0;i--){
+        group.add(obj[i]);
+    }
+
+    canvas.add(group);
+    group.set("angle", "-180").set('flipY', true);
+
+    if(canvas.backgroundImage){
+        angle = (angle + 180) % 360;
+        console.log(angle);
+
+
+        if(angle == 90 || angle == 270 || angle == -90 || angle == -270){
+            backgroundFlipX = !backgroundFlipX;
+            canvas.backgroundImage.setAngle(angle).set('flipX', backgroundFlipX);   
+        } else if(angle == 0 || angle == 180 || angle == -0 || angle == -180){
+            backgroundFlipY = !backgroundFlipY;
+            canvas.backgroundImage.setAngle(angle).set('flipY', backgroundFlipY);   
+        }
+
+        if(angle == 0) {
+            canvas.backgroundImage.top = 0;
+            canvas.backgroundImage.left = 0;
+        } else if(angle == 180 || angle == -180) {
+            canvas.backgroundImage.top = canvas.height;
+            canvas.backgroundImage.left = canvas.width;
+        }
+    }
+
+    canvas.renderAll();
+
+    items = group._objects;
+    group._restoreObjectsState();
+    canvas.remove(group);
+
+    for (var i = 0; i < items.length; i++) {
+        canvas.add(items[i]);
+        canvas.remove(origItems[i]);
+    }
+}
+
+function flipX() {
+    var group = new fabric.Group();
+    var origItems = canvas._objects;
+
+    group.set({width: canvas.width, height: canvas.height, left: 0, top: canvas.height, originX: 'center', originY: 'center', centeredRotation: true})        
+    
+    var obj = canvas.getObjects();
+    for(i=obj.length - 1; i >= 0;i--){
+        group.add(obj[i]);
+    }
+
+    canvas.add(group);
+    group.set("angle", "-180").set('flipX', true);
+
+    if(canvas.backgroundImage){
+        angle = (angle + 180) % 360;
+        console.log(angle);
+
+
+        if(angle == 90 || angle == 270 || angle == -90 || angle == -270){
+            backgroundFlipY = !backgroundFlipY;
+            canvas.backgroundImage.setAngle(angle).set('flipY', backgroundFlipY);   
+        } else if(angle == 0 || angle == 180 || angle == -0 || angle == -180){
+            backgroundFlipX = !backgroundFlipX;
+            canvas.backgroundImage.setAngle(angle).set('flipX', backgroundFlipX);   
+        }
+
+        if(angle == 0) {
+            canvas.backgroundImage.top = 0;
+            canvas.backgroundImage.left = 0;
+        } else if(angle == 180 || angle == -180) {
+            canvas.backgroundImage.top = canvas.height;
+            canvas.backgroundImage.left = canvas.width;
         }
     }
 
@@ -161,6 +259,9 @@ function newCanvas(width, height) {
     fabric.Object.prototype.selectable = false;
     canvas.setHeight(height);
     canvas.setWidth(width);
+    angle = 0;
+    backgroundFlipY = false;
+    backgroundFlipX = false;
     updateLayers();
     $('.close').click();
     document.getElementById('canvasWrapper').style.width = width + "px";
@@ -207,6 +308,9 @@ var myAppModule = (function () {
             canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
             canvas.background = false;
             document.getElementById('canvasWrapper').style.width = img.width + "px";
+            angle = 0;
+            backgroundFlipY = false;
+            backgroundFlipX = false;
             $(window).resize();
             $('#select-mode').click();
         } else {
