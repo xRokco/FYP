@@ -34,7 +34,7 @@ $('.export').click(function(){
         document.getElementById('json').innerHTML = 'Loading...';
         document.getElementById('jsonModal').style.display = "block";
         setTimeout(function() {
-            document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id']), null, 4);
+            document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2']), null, 4);
         }, 0);
     } else {
         window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
@@ -70,6 +70,16 @@ $('#import').click(function(){
         canvas.setWidth(object.width);
         canvas.setHeight(object.height);
         document.getElementById('canvasWrapper').style.width = object.width + "px";
+        var obj = canvas.getObjects();
+        for(i=obj.length - 1; i >= 0;i--){
+            if(obj[i].flipX2 == true && obj[i].flipY2 == true){
+                //do nothing
+            }else if(obj[i].flipY2 == true || obj[i].flipX2 == true){
+                console.log("flipping")
+                obj[i].flipY = true;
+            }
+        }
+        canvas.renderAll();
         updateLayers();
         $('.close').click();
     });

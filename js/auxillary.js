@@ -127,6 +127,7 @@ function flipY() {
     var obj = canvas.getObjects();
     for(i=obj.length - 1; i >= 0;i--){
         group.add(obj[i]);
+        obj[i].flipY2 = !obj[i].flipY2;
     }
 
     canvas.add(group);
@@ -175,6 +176,7 @@ function flipX() {
     var obj = canvas.getObjects();
     for(i=obj.length - 1; i >= 0;i--){
         group.add(obj[i]);
+        obj[i].flipX2 = !obj[i].flipX2;
     }
 
     canvas.add(group);
@@ -187,7 +189,7 @@ function flipX() {
 
         if(angle == 90 || angle == 270 || angle == -90 || angle == -270){
             backgroundFlipY = !backgroundFlipY;
-            canvas.backgroundImage.setAngle(angle).set('flipY', backgroundFlipY);   
+            canvas.backgroundImage.setAngle(angle).set('flipY', backgroundFlipY);  
         } else if(angle == 0 || angle == 180 || angle == -0 || angle == -180){
             backgroundFlipX = !backgroundFlipX;
             canvas.backgroundImage.setAngle(angle).set('flipX', backgroundFlipX);   
