@@ -15,6 +15,9 @@ $(document).ready(function(){
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
     var context = document.getElementById("c").getContext('2d');
+    var clipboard = [];
+    var pasteMultiplier = 0;
+
     /*
      * Call the file upload functions when the relevant icon is clicked
      */
@@ -66,26 +69,6 @@ $(document).ready(function(){
     $('#colorvalue').change(function() {
         canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
     });
-
-    $('#rotateCW').click(function() {
-        rotate(90);
-    });
-
-    $('#rotateCCW').click(function() {
-        rotate(-90);
-    });
-
-    $('#flipY').click(function() {
-        flipY();
-    });
-
-    $('#flipX').click(function() {
-        flipX();
-    });
-
-    //canvas.on('object:rotating', function(e) {
-    //    console.log(canvas.getActiveGroup());
-    //});
 
     /*
      * Change the freeDrawingBrush width value when the slider changes
@@ -683,7 +666,7 @@ $(document).ready(function(){
      * @param {Event} event Event object
      */
     $(document).on('keydown', function( event ) {
-        console.log(event.which);
+        //console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
             canvas.setZoom(canvas.getZoom() + 0.01 );
@@ -786,9 +769,26 @@ $(document).ready(function(){
         if(!$("input,textarea,select").is(":focus")) {
             console.log('copied')
             if(canvas.getActiveObject()) {
-                canvas.clipboard = canvas.getActiveObject();
+                pasteMultiplier = 0;
+                var i = 0;
+                clipboard = [];
+                var o = canvas.getActiveObject();
+                clipboard[1] =  fabric.util.object.clone(o);
+                clipboard[1].left = o.left + 15;
+                clipboard[1].top = o.top + 15;
+                updateLayers();
             } else if(canvas.getActiveGroup()) {
-                canvas.clipboard = canvas.getActiveGroup();
+                pasteMultiplier = 0;
+                var i = 0;
+                clipboard = [];
+                canvas.getActiveGroup().forEachObject(function(o) {
+                    clipboard[i] = fabric.util.object.clone(o);
+                    clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left + 15;
+                    clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top + 15;
+                    updateLayers();
+                    i++;
+                });
+                canvas.deactivateAll().renderAll();
             } 
         }
     }); 
@@ -797,16 +797,32 @@ $(document).ready(function(){
      * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
      */
     $(document).bind('cut', function() {
+        console.log("cut");
         if(!$("input,textarea,select").is(":focus")) {
             console.log('cut')
             if(canvas.getActiveObject()) {
-                canvas.clipboard = canvas.getActiveObject();
+                pasteMultiplier = 0;
+                var i = 0;
+                clipboard = [];
+                var o = canvas.getActiveObject();
+                clipboard[1] =  fabric.util.object.clone(o);
+                clipboard[1].left = o.left + 15;
+                clipboard[1].top = o.top + 15;
                 canvas.getActiveObject().remove();
                 updateLayers();
             } else if(canvas.getActiveGroup()) {
-                canvas.clipboard = canvas.getActiveGroup();
-                canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-                updateLayers();
+                pasteMultiplier = 0;
+                var i = 0;
+                clipboard = [];
+                canvas.getActiveGroup().forEachObject(function(o) {
+                    clipboard[i] = fabric.util.object.clone(o);
+                    clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left + 15;
+                    clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top + 15;
+                    canvas.remove(o);
+                    updateLayers();
+                    i++;
+                });
+                canvas.deactivateAll().renderAll();
             }
         }
     });
@@ -817,21 +833,18 @@ $(document).ready(function(){
     $(document).bind('paste', function(e) {
         if(!$("input,textarea,select").is(":focus")) {
             console.log('pasted')
-            if(canvas.getActiveObject()) {
-                var object = fabric.util.object.clone(canvas.clipboard);
-                object.set("top", object.top+15);
-                object.set("left", object.left+15);
-                canvas.add(object);
+            var i = 0;
+            var paste = [];
+            clipboard.forEach(function(o) {
+                paste[i] = fabric.util.object.clone(o);
+                canvas.add(paste[i]);
+                paste[i].set("top", paste[i].top + (pasteMultiplier*15));
+                paste[i].set("left", paste[i].left + (pasteMultiplier*15));
                 updateLayers();
-            } else if(canvas.getActiveGroup()) {
-                canvas.clipboard.forEachObject(function(o) {
-                    var object = fabric.util.object.clone(o);
-                    object.set("top", object.top+15);
-                    object.set("left", object.left+15);
-                    canvas.add(object);
-                    updateLayers();
-                })
-            }
+                canvas.renderAll();
+                i++;
+            })
+            pasteMultiplier++;
         } else if($("#importJSON").is(":focus")) {
             e.preventDefault();
             $('#importJSON').val("Loading...");
@@ -840,6 +853,34 @@ $(document).ready(function(){
                 $('#importJSON').val(data);
             }, 0, data);
         }
+    });
+
+    $('#rotateCW').click(function() {
+        rotate(90);
+    });
+
+    $('#rotateCCW').click(function() {
+        rotate(-90);
+    });
+
+    $('#flipY').click(function() {
+        flipY();
+    });
+
+    $('#flipX').click(function() {
+        flipX();
+    });
+
+    $('#copy').click(function() {
+        $(document).trigger("copy");
+    });
+
+    $('#cut').click(function() {
+        $(document).trigger("cut");
+    });
+
+    $('#paste').click(function() {
+        $(document).trigger("paste");
     });
 
     /*
