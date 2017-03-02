@@ -198,7 +198,8 @@ label[for=background] {
 }
 
 #jsonModal .modal-content {
-    max-height: 80vh;
+    margin-top: 3%;
+    max-height: 80%;
     width: 45%;
 }
 
@@ -208,7 +209,7 @@ label[for=background] {
 }
 
 pre{
-    max-height: 65vh;
+    max-height: 60vh;
     background: #F1F1F1;
 }
 

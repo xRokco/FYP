@@ -705,9 +705,13 @@ $(document).ready(function(){
             event.preventDefault();
             $('#exportButton').click();
         }
-        if(event.ctrlKey==true && event.which == 73) { //open/import
+        if(event.ctrlKey==true && event.which == 73) { //import
             event.preventDefault();
             $('#importButton').click();
+        }
+        if(event.ctrlKey==true && event.which == 79) { //open background image
+            event.preventDefault();
+            $('#background').click();
         }
         if(event.ctrlKey==true && event.which == 78) { //new **DOESN'T WORK ON CHROME USUALLY**
             event.preventDefault();
