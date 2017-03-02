@@ -246,8 +246,8 @@ function hideLayer(index) {
 }
 
 function newCanvas(width, height) {
-    width = width || canvas.width;
-    height = height || canvas.height;
+    width = width || initWidth;
+    height = height || initHeight;
     bg = canvas.backgroundColor
     canvas.clear();
     if(document.getElementById('transparent').checked){
@@ -261,6 +261,11 @@ function newCanvas(width, height) {
     }
     
     fabric.Object.prototype.selectable = false;
+    canvas.setZoom(1);
+    canvas.setHeight(initHeight);
+    canvas.setWidth(initWidth);
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
     canvas.setHeight(height);
     canvas.setWidth(width);
     angle = 0;
@@ -308,6 +313,8 @@ var myAppModule = (function () {
         });
 
         if(canvas.background) {
+            canvas.setZoom(1);
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
             canvas.clear();
             canvas.setWidth(img.width);
             canvas.setHeight(img.height);
@@ -341,23 +348,22 @@ var myAppModule = (function () {
 })();
 
 function handleFileSelect(evt) {
+    console.log("here");
     var files = evt.target.files;
     var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-
-        if (!f.type.match('image.*')) {
-            continue;
-        }
-
-        var reader = new FileReader();
-
-        myAppModule.init(f, reader);
-
-        reader.onload = myAppModule.OnloadFile;
-
-        reader.readAsDataURL(f);
-
+    if (!files[0].type.match('image.*')) {
+        return;
     }
+
+    var reader = new FileReader();
+
+    myAppModule.init(files[0], reader);
+
+    reader.onload = myAppModule.OnloadFile;
+
+    reader.readAsDataURL(files[0]);
+    document.getElementById("selectFile").value = "";
+
 }
 
 function handleFileSelect2(evt) {
