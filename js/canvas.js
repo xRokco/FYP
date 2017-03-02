@@ -269,7 +269,7 @@ $(document).ready(function(){
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
-            var imagesdata = context.getImageData(canvas.getPointer().x, canvas.getPointer().y, 1, 1 );
+            var imagesdata = context.getImageData(canvas.getPointer().x * canvas.getZoom(), canvas.getPointer().y * canvas.getZoom(), 1, 1 );
             var new_color = [ imagesdata.data[0],
                             imagesdata.data[1],
                             imagesdata.data[2] ];
