@@ -695,6 +695,7 @@ $(document).ready(function(){
                 height: initHeight
             });
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         }
         if(event.ctrlKey==true && event.which == 8) { //reset pan
             var delta = new fabric.Point(0,0) ;
