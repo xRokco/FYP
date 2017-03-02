@@ -670,16 +670,30 @@ $(document).ready(function(){
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
             canvas.setZoom(canvas.getZoom() + 0.01 );
+            canvas.setDimensions({
+                    width: initWidth * canvas.getZoom(),
+                    height: initHeight * canvas.getZoom()
+            });
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         }
         if(event.ctrlKey==true && event.which == 189){ //zoom out
             event.preventDefault();
             canvas.setZoom(canvas.getZoom() - 0.01 );
+            canvas.setDimensions({
+                width: initWidth * canvas.getZoom(),
+                height: initHeight * canvas.getZoom()
+            });
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         }
         if(event.ctrlKey==true && event.which == 48){ //reset zoom
             event.preventDefault();
             canvas.setZoom(1);
+            canvas.setDimensions({
+                width: initWidth,
+                height: initHeight
+            });
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
         if(event.ctrlKey==true && event.which == 8) { //reset pan
@@ -754,10 +768,19 @@ $(document).ready(function(){
             if (event.originalEvent.wheelDelta >= 0) {
                 event.preventDefault();
                 canvas.setZoom(canvas.getZoom() + 0.01 ); //zoom in
+                canvas.setDimensions({
+                    width: initWidth * canvas.getZoom(),
+                    height: initHeight * canvas.getZoom()
+                });
             } else {
                 event.preventDefault();
                 canvas.setZoom(canvas.getZoom() - 0.01 ); //zoom in
+                canvas.setDimensions({
+                    width: initWidth * canvas.getZoom(),
+                    height: initHeight * canvas.getZoom()
+                });
             }
+            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
     });

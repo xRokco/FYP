@@ -10,6 +10,8 @@ var angle = 0;
 var backgroundFlipY = false;
 var backgroundFlipX = false;
 canvas.renderAll();
+var initWidth = canvas.getWidth();
+var initHeight = canvas.getHeight();
 
 
 $( function() {
@@ -264,6 +266,8 @@ function newCanvas(width, height) {
     angle = 0;
     backgroundFlipY = false;
     backgroundFlipX = false;
+    initWidth = canvas.getWidth();
+    initHeight = canvas.getHeight();
     updateLayers();
     $('.close').click();
     document.getElementById('canvasWrapper').style.width = width + "px";
@@ -313,6 +317,8 @@ var myAppModule = (function () {
             angle = 0;
             backgroundFlipY = false;
             backgroundFlipX = false;
+            initWidth = canvas.getWidth();
+            initHeight = canvas.getHeight();
             $(window).resize();
             $('#select-mode').click();
         } else {
