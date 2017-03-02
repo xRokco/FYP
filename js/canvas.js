@@ -666,7 +666,7 @@ $(document).ready(function(){
      * @param {Event} event Event object
      */
     $(document).on('keydown', function( event ) {
-        //console.log(event.which);
+        console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
             canvas.setZoom(canvas.getZoom() + 0.01 );
@@ -704,6 +704,10 @@ $(document).ready(function(){
         if(event.ctrlKey==true && event.which == 83) { //save/export
             event.preventDefault();
             $('#exportButton').click();
+        }
+        if(event.ctrlKey==true && event.which == 79) { //open/import
+            event.preventDefault();
+            $('#importButton').click();
         }
         if(event.ctrlKey==true && event.which == 78) { //new **DOESN'T WORK ON CHROME USUALLY**
             event.preventDefault();

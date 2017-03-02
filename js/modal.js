@@ -29,7 +29,6 @@ $('#exportButton').click(function(){
  * open the image on the canvas in a new tab/window
  */
 $('.export').click(function(){
-    document.getElementById('load').style.display='block';
     if($(this).attr("value")=="json"){
         document.getElementById('json').innerHTML = 'Loading...';
         document.getElementById('jsonModal').style.display = "block";
@@ -39,7 +38,6 @@ $('.export').click(function(){
     } else {
         window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
     }
-    document.getElementById('load').style.display = "none";
 });
 
 $('#select').click(function(){
@@ -63,26 +61,39 @@ $('#importButton').click(function(){
 
 $('#import').click(function(){
     var json = document.getElementById('importJSON').value;
-    var object = JSON.parse(json);
+    try {
+        var object = JSON.parse(json);
+    } catch(err){
+        alert("There seems to be a problem with your JSON. Make sure it's formatted correctly and try again. Sorry about that");
+        return;
+    }
     console.log("importing")
-    canvas.loadFromJSON(json, function(){
-        canvas.renderAll.bind(canvas);
-        canvas.setWidth(object.width);
-        canvas.setHeight(object.height);
-        document.getElementById('canvasWrapper').style.width = object.width + "px";
-        var obj = canvas.getObjects();
-        for(i=obj.length - 1; i >= 0;i--){
-            if(obj[i].flipX2 == true && obj[i].flipY2 == true){
-                //do nothing
-            }else if(obj[i].flipY2 == true || obj[i].flipX2 == true){
-                console.log("flipping")
-                obj[i].flipY = true;
-            }
+    try {
+        if("objects" in object && "background" in object && "width" in object && "height" in object) {
+            canvas.loadFromJSON(json, function(){
+                canvas.renderAll.bind(canvas);
+                canvas.setWidth(object.width);
+                canvas.setHeight(object.height);
+                document.getElementById('canvasWrapper').style.width = object.width + "px";
+                var obj = canvas.getObjects();
+                for(i=obj.length - 1; i >= 0;i--){
+                    if(obj[i].flipX2 == true && obj[i].flipY2 == true){
+                        //do nothing
+                    }else if(obj[i].flipY2 == true || obj[i].flipX2 == true){
+                        console.log("flipping")
+                        obj[i].flipY = true;
+                    }
+                }
+                canvas.renderAll();
+                updateLayers();
+                $('.close').click();
+            });
+        } else {
+            throw("You may have badly formatted JSON, please make sure it has objects, background, width and height properties");
         }
-        canvas.renderAll();
-        updateLayers();
-        $('.close').click();
-    });
+    } catch(err) {
+        alert(err);
+    }
 })
 
 //Export Modal
