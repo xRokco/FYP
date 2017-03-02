@@ -705,7 +705,7 @@ $(document).ready(function(){
             event.preventDefault();
             $('#exportButton').click();
         }
-        if(event.ctrlKey==true && event.which == 79) { //open/import
+        if(event.ctrlKey==true && event.which == 73) { //open/import
             event.preventDefault();
             $('#importButton').click();
         }
