@@ -278,6 +278,50 @@ function newCanvas(width, height) {
     document.getElementById('canvasWrapper').style.width = width + "px";
 }
 
+function resizeCanvas(width, height) {
+    var width = width || initWidth;
+    var height = height || initHeight;
+    var bg = canvas.backgroundColor
+    if(document.getElementById('resizeTransparent').checked){
+        bg=null;
+    } else {
+        if(document.getElementById('resizeBgcolour').value!=''){
+            bg=document.getElementById('bgcolour').value;
+        }
+    }
+    
+    if(document.getElementById('resizeType').value == 'percent'){
+        var obj = canvas.getObjects();
+        for(i=obj.length - 1; i >= 0;i--){
+            obj[i].width = obj[i].width *(width/100);
+            obj[i].height = obj[i].height *(height/100);
+            obj[i].left = obj[i].left*(width/100);
+            obj[i].top = obj[i].top*(height/100);
+        }
+        width = initWidth*(width/100);
+        height = initHeight*(height/100);
+    }
+
+    if(canvas.backgroundImage){
+        canvas.backgroundImage.width = width;
+        canvas.backgroundImage.height = height;
+        canvas.renderAll()
+    }
+
+    canvas.setZoom(1);
+    canvas.setHeight(initHeight);
+    canvas.setWidth(initWidth);
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    canvas.setHeight(height);
+    canvas.setWidth(width);
+    initWidth = canvas.getWidth();
+    initHeight = canvas.getHeight();
+    updateLayers();
+    $('.close').click();
+    document.getElementById('canvasWrapper').style.width = width + "px";
+}
+
 function getSelectedType() {
     if (canvas.getActiveGroup()){
         return "group";

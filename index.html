@@ -97,6 +97,9 @@
                                 <li class="popover-item">
                                     <a class="popover-link" href="javascript:void(0)" id="flipX">Flip Horizontally</a>
                                 </li>
+                                <li class="popover-item">
+                                    <a class="popover-link" href="javascript:void(0)" id="resizeButton">Canvas size...</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -225,10 +228,10 @@
                 <form class="form">
                     <div class="row">
                         <div class="six columns">
-                            <label for="width">Width: </label> <input type="number" name="width" id="width"><br>
+                            <label for="resizewidth">Width: </label> <input type="number" name="width" id="width"><br>
                         </div>
                         <div class="six columns">
-                            <label for="height">Height: </label><input type="number" name="height" id="height"><br>
+                            <label for="resizeheight">Height: </label><input type="number" name="height" id="height"><br>
                         </div>
                     </div>
                     <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
@@ -241,6 +244,46 @@
                     </div>
 
                     <input class="button-primary" id="newCanvas" value="Create" type="submit">
+                </form>
+            </div>
+        </div>
+
+        <div id="resizeModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--<div class="modal-close-icon">-->
+                <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
+                <h4>Resize canvas...</h4>
+                <form class="form">
+                    <div class="row">
+                        <div class="six columns">
+                            <label for="resizeWidth">Width: </label> <input type="number" name="resizeWidth" id="resizeWidth">
+                        </div>
+                        <div class="six columns">
+                            <label for="resizeLocked">Lock rezise aspect ratio: </label> <input type="checkbox" name="resizeLocked" id="resizeLocked">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="six columns">
+                            <label for="resizeHeight">Height: </label><input type="number" name="resizeHeight" id="resizeHeight">
+                        </div>
+                        <div class="six columns">
+                            <select id="resizeType">
+                                <option value="px">px</option>
+                                <option value="percent">%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
+                        <div class="six columns">
+                            <label for="resizeBgcolour">Background colour: </label> <input type="text" name="resizeBgcolour" id="resizeBgcolour">
+                        </div>
+                        <div class="six columns">
+                            <label for="resizeTransparent">Transparent background: </label><input type="checkbox" name="resizeTransparent" id="resizeTransparent">
+                        </div>
+                    </div>
+
+                    <input class="button-primary" id="resizeCanvas" value="Create" type="submit">
                 </form>
             </div>
         </div>
@@ -273,6 +316,7 @@
                         <p><kbd>ctrl</kbd> + <kbd>X</kbd> - cut selected object or group.</p>
                         <p><kbd>ctrl</kbd> + <kbd>V</kbd> - pasted object or group.</p>
                         <p><kbd>ctrl</kbd> + <kbd>S</kbd> - export image.</p>
+                        <p><kbd>ctrl</kbd> + <kbd>B</kbd> - new canvas.</p>
                     </div>
                 </div>
             </div>

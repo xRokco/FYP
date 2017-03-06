@@ -643,13 +643,13 @@ $(document).ready(function(){
         up arrow - 38
         right arrow - 39
         down arrow - 40
-        delete - 127
+        delete - 46 and 127
         num line equals key - 187
         num line underscore - 198
         num line zero - 48
         backspace - 8
         hash key*/
-        if(event.keyCode == 127) { //delete object
+        if(event.which == 127 || event.which == 46) { //delete object
             if(canvas.getActiveObject()) {
                 canvas.getActiveObject().remove();
                 updateLayers();
@@ -708,6 +708,10 @@ $(document).ready(function(){
         if(event.ctrlKey==true && event.which == 73) { //import
             event.preventDefault();
             $('#importButton').click();
+        }
+        if(event.ctrlKey==true && event.which == 66) { //new
+            event.preventDefault();
+            $('#newCanvasButton').click();
         }
         if(event.ctrlKey==true && event.which == 79) { //open background image
             event.preventDefault();

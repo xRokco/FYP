@@ -105,11 +105,51 @@ $('#newCanvas').click(function(){
     newCanvas(document.getElementById('width').value,document.getElementById('height').value);
 });
 
+$('#resizeButton').click(function(){
+    if(canvas.backgroundColor){
+        document.getElementById('resizeBgcolour').value = canvas.backgroundColor;
+        document.getElementById('resizeTransparent').checked = false;  
+    } else {
+        document.getElementById('resizeBgcolour').value = '';
+        document.getElementById('resizeTransparent').checked = true;  
+    }
+    document.getElementById('resizeLocked').checked = false;
+    document.getElementById('resizeWidth').value = initWidth;
+    document.getElementById('resizeHeight').value = initHeight;
+    document.getElementById('resizeType').value = 'px';
+    document.getElementById('resizeModal').style.display = "block";
+});
+
+$('#resizeCanvas').click(function(){
+    resizeCanvas(document.getElementById('resizeWidth').value,document.getElementById('resizeHeight').value);
+});
+
+$('#resizeWidth').on('change keydown paste input', function() {
+    if(document.getElementById('resizeLocked').checked == true){
+        if(document.getElementById('resizeType').value == 'px'){
+            document.getElementById('resizeHeight').value = initHeight * (document.getElementById('resizeWidth').value/initWidth);
+        } else {
+            document.getElementById('resizeHeight').value = document.getElementById('resizeWidth').value; 
+        }
+    }
+});
+
+$('#resizeHeight').on('change keydown paste input', function() {
+    if(document.getElementById('resizeLocked').checked == true){
+        if(document.getElementById('resizeType').value == 'px'){
+            document.getElementById('resizeWidth').value = initWidth * (document.getElementById('resizeHeight').value/initHeight);
+        } else {
+            document.getElementById('resizeWidth').value = document.getElementById('resizeHeight').value;
+        }
+    }
+});
+
 // When the user clicks on <span> (x), close the modal
 $('.close').click(function() {
     document.getElementById('newCanvasModal').style.display = "none";
     document.getElementById('exportModal').style.display = "none";
     document.getElementById('importModal').style.display = "none";
+    document.getElementById('resizeModal').style.display = "none";
 });
 
 $('.closeJSON').click(function() {
@@ -129,6 +169,9 @@ $(window).click(function(event) {
     }
     if (event.target == document.getElementById('importModal')) {
         document.getElementById('importModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('resizeModal')) {
+        document.getElementById('resizeModal').style.display = "none";
     }
 });
 
