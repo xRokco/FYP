@@ -726,9 +726,12 @@ $(document).ready(function(){
                 var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object left
-                    var obj = canvas.getActiveObject();
-                    obj.set("left", obj.left-1);
+                if(!$("input,textarea,select").is(":focus")) { //move object left
+                    if(canvas.getActiveObject()) {
+                        canvas.getActiveObject().left--;
+                    } else if (canvas.getActiveGroup()){
+                        canvas.getActiveGroup().left--;
+                    }
                     canvas.renderAll();
                 }
             }
@@ -738,9 +741,12 @@ $(document).ready(function(){
                 var delta = new fabric.Point(0,10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object up
-                    var obj = canvas.getActiveObject();
-                    obj.set("top", obj.top-1);
+                if(!$("input,textarea,select").is(":focus")) { //move object up
+                    if(canvas.getActiveObject()) {
+                        canvas.getActiveObject().top--;
+                    } else if (canvas.getActiveGroup()){
+                        canvas.getActiveGroup().top--;
+                    }
                     canvas.renderAll();
                 }
             }
@@ -750,9 +756,12 @@ $(document).ready(function(){
                 var delta = new fabric.Point(-10,0) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object right
-                    var obj = canvas.getActiveObject();
-                    obj.set("left", obj.left+1);
+                if(!$("input,textarea,select").is(":focus")) { //move object right
+                    if(canvas.getActiveObject()) {
+                        canvas.getActiveObject().left++;
+                    } else if (canvas.getActiveGroup()){
+                        canvas.getActiveGroup().left++;
+                    }
                     canvas.renderAll();
                 }
             }
@@ -762,9 +771,12 @@ $(document).ready(function(){
                 var delta = new fabric.Point(0,-10) ;
                 canvas.relativePan(delta);
             } else {
-                if(canvas.getActiveObject() && !$("input,textarea,select").is(":focus")) { //move object down
-                    var obj = canvas.getActiveObject();
-                    obj.set("top", obj.top+1);
+                if(!$("input,textarea,select").is(":focus")) { //move object down
+                    if(canvas.getActiveObject()) {
+                        canvas.getActiveObject().top++;
+                    } else if (canvas.getActiveGroup()){
+                        canvas.getActiveGroup().top++;
+                    }
                     canvas.renderAll();
                 }
             }
