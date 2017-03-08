@@ -53,13 +53,18 @@ function updateLayers() {
         } else {
             var down = "<img src=\"images/down.png\" onclick=\"moveBack(" + i + ")\">";
         }
-     
+
+        var selected = "";
+        if(obj[i].active == true){
+            var selected = "selected";
+        }
+
         var image = "";
         if(obj[i].visible == false) {
             var image = "-white";
         }
 
-        text += "<div>" + down + up + "<span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        text += "<div class=\"" + selected + "\">" + down + up + "<span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -294,6 +299,7 @@ function selectLayer(event, index) {
         $('#select-mode').click();
         canvas.setActiveObject(canvas.item(index));
     }
+    updateLayers();
 }
 
 function hideLayer(index) {

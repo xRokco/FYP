@@ -153,6 +153,10 @@ html {
     margin-right: 4px;
 }
 
+.selected {
+    background-color: lightgrey;
+}
+
 #open-label{
     margin: 0;
     cursor: pointer;
