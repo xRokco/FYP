@@ -160,6 +160,23 @@ $(document).ready(function(){
         canvas.eyedropper = true;
     });
 
+    $('#crop-mode').click(function (){
+        console.log("entering crop mode");
+        canvas.deactivateAll().renderAll();
+        
+        //Declaring the variables
+        canvas.isMouseDown=false;
+        var refShape;
+        
+        hideOptions();
+        $('#crop-mode').css("border", "1px solid silver");
+
+        document.getElementById("locklab").style.display = '';
+        canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/rectangle.png'), auto";
+        canvas.cropMode = true;
+    });
+
     /*
      * When mouse is clicked down on the canvas -
      * - set the isMouseDown variable to true
@@ -200,8 +217,14 @@ $(document).ready(function(){
 
         //Creating the rectangle object
         if(canvas.rectDrawing) {
+            if(document.getElementById('lock').checked){
+                var id = 'square';
+            } else {
+                var id = 'rectangle';
+            }
+
             var rect=new fabric.Rect({
-                id: 'rectangle',
+                id: id,
                 left:canvas.getPointer().x,
                 top:canvas.getPointer().y,
                 width:5,
@@ -213,6 +236,25 @@ $(document).ready(function(){
             
             canvas.add(rect);
             refShape=rect;  //Reference of rectangle object
+        }
+
+        if(canvas.cropMode) {
+            var rect = new fabric.Rect({
+                id: 'cropper',
+                left:canvas.getPointer().x,
+                top:canvas.getPointer().y,
+                fill: 'transparent',
+                width: 2,
+                height: 2,
+                strokeDashArray: [5, 5],
+                stroke: 'black',
+                type: 'cropper',
+                lockRotation: true,
+                selectable: true
+            });
+
+            canvas.add(rect);
+            refShape=rect;
         }
 
         if(canvas.circleDrawing) {
@@ -283,12 +325,11 @@ $(document).ready(function(){
         }
         
         //Getting the mouse Co-ordinates
-        if(canvas.rectDrawing) {
+        if(canvas.rectDrawing || canvas.cropMode) {
             var posX=canvas.getPointer().x;
             var posY=canvas.getPointer().y;
 
             if(document.getElementById('lock').checked){
-                refShape.id = 'square';
                 if(startPointLeft > posX) {
                     refShape.set({originX: 'right' });
                     refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
@@ -366,11 +407,7 @@ $(document).ready(function(){
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
             var obj = canvas.getObjects()
-            if(canvas.eraser == true){
-                obj[obj.length - 1].id = "erase";
-            } else {
-                obj[obj.length - 1].id = "line";
-            }
+            obj[obj.length - 1].id = "line";
         }
 
         if(canvas.textDrawing) {
@@ -400,6 +437,28 @@ $(document).ready(function(){
             $('#select-mode').click();
             document.getElementById("text-mode-options").style.display = '';
             canvas.textDrawing = false;
+        }
+
+        if(canvas.cropMode){
+            var croppedLeft = refShape.left;
+            var croppedTop = refShape.top;
+            var croppedWidth = refShape.width;
+            var croppedHeight = refShape.height;
+
+            refShape.remove();
+            canvas.renderAll();
+
+            var url = canvas.toDataURL({
+                format: 'png',
+                left: croppedLeft,
+                top: croppedTop,
+                width: croppedWidth,
+                height: croppedHeight
+            });
+            
+            window.open(url);
+
+            $('#select-mode').click();
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){

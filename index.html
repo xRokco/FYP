@@ -62,6 +62,9 @@
                                 <li class="popover-item">
                                     <a href="javascript:void(0)" class="popover-link" id="exportButton">Export</a>
                                 </li>
+                                <li class="popover-item">
+                                    <a href="javascript:void(0)" class="popover-link" id="exportCrop">Export Crop</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -127,7 +130,7 @@
             <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
             <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
             <img id="eyedropper-mode" class="tool" src="images/tools/eyedropper.png">
-            <!-- <img id="rasterize" class="tool" src="images/tools/image.png"> -->
+            <img id="crop-mode" class="tool" src="images/tools/image.png">
         </div>
 
         <div class="drag toolOptions">
@@ -140,8 +143,10 @@
                 <input type="range" value="10" min="0" max="150" id="shape-line-width"><br>
                 <label class="inline" for="shape-fill">Fill:</label>
                 <input type="checkbox" id="shape-fill"/><br/>
-                <div id="locklab"><label for="lock" class="inline">Lock aspect ratio:</label>
-                <input type="checkbox" id="lock"/></div><br/>
+            </div>
+            <div style="display: none;" id="locklab" class="options">
+                <label for="lock" class="inline">Lock aspect ratio:</label>
+                <input type="checkbox" id="lock"/>
             </div>
             <div style="display: none;" id="text-mode-options" class="options">
                 <label for="text">Text:</label><textarea name="text" id="text"></textarea>
