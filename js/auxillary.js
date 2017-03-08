@@ -110,6 +110,9 @@ function rotate(a) {
 
     canvas.renderAll();
 
+    initWidth = canvas.getWidth();
+    initHeight = canvas.getHeight();
+
     items = group._objects;
     group._restoreObjectsState();
     canvas.remove(group);
@@ -293,18 +296,53 @@ function resizeCanvas(width, height) {
     if(document.getElementById('resizeType').value == 'percent'){
         var obj = canvas.getObjects();
         for(i=obj.length - 1; i >= 0;i--){
-            obj[i].width = obj[i].width *(width/100);
-            obj[i].height = obj[i].height *(height/100);
+            if(obj[i].get('type')=='text'){
+                obj[i].scaleX = obj[i].scaleX *(width/100);
+                obj[i].scaleY = obj[i].scaleY *(height/100);
+            } else {
+                obj[i].width = obj[i].width *(width/100);
+                obj[i].height = obj[i].height *(height/100);
+            }
             obj[i].left = obj[i].left*(width/100);
             obj[i].top = obj[i].top*(height/100);
         }
         width = initWidth*(width/100);
         height = initHeight*(height/100);
+    } else {
+        var obj = canvas.getObjects();
+        var widthRatio = width/initWidth;
+        var heightRatio = height/initHeight; 
+        for(i=obj.length - 1; i >= 0;i--){
+            if(obj[i].get('type')=='text'){
+                obj[i].scaleX = obj[i].scaleX * widthRatio;
+                obj[i].scaleY = obj[i].scaleY * heightRatio;
+            } else {
+                obj[i].width = obj[i].width *widthRatio;
+                obj[i].height = obj[i].height *heightRatio;
+            }
+            obj[i].left = obj[i].left*widthRatio;
+            obj[i].top = obj[i].top*heightRatio;
+        }
     }
 
     if(canvas.backgroundImage){
-        canvas.backgroundImage.width = width;
-        canvas.backgroundImage.height = height;
+        if(Math.abs(canvas.backgroundImage.angle) == 0) {
+            canvas.backgroundImage.width = width;
+            canvas.backgroundImage.height = height;
+        } else if(canvas.backgroundImage.angle == 90 || canvas.backgroundImage.angle == -270) {
+            canvas.backgroundImage.left = width;
+            canvas.backgroundImage.width = height;
+            canvas.backgroundImage.height = width;
+        } else if(canvas.backgroundImage.angle == -90 || canvas.backgroundImage.angle == 270){
+            canvas.backgroundImage.top = height;
+            canvas.backgroundImage.width = height;
+            canvas.backgroundImage.height = width;
+        } else if(Math.abs(canvas.backgroundImage.angle) == 180) {
+            canvas.backgroundImage.top = height;
+            canvas.backgroundImage.left = width;
+            canvas.backgroundImage.width = width;
+            canvas.backgroundImage.height = height;
+        }
         canvas.renderAll()
     }
 
