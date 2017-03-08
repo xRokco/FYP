@@ -57,7 +57,7 @@ function updateLayers() {
             var image = "-white";
         }
 
-        text += "<div>" + down + up + "<span onclick=\"selectLayer(" + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        text += "<div>" + down + up + "<span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -231,10 +231,67 @@ function moveForwards(index) {
     updateLayers();
 }
 
-function selectLayer(index) {
-    hideOptions();
-    fabric.Object.prototype.selectable = true; 
-    canvas.setActiveObject(canvas.item(index));
+function selectLayer(event, index) {
+    console.log(event);
+    if(event.shiftKey == true){
+        if(canvas.getActiveGroup()){
+            console.log(canvas.getActiveGroup());
+            var objs = [];
+            canvas.getActiveGroup()._objects.forEach(function(ele) {
+                objs.push(ele);
+            });
+            canvas.deactivateAll();    
+            
+            var i;
+            var alreadyIn = false;
+            for (i = 0; i < objs.length; i++) {
+                if (objs[i] === canvas.item(index)) {
+                    alreadyIn = true;
+                }
+            }
+
+            if(alreadyIn == false){
+                objs.push(canvas.item(index));
+            }
+
+            objs.forEach(function(ele) {
+                ele.set('active', true);
+            });
+
+            var group = new fabric.Group(objs, {
+                originX: 'center',
+                originY: 'center'
+            });
+
+            canvas._activeObject = null;
+            group.setCoords();
+            canvas.setActiveGroup(group).renderAll();
+        } else if(canvas.getActiveObject()){
+            var objs = [canvas.getActiveObject(), canvas.item(index)];
+
+            objs.forEach(function(ele) {
+                ele.set('active', true);
+            });
+
+            //create group
+            var group = new fabric.Group(objs, {
+                originX: 'center',
+                originY: 'center'
+            });
+
+            canvas._activeObject = null;
+            group.setCoords();
+            canvas.setActiveGroup(group).renderAll();
+        } else {
+            canvas.deactivateAll().renderAll();
+            $('#select-mode').click();
+            canvas.setActiveObject(canvas.item(index));
+        }
+    } else {
+        canvas.deactivateAll().renderAll();
+        $('#select-mode').click();
+        canvas.setActiveObject(canvas.item(index));
+    }
 }
 
 function hideLayer(index) {
