@@ -145,6 +145,10 @@
                 <label for="lock" class="inline">Lock aspect ratio:</label>
                 <input type="checkbox" id="lock"/>
             </div>
+            <div style="display: none;" id="straightlab" class="options">
+                <label for="straight" class="inline">Straight line:</label>
+                <input type="checkbox" id="straight"/>
+            </div>
             <div style="display: none;" id="text-mode-options" class="options">
                 <label for="text">Text:</label><textarea name="text" id="text"></textarea>
                 </br>
@@ -213,7 +217,7 @@
 
         <div id="jsonModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content">
                 <a href="javascript:void(0)" class="closeJSON"><i class="fa fa-times"></i></a>
                 <h4>JSON...</h4>
                 <pre><code id="json"></code></pre>

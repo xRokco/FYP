@@ -26,6 +26,7 @@ function hideOptions() {
     canvas.circleDrawing = false;
     canvas.textDrawing = false;
     canvas.cropMode = false;
+    canvas.straightLineMode = false;
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
 
@@ -35,6 +36,7 @@ function hideOptions() {
     document.getElementById("shape-mode-options").style.display = 'none';
     document.getElementById("text-mode-options").style.display = 'none';
     document.getElementById("locklab").style.display = 'none';
+    document.getElementById("straightlab").style.display = 'none';
     fabric.Object.prototype.selectable = false;
 }
 

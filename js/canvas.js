@@ -57,10 +57,19 @@ $(document).ready(function(){
         hideOptions();
         $('#drawing-mode').css("border", "1px solid silver");
 
-        canvas.isDrawingMode = true;
+        if(document.getElementById('straight').checked == true){
+            canvas.straightLineMode = true;
+            canvas.isDrawingMode = false;
+            var refShape;
+        } else {
+            canvas.isDrawingMode = true;
+            canvas.straightLineMode = false;
+        }
+
         canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
         canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
         document.getElementById("drawing-mode-options").style.display = '';
+        document.getElementById("straightlab").style.display = '';
     });
 
     /*
@@ -135,6 +144,11 @@ $(document).ready(function(){
         console.log("entering text mode");
         canvas.deactivateAll().renderAll();
         
+        document.getElementById('bold').checked = false;
+        document.getElementById('italic').checked = false;
+        document.getElementById('font').value = 'Lato';
+        document.getElementById('text').value = "";
+
         hideOptions();
         $('#text-mode').css("border", "1px solid silver");
 
@@ -199,6 +213,21 @@ $(document).ready(function(){
 
         startPointLeft = canvas.getPointer().x;
         startPointTop = canvas.getPointer().y;
+
+        if(canvas.straightLineMode) {
+            var pointer = canvas.getPointer(event.e);
+            var points = [ pointer.x, pointer.y, pointer.x, pointer.y ];
+            var line = new fabric.Line(points, {
+                strokeWidth: parseInt(document.getElementById("drawing-line-width").value, 10) || 1,
+                fill: $.farbtastic('#colorpicker').color,
+                stroke: $.farbtastic('#colorpicker').color,
+                originX: 'center',
+                originY: 'center',
+                id: 'straight line'
+            });
+            canvas.add(line);
+            refShape=line;
+        }
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
@@ -309,6 +338,15 @@ $(document).ready(function(){
             return;
         }
 
+        if(canvas.straightLineMode) {
+            refShape.set({ 
+                x2: canvas.getPointer().x, 
+                y2: canvas.getPointer().y 
+            });
+
+            canvas.renderAll(); 
+        }
+
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
             var imagesdata = context.getImageData(canvas.getPointer().x * canvas.getZoom(), canvas.getPointer().y * canvas.getZoom(), 1, 1 );
@@ -410,6 +448,10 @@ $(document).ready(function(){
             obj[obj.length - 1].id = "line";
         }
 
+        if(canvas.straightLineMode) {
+            refShape.setCoords();
+        }
+
         if(canvas.textDrawing) {
             if(document.getElementById('italic').checked) {
                 var italic = 'italic';
@@ -487,6 +529,16 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    $('#straight').change(function() {
+        if(document.getElementById('straight').checked == true){
+            canvas.straightLineMode = true;
+            canvas.isDrawingMode = false;
+        } else {
+            canvas.isDrawingMode = true;
+            canvas.straightLineMode = false;
+        }
+    });
+
     /*
      * When the font option changes change the font of the text on the select text object
      */
@@ -543,11 +595,23 @@ $(document).ready(function(){
      * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
      */
     $('#shape-line-width').on('input', function(){
-        if(getSelectedType() != 'text' && getSelectedType() != 'image'){
+        if(getSelectedType() != 'text' && getSelectedType() != 'image' && getSelectedType() != null){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("shape-line-width").value, 10) || 1;
             canvas.renderAll();
         }
     });
+
+    /*
+     * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
+     */
+    $('#drawing-line-width').on('input', function(){
+        if(getSelectedType() == 'line' || getSelectedType() == 'straight line'){
+            canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
+            canvas.renderAll();
+        }
+    });
+
+
 
     /*
      * When the fill checkbox is checked, toggle between solid and hollow center on the object (rect, circle, ellipse)
@@ -621,11 +685,41 @@ $(document).ready(function(){
         if(getSelectedType() == 'text'){
             hideOptions();
             $('#select-mode').click();
+            if(canvas.getActiveObject().fontWeight == 700){
+                document.getElementById("bold").checked = true;
+            } else {
+                document.getElementById("bold").checked = false;
+            }
+
+            if(canvas.getActiveObject().fontStyle == 'italic'){
+                document.getElementById("italic").checked = true;
+            } else {
+                document.getElementById("italic").checked = false;
+            }
+
+            document.getElementById("font").value = canvas.getActiveObject().fontFamily;
+
+            if(canvas.getActiveObject().text == "text"){
+                document.getElementById("text").value = "";
+            } else {
+                document.getElementById("text").value = canvas.getActiveObject().text;
+            }
+
             document.getElementById("text-mode-options").style.display = 'block';
         } else if (getSelectedType() == 'rectangle' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             $('#select-mode').click();
+            document.getElementById("shape-line-width").value = canvas.getActiveObject().strokeWidth;
+            if(canvas.getActiveObject().fill == ''){
+                document.getElementById("shape-fill").checked = false;
+            } else {
+                document.getElementById("shape-fill").checked = true;
+            }
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
+        } else if (getSelectedType() == 'line' || getSelectedType() == 'straight line'){
+            $('#select-mode').click();
+            document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
+            document.getElementById("drawing-mode-options").style.display = 'block';
         }
     });
 
