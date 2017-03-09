@@ -172,8 +172,8 @@ $(document).ready(function(){
         $('#crop-mode').css("border", "1px solid silver");
 
         document.getElementById("locklab").style.display = '';
-        canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
-        canvas.hoverCursor = "url('images/cursors/rectangle.png'), auto";
+        canvas.defaultCursor = "url('images/cursors/crop.png'), auto";
+        canvas.hoverCursor = "url('images/cursors/crop.png'), auto";
         canvas.cropMode = true;
     });
 
@@ -427,7 +427,7 @@ $(document).ready(function(){
                 id: 'text',
                 left: canvas.getPointer().x, 
                 top: canvas.getPointer().y,
-                fontFamily: "Raleway",
+                fontFamily: "Lato",
                 fontWeight: bold,
                 fontStyle: italic,
                 fill: $.farbtastic('#colorpicker').color

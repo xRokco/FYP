@@ -21,6 +21,7 @@ body {
     background-color: #EEE;
     overflow: hidden;
     height: 100vh;
+    font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -109,7 +110,7 @@ html {
 }
 
 .rgbvalue, .hslvalue {
-    width:80%;
+    width:60%;
 }
 
 .colorwrapper label {

@@ -15,7 +15,7 @@
 
         <!-- FONT
         –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-        <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Lato:400,300,600' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
         <!-- CSS
@@ -127,7 +127,7 @@
             <img id="select-mode" class="tool" src="images/tools/select.png" title="object select tool">
             <img id="text-mode" class="tool" src="images/tools/text.png" title="text tool">
             <img id="eyedropper-mode" class="tool" src="images/tools/eyedropper.png">
-            <img id="crop-mode" class="tool" src="images/tools/image.png">
+            <img id="crop-mode" class="tool" src="images/tools/crop.png">
         </div>
 
         <div class="drag toolOptions">
@@ -152,7 +152,7 @@
                 <label for="bold" class="inline">Bold: </label><input id="bold" type="checkbox" name="bold"/>
                 <label for="font">Font:</label>
                 <select id="font">
-                    <option value="Raleway">Raleway</option>
+                    <option value="Lato">Lato</option>
                     <option value="Arial">Arial</option>
                     <option value="Arial Black">Arial Black</option>
                     <option value="Times New Roman">Times New Roman</option>
@@ -174,14 +174,14 @@
             <br/>
             <form style="margin-bottom:10px"><input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" /></form>
             <form class="row">
-                <label class="four columns">r: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
-                <label class="four columns">g: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
-                <label class="four columns">b: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">R: <input type="text" class="rgbvalue" id="rvalue" name="rvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">G: <input type="text" class="rgbvalue" id="gvalue" name="gvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">B: <input type="text" class="rgbvalue" id="bvalue" name="bvalue" value="0" autocomplete="off" /></label>
             </form>
             <form class="row">
-                <label class="four columns" class="four columns">h: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
-                <label class="four columns">s: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
-                <label class="four columns">l: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns" class="four columns">H: <input type="text" class="hslvalue" id="hvalue" name="hvalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">S: <input type="text" class="hslvalue" id="svalue" name="svalue" value="0" autocomplete="off" /></label>
+                <label class="four columns">L: <input type="text" class="hslvalue" id="lvalue" name="lvalue" value="0" autocomplete="off" /></label>
             </form>
         </div>
 
@@ -198,7 +198,7 @@
 
         <div id="exportModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
+            <div class="modal-content drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Export as...</h4>
@@ -213,7 +213,7 @@
 
         <div id="jsonModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
+            <div class="modal-content drag">
                 <a href="javascript:void(0)" class="closeJSON"><i class="fa fa-times"></i></a>
                 <h4>JSON...</h4>
                 <pre><code id="json"></code></pre>
@@ -223,7 +223,7 @@
 
         <div id="newCanvasModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
+            <div class="modal-content drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>New canvas...</h4>
@@ -252,7 +252,7 @@
 
         <div id="resizeModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
+            <div class="modal-content drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Resize canvas...</h4>
@@ -326,7 +326,7 @@
 
         <div id="importModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
+            <div class="modal-content drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="javascript:void(0)" class="close"><i class="fa fa-times"></i></a>
                 <h4>Import from JSON...</h4>

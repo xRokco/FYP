@@ -362,8 +362,12 @@ function resizeCanvas(width, height) {
         var obj = canvas.getObjects();
         for(i=obj.length - 1; i >= 0;i--){
             if(obj[i].get('type')=='text'){
-                obj[i].scaleX = obj[i].scaleX *(width/100);
-                obj[i].scaleY = obj[i].scaleY *(height/100);
+                if (width == height) {
+                    obj[i].fontSize = obj[i].fontSize*(width/100);
+                } else {
+                    obj[i].scaleX = obj[i].scaleX *(width/100);
+                    obj[i].scaleY = obj[i].scaleY *(height/100);
+                }
             } else {
                 obj[i].width = obj[i].width *(width/100);
                 obj[i].height = obj[i].height *(height/100);
@@ -379,8 +383,12 @@ function resizeCanvas(width, height) {
         var heightRatio = height/initHeight; 
         for(i=obj.length - 1; i >= 0;i--){
             if(obj[i].get('type')=='text'){
-                obj[i].scaleX = obj[i].scaleX * widthRatio;
-                obj[i].scaleY = obj[i].scaleY * heightRatio;
+                if (widthRatio == heightRatio) {
+                    obj[i].fontSize = obj[i].fontSize*widthRatio;
+                } else {
+                    obj[i].scaleX = obj[i].scaleX * widthRatio;
+                    obj[i].scaleY = obj[i].scaleY * heightRatio;
+                }
             } else {
                 obj[i].width = obj[i].width *widthRatio;
                 obj[i].height = obj[i].height *heightRatio;
