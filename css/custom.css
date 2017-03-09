@@ -39,9 +39,9 @@ html {
     border-top: 20px solid silver;
     width: 88px;
     height: 176px;
-    margin-left:5px;
-    margin-top: 5px; 
-    float: left;
+    position: absolute;
+    left: 5px;
+    top: 70px; 
     line-height: normal;
     font-size: 0em;
     background-color: #EEE;
@@ -52,10 +52,9 @@ html {
     border-top: 20px solid silver;
     min-width: 150px;
     min-height: 180px; 
-    margin-left: -84px;
-    margin-right: 5px;
-    top: 210px;
-    float: left;
+    position: absolute;
+    top: 280px;
+    left:5px;
     line-height: normal;
     background-color: #EEE;
     padding-top: 10px;
@@ -92,10 +91,10 @@ html {
 .colorwrapper {
     border: 1px solid silver;
     border-top: 20px solid silver;
-    float: right;
+    position: absolute;
     line-height: normal;
-    margin-top: 100px;
-    margin-right:50px;
+    top: 120px;
+    right:5px;
     width: 300px;
     background-color: #EEE;
 }
@@ -122,10 +121,9 @@ html {
     border-top: 20px solid silver;
     min-width: 200px;
     min-height: 108px; 
-    margin-left: -155px;
-    margin-right: 5px;
-    top: 440px;
-    float: left;
+    position: absolute;
+    top: 510px;
+    left:5px;
     line-height: normal;
     background-color: #EEE;
     text-align: center;
