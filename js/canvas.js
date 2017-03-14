@@ -17,6 +17,8 @@ $(document).ready(function(){
     var context = document.getElementById("c").getContext("2d");
     var clipboard = [];
     var pasteMultiplier = 0;
+    var panDiffTop = 0;
+    var panDiffLeft = 0;
 
     /*
      * Call the file upload functions when the relevant icon is clicked
@@ -231,7 +233,7 @@ $(document).ready(function(){
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
-            var imagesdata = context.getImageData(canvas.getPointer().x, canvas.getPointer().y, 1, 1 );
+            var imagesdata = context.getImageData((canvas.getPointer().x + panDiffLeft) * canvas.getZoom(), (canvas.getPointer().y + panDiffTop) * canvas.getZoom(), 1, 1 );
             var new_color = [ imagesdata.data[0],
                             imagesdata.data[1],
                             imagesdata.data[2] ];
@@ -349,7 +351,7 @@ $(document).ready(function(){
 
         if(canvas.eyedropper) {
             // calculate the x and y coordinates of the cursor
-            var imagesdata = context.getImageData(canvas.getPointer().x * canvas.getZoom(), canvas.getPointer().y * canvas.getZoom(), 1, 1 );
+            var imagesdata = context.getImageData((canvas.getPointer().x + panDiffLeft) * canvas.getZoom(), (canvas.getPointer().y + panDiffTop) * canvas.getZoom(), 1, 1 );
             var new_color = [ imagesdata.data[0],
                             imagesdata.data[1],
                             imagesdata.data[2] ];
@@ -853,6 +855,8 @@ $(document).ready(function(){
         if(event.ctrlKey==true && event.which == 8) { //reset pan
             var delta = new fabric.Point(0,0) ;
             canvas.absolutePan(delta);
+            panDiffTop = 0;
+            panDiffLeft = 0;
         }
         if(event.ctrlKey==true && event.which == 83) { //save/export
             event.preventDefault();
@@ -878,6 +882,8 @@ $(document).ready(function(){
             if(event.ctrlKey==true){ //pan left
                 var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
+                panDiffLeft += 10;
+                console.log(panDiffLeft);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object left
                     if(canvas.getActiveObject()) {
@@ -893,6 +899,7 @@ $(document).ready(function(){
             if(event.ctrlKey==true){ //pan up
                 var delta = new fabric.Point(0,10) ;
                 canvas.relativePan(delta);
+                panDiffTop += 10; 
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object up
                     if(canvas.getActiveObject()) {
@@ -908,6 +915,7 @@ $(document).ready(function(){
             if(event.ctrlKey==true){ //pan right
                 var delta = new fabric.Point(-10,0) ;
                 canvas.relativePan(delta);
+                panDiffLeft += 10;
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object right
                     if(canvas.getActiveObject()) {
@@ -923,6 +931,7 @@ $(document).ready(function(){
             if(event.ctrlKey==true){ //pan down
                 var delta = new fabric.Point(0,-10) ;
                 canvas.relativePan(delta);
+                panDiffTop -= 10;
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object down
                     if(canvas.getActiveObject()) {
