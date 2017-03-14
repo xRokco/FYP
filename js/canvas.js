@@ -1051,6 +1051,26 @@ $(document).ready(function(){
         resetZoom();
     });
 
+    $('#panUp').click(function() {
+        pan(0,10);
+    });
+
+    $('#panDown').click(function() {
+        pan(0,-10);
+    });
+
+    $('#panLeft').click(function() {
+        pan(10,0);
+    });
+
+    $('#panRight').click(function() {
+        pan(-10,0);
+    });
+
+    $('#resetPan').click(function() {
+        resetPan();
+    });
+
     $('#copy').click(function() {
         $(document).trigger("copy");
     });
