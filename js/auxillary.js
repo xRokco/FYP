@@ -72,7 +72,6 @@ function updateLayers() {
 }
 
 function rotate(a) {
-
     var width = canvas.getWidth();
     var height = canvas.getHeight();
     canvas.setWidth(height);

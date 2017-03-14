@@ -8,21 +8,21 @@
 /*
  * When page has finished loading -
  * - create the position coordinates object,
- * - get the canvas offset 
+ * - get the canvas offset
  * - remove the canvas selection box
  */
 $(document).ready(function(){
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
-    var context = document.getElementById("c").getContext('2d');
+    var context = document.getElementById("c").getContext("2d");
     var clipboard = [];
     var pasteMultiplier = 0;
 
     /*
      * Call the file upload functions when the relevant icon is clicked
      */
-    $('#selectFile').change(handleFileSelect);
-    $('#background').change(handleFileSelect2);
+    $("#selectFile").change(handleFileSelect);
+    $("#background").change(handleFileSelect2);
 
     /*
      * Enter object selection mode when the icon is clicked
@@ -30,11 +30,11 @@ $(document).ready(function(){
      * Hide all options
      * Set all objects to selectable
      */
-    $('#select-mode').click(function(){
+    $("#select-mode").click(function(){
         console.log("entering select");
 
         hideOptions();
-        $('#select-mode').css("border", "1px solid silver");
+        $("#select-mode").css("border", "1px solid silver");
 
         canvas.selectionColor = "rgba(100, 100, 255, 0.3)";
         canvas.selectionBorderColor = "rgba(255, 255, 255, 0.3)";
@@ -50,14 +50,14 @@ $(document).ready(function(){
      * Change the cursor to the pencil
      * Display the relevant options while hiding non-relevant
      */
-    $('#drawing-mode').click(function() {
+    $("#drawing-mode").click(function() {
         console.log("entering line drawing");
         canvas.deactivateAll().renderAll();
 
         hideOptions();
-        $('#drawing-mode').css("border", "1px solid silver");
+        $("#drawing-mode").css("border", "1px solid silver");
 
-        if(document.getElementById('straight').checked == true){
+        if(document.getElementById("straight").checked == true){
             canvas.straightLineMode = true;
             canvas.isDrawingMode = false;
             var refShape;
@@ -68,15 +68,15 @@ $(document).ready(function(){
 
         canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
         canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
-        document.getElementById("drawing-mode-options").style.display = '';
-        document.getElementById("straightlab").style.display = '';
+        document.getElementById("drawing-mode-options").style.display = "";
+        document.getElementById("straightlab").style.display = "";
     });
 
     /*
      * Change the freeDrawingBrush color value when the colorpicker text field changes value
      */
-    $('#colorvalue').change(function() {
-        canvas.freeDrawingBrush.color = $.farbtastic('#colorpicker').color;
+    $("#colorvalue").change(function() {
+        canvas.freeDrawingBrush.color = $.farbtastic("#colorpicker").color;
     });
 
     /*
