@@ -12,7 +12,11 @@ var backgroundFlipX = false;
 canvas.renderAll();
 var initWidth = canvas.getWidth();
 var initHeight = canvas.getHeight();
-
+var panDiffTop = 0;
+var panDiffLeft = 0;
+var transformedP = {};
+transformedP.x = 0;
+transformedP.y = 0;
 
 $( function() {
     $( ".drag" ).draggable();
@@ -237,6 +241,50 @@ function moveBack(index) {
 function moveForwards(index) {
     canvas.bringForward(canvas.item(index));
     updateLayers();
+}
+
+function zoomIn() {
+    canvas.setZoom(canvas.getZoom() + 0.01 );
+    canvas.setDimensions({
+            width: initWidth * canvas.getZoom(),
+            height: initHeight * canvas.getZoom()
+    });
+    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+}
+
+function zoomOut() {
+    canvas.setZoom(canvas.getZoom() - 0.01 );
+    canvas.setDimensions({
+        width: initWidth * canvas.getZoom(),
+        height: initHeight * canvas.getZoom()
+    });
+    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+}
+
+function resetZoom() {
+    canvas.setZoom(1);
+    canvas.setDimensions({
+        width: initWidth,
+        height: initHeight
+    });
+    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+}
+
+function pan(x, y) {
+    var delta = new fabric.Point(x,y) ;
+    canvas.relativePan(delta);
+    panDiffLeft += Math.round(x*(1/canvas.getZoom()));
+    panDiffTop += Math.round(y*(1/canvas.getZoom()));
+}
+
+function resetPan() {
+    var delta = new fabric.Point(0,0) ;
+    canvas.absolutePan(delta);
+    panDiffTop = 0;
+    panDiffLeft = 0;
 }
 
 function selectLayer(event, index) {

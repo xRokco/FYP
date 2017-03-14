@@ -17,8 +17,6 @@ $(document).ready(function(){
     var context = document.getElementById("c").getContext("2d");
     var clipboard = [];
     var pasteMultiplier = 0;
-    var panDiffTop = 0;
-    var panDiffLeft = 0;
 
     /*
      * Call the file upload functions when the relevant icon is clicked
@@ -824,39 +822,18 @@ $(document).ready(function(){
         //console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() + 0.01 );
-            canvas.setDimensions({
-                    width: initWidth * canvas.getZoom(),
-                    height: initHeight * canvas.getZoom()
-            });
-            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            zoomIn();
         }
         if(event.ctrlKey==true && event.which == 189){ //zoom out
             event.preventDefault();
-            canvas.setZoom(canvas.getZoom() - 0.01 );
-            canvas.setDimensions({
-                width: initWidth * canvas.getZoom(),
-                height: initHeight * canvas.getZoom()
-            });
-            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            zoomOut();
         }
         if(event.ctrlKey==true && event.which == 48){ //reset zoom
             event.preventDefault();
-            canvas.setZoom(1);
-            canvas.setDimensions({
-                width: initWidth,
-                height: initHeight
-            });
-            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            resetZoom();
         }
         if(event.ctrlKey==true && event.which == 8) { //reset pan
-            var delta = new fabric.Point(0,0) ;
-            canvas.absolutePan(delta);
-            panDiffTop = 0;
-            panDiffLeft = 0;
+            resetPan();
         }
         if(event.ctrlKey==true && event.which == 83) { //save/export
             event.preventDefault();
@@ -880,9 +857,7 @@ $(document).ready(function(){
         }
         if(event.which == 37) { //left arrow
             if(event.ctrlKey==true){ //pan left
-                var delta = new fabric.Point(10,0) ;
-                canvas.relativePan(delta);
-                panDiffLeft += 10;
+                pan(10,0);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object left
                     if(canvas.getActiveObject()) {
@@ -896,9 +871,7 @@ $(document).ready(function(){
         }
         if(event.which == 38) { //up arrow
             if(event.ctrlKey==true){ //pan up
-                var delta = new fabric.Point(0,10) ;
-                canvas.relativePan(delta);
-                panDiffTop += 10; 
+                pan(0,10);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object up
                     if(canvas.getActiveObject()) {
@@ -912,9 +885,7 @@ $(document).ready(function(){
         }
         if(event.which == 39) { //right arrow
             if(event.ctrlKey==true){ //pan right
-                var delta = new fabric.Point(-10,0) ;
-                canvas.relativePan(delta);
-                panDiffLeft += 10;
+                pan(-10,0);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object right
                     if(canvas.getActiveObject()) {
@@ -928,9 +899,7 @@ $(document).ready(function(){
         }
         if(event.which == 40) { //down arrow
             if(event.ctrlKey==true){ //pan down
-                var delta = new fabric.Point(0,-10) ;
-                canvas.relativePan(delta);
-                panDiffTop -= 10;
+                pan(0,-10);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object down
                     if(canvas.getActiveObject()) {
@@ -953,21 +922,11 @@ $(document).ready(function(){
         if (event.ctrlKey == true) {
             if (event.originalEvent.wheelDelta >= 0) {
                 event.preventDefault();
-                canvas.setZoom(canvas.getZoom() + 0.01 ); //zoom in
-                canvas.setDimensions({
-                    width: initWidth * canvas.getZoom(),
-                    height: initHeight * canvas.getZoom()
-                });
+                zoomIn();
             } else {
                 event.preventDefault();
-                canvas.setZoom(canvas.getZoom() - 0.01 ); //zoom in
-                canvas.setDimensions({
-                    width: initWidth * canvas.getZoom(),
-                    height: initHeight * canvas.getZoom()
-                });
+                zoomOut();
             }
-            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
-            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
     });
 
@@ -1078,6 +1037,18 @@ $(document).ready(function(){
 
     $('#flipX').click(function() {
         flipX();
+    });
+
+    $('#zoomIn').click(function() {
+        zoomIn();
+    });
+
+    $('#zoomOut').click(function() {
+        zoomOut();
+    });
+
+    $('#resetZoom').click(function() {
+        resetZoom();
     });
 
     $('#copy').click(function() {
