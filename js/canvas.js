@@ -821,7 +821,7 @@ $(document).ready(function(){
      * @param {Event} event Event object
      */
     $(document).on('keydown', function( event ) {
-        console.log(event.which);
+        //console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
             canvas.setZoom(canvas.getZoom() + 0.01 );
@@ -883,7 +883,6 @@ $(document).ready(function(){
                 var delta = new fabric.Point(10,0) ;
                 canvas.relativePan(delta);
                 panDiffLeft += 10;
-                console.log(panDiffLeft);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object left
                     if(canvas.getActiveObject()) {
