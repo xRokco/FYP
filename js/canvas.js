@@ -521,11 +521,12 @@ $(document).ready(function(){
         canvas.getActiveObject().text = document.getElementById('text').value;
         if (document.getElementById('text').value == "") {
             canvas.getActiveObject().id = "text";
-            updateLayers();
         } else {
             canvas.getActiveObject().id = document.getElementById('text').value.replace(/(\r\n|\n|\r)/gm," ");
         }
         updateLayers();
+        canvas.getActiveObject()._initDimensions();
+        canvas.getActiveObject().setCoords();
         canvas.renderAll();
     });
 
