@@ -518,16 +518,18 @@ $(document).ready(function(){
      */
     $('#text').on('change keydown paste input', function() {
         console.log("text changed");
-        canvas.getActiveObject().text = document.getElementById('text').value;
-        if (document.getElementById('text').value == "") {
-            canvas.getActiveObject().id = "text";
-        } else {
-            canvas.getActiveObject().id = document.getElementById('text').value.replace(/(\r\n|\n|\r)/gm," ");
+        if (canvas.getActiveObject()) {
+            canvas.getActiveObject().text = document.getElementById('text').value;
+            if (document.getElementById('text').value == "") {
+                canvas.getActiveObject().id = "text";
+            } else {
+                canvas.getActiveObject().id = document.getElementById('text').value.replace(/(\r\n|\n|\r)/gm," ");
+            }
+            updateLayers();
+            canvas.getActiveObject()._initDimensions();
+            canvas.getActiveObject().setCoords();
+            canvas.renderAll();
         }
-        updateLayers();
-        canvas.getActiveObject()._initDimensions();
-        canvas.getActiveObject().setCoords();
-        canvas.renderAll();
     });
 
     $('#straight').change(function() {
@@ -546,6 +548,8 @@ $(document).ready(function(){
     $('#font').change(function() {
         console.log("font changed");
         canvas.getActiveObject().fontFamily = this.value;
+        canvas.getActiveObject()._initDimensions();
+        canvas.getActiveObject().setCoords();
         canvas.renderAll();
     });
 
@@ -559,6 +563,8 @@ $(document).ready(function(){
         } else {
             canvas.getActiveObject().fontWeight = 400;
         }
+        canvas.getActiveObject()._initDimensions();
+        canvas.getActiveObject().setCoords();
         canvas.renderAll();
     });
 
@@ -572,6 +578,8 @@ $(document).ready(function(){
         } else {
             canvas.getActiveObject().fontStyle = 'normal';
         }
+        canvas.getActiveObject()._initDimensions();
+        canvas.getActiveObject().setCoords();
         canvas.renderAll();
     });
 
