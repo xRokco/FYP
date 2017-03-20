@@ -518,7 +518,7 @@ $(document).ready(function(){
      */
     $('#text').on('change keydown paste input', function() {
         console.log("text changed");
-        if (canvas.getActiveObject()) {
+        if (canvas.getActiveObject() && getSelectedType() == "text") {
             canvas.getActiveObject().text = document.getElementById('text').value;
             if (document.getElementById('text').value == "") {
                 canvas.getActiveObject().id = "text";
@@ -691,9 +691,9 @@ $(document).ready(function(){
      * - display the relevant options
      */
     canvas.on('object:selected', function() {
+        hideOptions();
+        $('#select-mode').click();
         if(getSelectedType() == 'text'){
-            hideOptions();
-            $('#select-mode').click();
             if(canvas.getActiveObject().fontWeight == 700){
                 document.getElementById("bold").checked = true;
             } else {
@@ -715,8 +715,7 @@ $(document).ready(function(){
             }
 
             document.getElementById("text-mode-options").style.display = 'block';
-        } else if (getSelectedType() == 'rectangle' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
-            $('#select-mode').click();
+        } else if (getSelectedType() == 'rect' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             document.getElementById("shape-line-width").value = canvas.getActiveObject().strokeWidth;
             if(canvas.getActiveObject().fill == ''){
                 document.getElementById("shape-fill").checked = false;
@@ -726,7 +725,6 @@ $(document).ready(function(){
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
         } else if (getSelectedType() == 'line' || getSelectedType() == 'straight line'){
-            $('#select-mode').click();
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
             document.getElementById("drawing-mode-options").style.display = 'block';
         }
@@ -742,7 +740,7 @@ $(document).ready(function(){
     });
 
     $('#rasterize').click(function(){
-        if(canvas.getActiveObject() || canvas.getActiveGroup()) {
+        if(getSelectedType() != null) {
             console.log("attempting to collapse");
             var obj = canvas.getObjects();
             var keepHidden = [];
@@ -777,7 +775,7 @@ $(document).ready(function(){
             });
             if(canvas.getActiveObject()) {
                 canvas.getActiveObject().remove();
-            } else if(canvas.getActiveGroup()) {
+            } else if(getSelectedType() == "group") {
                 canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
             }
             var obj = canvas.getObjects();
@@ -813,12 +811,12 @@ $(document).ready(function(){
         hash key*/
         if(event.which == 127 || event.which == 46) { //delete object
             if(canvas.getActiveObject()) {
-                canvas.getActiveObject().remove();
-                updateLayers();
-            } else if(canvas.getActiveGroup()) {
+                canvas.getActiveObject().remove();  
+            } else if(getSelectedType() == "group") {
                 canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-                updateLayers();
+                canvas.discardActiveGroup().renderAll();
             }
+            updateLayers();
         }
     });
 
@@ -871,7 +869,7 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object left
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left--;
-                    } else if (canvas.getActiveGroup()){
+                    } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left--;
                     }
                     canvas.renderAll();
@@ -885,7 +883,7 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object up
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top--;
-                    } else if (canvas.getActiveGroup()){
+                    } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top--;
                     }
                     canvas.renderAll();
@@ -899,7 +897,7 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object right
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left++;
-                    } else if (canvas.getActiveGroup()){
+                    } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left++;
                     }
                     canvas.renderAll();
@@ -913,7 +911,7 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object down
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top++;
-                    } else if (canvas.getActiveGroup()){
+                    } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top++;
                     }
                     canvas.renderAll();
@@ -954,7 +952,7 @@ $(document).ready(function(){
                 clipboard[1].left = o.left + 15;
                 clipboard[1].top = o.top + 15;
                 updateLayers();
-            } else if(canvas.getActiveGroup()) {
+            } else if(getSelectedType() == "group") {
                 pasteMultiplier = 0;
                 var i = 0;
                 clipboard = [];
@@ -987,7 +985,7 @@ $(document).ready(function(){
                 clipboard[1].top = o.top + 15;
                 canvas.getActiveObject().remove();
                 updateLayers();
-            } else if(canvas.getActiveGroup()) {
+            } else if(getSelectedType() == "group") {
                 pasteMultiplier = 0;
                 var i = 0;
                 clipboard = [];
@@ -1096,4 +1094,8 @@ $(document).ready(function(){
      * Simulate a select icon click to init the functions
      */
     $('#select-mode').click();
+
+    $(".upper-canvas").on("contextmenu", function() { //disable right click on the canvas to try stop bad image download
+        return false;
+    });
 });

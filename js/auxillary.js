@@ -34,6 +34,8 @@ function hideOptions() {
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
 
+    updateLayers();
+
     $('.tool').css("border", "1px solid #EEE");
 
     document.getElementById("drawing-mode-options").style.display = 'none';
@@ -486,10 +488,12 @@ function getSelectedType() {
     if (canvas.getActiveGroup()){
         return "group";
     } else if(canvas.getActiveObject()){
-        if (canvas.getActiveObject().hasOwnProperty('text')){
-            return "text";
+        if (canvas.getActiveObject().get("id") == "straight line"){
+            return "straight line";
+        } else if(canvas.getActiveObject().get("id") == "square") {
+            return "square";
         } else {
-            return canvas.getActiveObject().id;
+            return canvas.getActiveObject().get("type");
         }
     } else {
         return null;
