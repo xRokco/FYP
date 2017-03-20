@@ -5,6 +5,7 @@ canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
 canvas.setHeight(400);
 canvas.setWidth(600);
+canvas.preserveObjectStacking = true;
 document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
 var angle = 0;
 var backgroundFlipY = false;
@@ -290,10 +291,8 @@ function resetPan() {
 }
 
 function selectLayer(event, index) {
-    console.log(event);
     if(event.shiftKey == true){
         if(canvas.getActiveGroup()){
-            console.log(canvas.getActiveGroup());
             var objs = [];
             canvas.getActiveGroup()._objects.forEach(function(ele) {
                 objs.push(ele);
@@ -365,36 +364,44 @@ function hideLayer(index) {
 }
 
 function newCanvas(width, height) {
-    width = width || initWidth;
-    height = height || initHeight;
-    bg = canvas.backgroundColor
-    canvas.clear();
-    if(document.getElementById('transparent').checked){
-        canvas.backgroundColor=null;
+    if(canvas.getObjects().length > 0 || canvas.backgroundImage){
+        var confirm = window.confirm("Are you sure you want to destroy current canvas to create a new one?");
     } else {
-        if(document.getElementById('bgcolour').value!=''){
-            canvas.backgroundColor=document.getElementById('bgcolour').value;
-        } else {
-            canvas.backgroundColor = bg;
-        }
+        var confirm = true;
     }
-    
-    fabric.Object.prototype.selectable = false;
-    canvas.setZoom(1);
-    canvas.setHeight(initHeight);
-    canvas.setWidth(initWidth);
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
-    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    canvas.setHeight(height);
-    canvas.setWidth(width);
-    angle = 0;
-    backgroundFlipY = false;
-    backgroundFlipX = false;
-    initWidth = canvas.getWidth();
-    initHeight = canvas.getHeight();
-    updateLayers();
-    $('.close').click();
-    document.getElementById('canvasWrapper').style.width = width + "px";
+
+    if(confirm == true) {
+        width = width || initWidth;
+        height = height || initHeight;
+        bg = canvas.backgroundColor
+        canvas.clear();
+        if(document.getElementById('transparent').checked){
+            canvas.backgroundColor=null;
+        } else {
+            if(document.getElementById('bgcolour').value!=''){
+                canvas.backgroundColor=document.getElementById('bgcolour').value;
+            } else {
+                canvas.backgroundColor = bg;
+            }
+        }
+        
+        fabric.Object.prototype.selectable = false;
+        canvas.setZoom(1);
+        canvas.setHeight(initHeight);
+        canvas.setWidth(initWidth);
+        document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+        document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+        canvas.setHeight(height);
+        canvas.setWidth(width);
+        angle = 0;
+        backgroundFlipY = false;
+        backgroundFlipX = false;
+        initWidth = canvas.getWidth();
+        initHeight = canvas.getHeight();
+        updateLayers();
+        $('.close').click();
+        document.getElementById('canvasWrapper').style.width = width + "px";
+    }
 }
 
 function resizeCanvas(width, height) {
@@ -488,9 +495,7 @@ function getSelectedType() {
     if (canvas.getActiveGroup()){
         return "group";
     } else if(canvas.getActiveObject()){
-        if (canvas.getActiveObject().get("id") == "straight line"){
-            return "straight line";
-        } else if(canvas.getActiveObject().get("id") == "square") {
+        if(canvas.getActiveObject().get("id") == "square") {
             return "square";
         } else {
             return canvas.getActiveObject().get("type");
@@ -521,21 +526,29 @@ var myAppModule = (function () {
         });
 
         if(canvas.background) {
-            canvas.setZoom(1);
-            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-            canvas.clear();
-            canvas.setWidth(img.width);
-            canvas.setHeight(img.height);
-            canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
-            canvas.background = false;
-            document.getElementById('canvasWrapper').style.width = img.width + "px";
-            angle = 0;
-            backgroundFlipY = false;
-            backgroundFlipX = false;
-            initWidth = canvas.getWidth();
-            initHeight = canvas.getHeight();
-            $(window).resize();
-            $('#select-mode').click();
+            if(canvas.getObjects().length > 0 || canvas.backgroundImage){
+                var confirm = window.confirm("Are you sure you want to destroy current canvas to create a new one with this image?");
+            } else {
+                var confirm = true;
+            }
+
+            if(confirm == true) {
+                canvas.setZoom(1);
+                document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+                canvas.clear();
+                canvas.setWidth(img.width);
+                canvas.setHeight(img.height);
+                canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
+                canvas.background = false;
+                document.getElementById('canvasWrapper').style.width = img.width + "px";
+                angle = 0;
+                backgroundFlipY = false;
+                backgroundFlipX = false;
+                initWidth = canvas.getWidth();
+                initHeight = canvas.getHeight();
+                $(window).resize();
+                $('#select-mode').click();
+            }
         } else {
             canvas.add(cImg);
             updateLayers();
@@ -556,7 +569,6 @@ var myAppModule = (function () {
 })();
 
 function handleFileSelect(evt) {
-    console.log("here");
     var files = evt.target.files;
     var output = [];
     if (!files[0].type.match('image.*')) {
@@ -589,14 +601,14 @@ function handleFileSelect2(evt) {
     reader.onload = myAppModule.OnloadFile;
 
     reader.readAsDataURL(files[0]);
+    document.getElementById("background").value = "";
 }
 
 $(window).on('beforeunload', function (e) {
-    if(canvas.getObjects().length > 0){
+    if(canvas.getObjects().length > 0 || canvas.backgroundImage){
         var confirmationMessage = 'It looks like you have been editing an image. '
                         + 'If you leave before saving, your changes will be lost.';
 
-        //(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-        return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        return confirmationMessage;
     }
 });

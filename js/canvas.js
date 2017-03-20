@@ -583,6 +583,22 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    $('#outline').on('change keydown paste input', function() {
+        console.log("outline changed");
+        if (canvas.getActiveObject() && getSelectedType() == "text") {
+            if(document.getElementById('outline').value == ""){
+                canvas.getActiveObject().strokeWidth = 0;   
+            } else {
+                canvas.getActiveObject().stroke = document.getElementById('outline').value;
+                canvas.getActiveObject().strokeWidth = 1;
+            }
+            updateLayers();
+            canvas.getActiveObject()._initDimensions();
+            canvas.getActiveObject().setCoords();
+            canvas.renderAll();
+        }
+    });
+
     /*
      * When the color value from the color picker changes, change the color of the selected object (rect, circle, ellipse, line, text)
      */
@@ -614,7 +630,7 @@ $(document).ready(function(){
      * When the shape line width slider changes, change the line width of the selected shape (rect, circle, ellipse)
      */
     $('#drawing-line-width').on('input', function(){
-        if(getSelectedType() == 'line' || getSelectedType() == 'straight line'){
+        if(getSelectedType() == 'path' || getSelectedType() == 'line'){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
             canvas.renderAll();
         }
@@ -714,6 +730,12 @@ $(document).ready(function(){
                 document.getElementById("text").value = canvas.getActiveObject().text;
             }
 
+            if(canvas.getActiveObject().strokeWidth == 0){
+                document.getElementById("outline").value = "";
+            } else {
+                document.getElementById("outline").value = canvas.getActiveObject().stroke;
+            }
+
             document.getElementById("text-mode-options").style.display = 'block';
         } else if (getSelectedType() == 'rect' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             document.getElementById("shape-line-width").value = canvas.getActiveObject().strokeWidth;
@@ -724,7 +746,7 @@ $(document).ready(function(){
             }
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
-        } else if (getSelectedType() == 'line' || getSelectedType() == 'straight line'){
+        } else if (getSelectedType() == 'path' || getSelectedType() == 'line'){
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
             document.getElementById("drawing-mode-options").style.display = 'block';
         }
@@ -953,7 +975,6 @@ $(document).ready(function(){
      * Override cut behaviour to copy the selected object or group to clipboard, and remove the object or group from the canvas
      */
     $(document).bind('cut', function() {
-        console.log("cut");
         if(!$("input,textarea,select").is(":focus")) {
             console.log('cut')
             if(canvas.getActiveObject()) {

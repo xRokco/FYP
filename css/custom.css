@@ -51,14 +51,14 @@ html {
     border: 1px solid silver;
     border-top: 20px solid silver;
     min-width: 150px;
-    min-height: 180px; 
+    min-height: 228px; 
     position: absolute;
     top: 280px;
     left:5px;
     line-height: normal;
     background-color: #EEE;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .toolOptions label {
@@ -75,7 +75,7 @@ html {
     display: inline;
 }
 
-#text, #font, #shape-line-width, #drawing-line-width {
+#text, #font, #shape-line-width, #drawing-line-width, #outline {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -122,12 +122,12 @@ html {
     min-width: 200px;
     min-height: 108px; 
     position: absolute;
-    top: 510px;
+    top: 551px;
     left:5px;
     line-height: normal;
     background-color: #EEE;
     text-align: center;
-    max-height: 250px;
+    max-height: 200px;
     overflow: auto;
 }
 
