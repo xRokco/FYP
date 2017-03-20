@@ -793,23 +793,13 @@ $(document).ready(function(){
     });
 
     /*
-     * When a key is pressed call this function
+     * When a key is pushed down, call this function
+     * - only perform certain actions if the control key was held down when the function gets called
      * @param {Event} event Event object
      */
-    $(document).on('keypress', function( event ) {
-        console.log(event.which);
-        /*keycodes
-        left arrow - 37
-        up arrow - 38
-        right arrow - 39
-        down arrow - 40
-        delete - 46 and 127
-        num line equals key - 187
-        num line underscore - 198
-        num line zero - 48
-        backspace - 8
-        hash key*/
-        if(event.which == 127 || event.which == 46) { //delete object
+    $(document).on('keydown', function( event ) {
+        //console.log(event.which);
+        if(event.which == 46) { //delete object
             if(canvas.getActiveObject()) {
                 canvas.getActiveObject().remove();  
             } else if(getSelectedType() == "group") {
@@ -818,15 +808,6 @@ $(document).ready(function(){
             }
             updateLayers();
         }
-    });
-
-    /*
-     * When a key is pushed down, call this function
-     * - only perform certain actions if the control key was held down when the function gets called
-     * @param {Event} event Event object
-     */
-    $(document).on('keydown', function( event ) {
-        //console.log(event.which);
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();
             zoomIn();
