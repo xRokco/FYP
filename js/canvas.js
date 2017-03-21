@@ -622,6 +622,7 @@ $(document).ready(function(){
     $('#shape-line-width').on('input', function(){
         if(getSelectedType() != 'text' && getSelectedType() != 'image' && getSelectedType() != null){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("shape-line-width").value, 10) || 1;
+            canvas.getActiveObject().setCoords();
             canvas.renderAll();
         }
     });
@@ -632,6 +633,7 @@ $(document).ready(function(){
     $('#drawing-line-width').on('input', function(){
         if(getSelectedType() == 'path' || getSelectedType() == 'line'){
             canvas.getActiveObject().strokeWidth = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
+            canvas.getActiveObject().setCoords();
             canvas.renderAll();
         }
     });
