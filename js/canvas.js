@@ -709,9 +709,10 @@ $(document).ready(function(){
      * - display the relevant options
      */
     canvas.on('object:selected', function() {
-        hideOptions();
-        $('#select-mode').click();
         if(getSelectedType() == 'text'){
+            hideOptions();
+            $('#select-mode').click();
+            
             if(canvas.getActiveObject().fontWeight == 700){
                 document.getElementById("bold").checked = true;
             } else {
@@ -740,6 +741,9 @@ $(document).ready(function(){
 
             document.getElementById("text-mode-options").style.display = 'block';
         } else if (getSelectedType() == 'rect' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
+            hideOptions();
+            $('#select-mode').click();
+            
             document.getElementById("shape-line-width").value = canvas.getActiveObject().strokeWidth;
             if(canvas.getActiveObject().fill == ''){
                 document.getElementById("shape-fill").checked = false;
@@ -749,6 +753,9 @@ $(document).ready(function(){
             document.getElementById("shape-mode-options").style.display = 'block';
             document.getElementById("locklab").style.display = 'none';
         } else if (getSelectedType() == 'path' || getSelectedType() == 'line'){
+            hideOptions();
+            $('#select-mode').click();
+            
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
             document.getElementById("drawing-mode-options").style.display = 'block';
         }
