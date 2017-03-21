@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $('#colorpicker').farbtastic('#colorvalue');
 
-    $('.farbtastic').click(function() {
+    $('.farbtastic').mousemove(function() {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec($('#colorvalue').val());
         r = parseInt(result[1], 16);
         g = parseInt(result[2], 16);
@@ -35,6 +35,10 @@ $(document).ready(function() {
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }
         $("#colorvalue").change();
+    });
+
+    $('.farbtastic').click(function() {
+        $('.farbtastic').mousemove();
     });
 
     $(".rgbvalue").change(function() {
