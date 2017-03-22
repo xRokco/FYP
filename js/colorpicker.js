@@ -48,6 +48,10 @@ $(document).ready(function() {
 
     $.farbtastic('#colorpicker').setColor('#000000');
 
+    $("#colorvalue").change(function(){
+        $.farbtastic('#colorpicker').setColor($("#colorvalue").val());        
+    });
+
     $(".rgbvalue").change(function() {
         if(parseInt($(this).val()) < 0 || parseInt($(this).val()) > 255) {
             return;
