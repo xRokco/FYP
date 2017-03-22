@@ -1,10 +1,9 @@
 $(document).ready(function() {
-    //$('#colorpicker').farbtastic('#colorvalue');
-    
     $('#colorpicker').farbtastic(function(){
         //console.log(this.color);
         $('#colorvalue').val($.farbtastic('#colorpicker').color.toUpperCase());
         $('#colorvalue').css('background-color', $.farbtastic('#colorpicker').color);
+        $('#colorvalue').css('color', $("#lvalue").val() > 0.5 ? '#000' : '#fff');
 
         canvas.freeDrawingBrush.color = $.farbtastic("#colorpicker").color;
 
@@ -46,6 +45,8 @@ $(document).ready(function() {
         }
         $("#colorvalue").change();        
     });
+
+    $.farbtastic('#colorpicker').setColor('#000000');
 
     $(".rgbvalue").change(function() {
         if(parseInt($(this).val()) < 0 || parseInt($(this).val()) > 255) {

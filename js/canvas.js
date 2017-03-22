@@ -241,7 +241,7 @@ $(document).ready(function(){
             hexb = ("00" + imagesdata.data[2].toString(16)).substr(-2);
 
             $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
-            $('.farbtastic').click();
+            //$('.farbtastic').click();
         }
 
         //Creating the rectangle object
@@ -293,7 +293,7 @@ $(document).ready(function(){
                     id: 'circle',
                     left:canvas.getPointer().x,
                     top:canvas.getPointer().y,                
-                    radius:6,
+                    radius: parseInt(document.getElementById("shape-line-width").value, 10)/4,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
@@ -309,7 +309,6 @@ $(document).ready(function(){
                     rx: canvas.getPointer().x-startPointLeft,
                     ry: canvas.getPointer().y-startPointTop,
                     angle: 0,
-                    fill: '',
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
@@ -359,7 +358,7 @@ $(document).ready(function(){
             hexb = ("00" + imagesdata.data[2].toString(16)).substr(-2);
 
             $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
-            $('.farbtastic').click();
+            //$('.farbtastic').click();
         }
         
         //Getting the mouse Co-ordinates
@@ -409,7 +408,7 @@ $(document).ready(function(){
             var posY=canvas.getPointer().y;
 
             if(document.getElementById('lock').checked) {
-                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX))/2;
+                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX));
                 refShape.set({ radius: radius});
             } else {
                 var rx = Math.abs(startPointLeft - posX)/2;
@@ -504,6 +503,7 @@ $(document).ready(function(){
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
+            console.log(refShape);
             canvas.setActiveObject(refShape);    
         }
         
