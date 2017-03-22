@@ -1,8 +1,14 @@
 $(document).ready(function() {
-    $('#colorpicker').farbtastic('#colorvalue');
+    //$('#colorpicker').farbtastic('#colorvalue');
+    
+    $('#colorpicker').farbtastic(function(){
+        //console.log(this.color);
+        $('#colorvalue').val($.farbtastic('#colorpicker').color.toUpperCase());
+        $('#colorvalue').css('background-color', $.farbtastic('#colorpicker').color);
 
-    $('.farbtastic').mousemove(function() {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec($('#colorvalue').val());
+        canvas.freeDrawingBrush.color = $.farbtastic("#colorpicker").color;
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec($.farbtastic('#colorpicker').color);
         r = parseInt(result[1], 16);
         g = parseInt(result[2], 16);
         b = parseInt(result[3], 16);
@@ -10,7 +16,11 @@ $(document).ready(function() {
         $("#gvalue").val(g);
         $("#bvalue").val(b);
 
-        //console.log([r, g, b]);
+        // $("#rvalue").css('background-color', "rgb(" + r + ", 0, 0)");
+        // $("#gvalue").css('background-color', "rgb(0, " + g + ", 0)");
+        // $("#bvalue").css('background-color', "rgb(0, 0, " + b + ")");
+
+        // //console.log([r, g, b]);
         r /= 255, g /= 255, b /= 255;
         var max = Math.max(r, g, b), min = Math.min(r, g, b);
         var h, s, l = (max + min) / 2;
@@ -34,11 +44,7 @@ $(document).ready(function() {
         if(document.getElementById('newCanvasModal').style.display != "none"){
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }
-        $("#colorvalue").change();
-    });
-
-    $('.farbtastic').click(function() {
-        $('.farbtastic').mousemove();
+        $("#colorvalue").change();        
     });
 
     $(".rgbvalue").change(function() {
@@ -56,7 +62,6 @@ $(document).ready(function() {
 
         $.farbtastic('#colorpicker').setColor('#'+hexr+hexg+hexb);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        $("#colorvalue").change();
     });
 
     $(".hslvalue").change(function() {
@@ -71,7 +76,6 @@ $(document).ready(function() {
         $.farbtastic('#colorpicker').setHSL([h,s,l]);
         console.log($.farbtastic('#colorpicker').hsl);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
-        $("#colorvalue").change();
     });
 
     // Variables
