@@ -293,7 +293,7 @@ $(document).ready(function(){
                     id: 'circle',
                     left:canvas.getPointer().x,
                     top:canvas.getPointer().y,                
-                    radius: parseInt(document.getElementById("shape-line-width").value, 10)/4,
+                    radius: 1,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
@@ -408,7 +408,7 @@ $(document).ready(function(){
             var posY=canvas.getPointer().y;
 
             if(document.getElementById('lock').checked) {
-                var radius = Math.max(Math.abs(startPointTop - posY),Math.abs(startPointLeft - posX));
+                var radius = Math.max(Math.abs(startPointTop - posY)+refShape.strokeWidth/8,Math.abs(startPointLeft - posX)+refShape.strokeWidth/8);
                 refShape.set({ radius: radius});
             } else {
                 var rx = Math.abs(startPointLeft - posX)/2;
@@ -881,8 +881,10 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object left
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left--;
+                        canvas.getActiveObject().setCoords();
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left--;
+                        canvas.getActiveGroup().setCoords();
                     }
                     canvas.renderAll();
                 }
@@ -895,8 +897,10 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object up
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top--;
+                        canvas.getActiveObject().setCoords();
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top--;
+                        canvas.getActiveGroup().setCoords();
                     }
                     canvas.renderAll();
                 }
@@ -909,8 +913,10 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object right
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left++;
+                        canvas.getActiveObject().setCoords();
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left++;
+                        canvas.getActiveGroup().setCoords();
                     }
                     canvas.renderAll();
                 }
@@ -923,8 +929,10 @@ $(document).ready(function(){
                 if(!$("input,textarea,select").is(":focus")) { //move object down
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top++;
+                        canvas.getActiveObject().setCoords();
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top++;
+                        canvas.getActiveGroup().setCoords();
                     }
                     canvas.renderAll();
                 }
