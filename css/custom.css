@@ -198,7 +198,7 @@ label[for=background] {
 #mobileModal .modal-content {
     z-index: 9;
     width: 90%;
-    height: 90%;
+    height: 70%;
 }
 
 /* Modal Content/Box */
