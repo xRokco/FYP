@@ -23,6 +23,12 @@ $('#exportButton').click(function(){
     document.getElementById('exportModal').style.display = "block";
 });
 
+$(document).ready(function(){
+    if (/Mobi/.test(navigator.userAgent)) {
+        document.getElementById('mobileModal').style.display = 'block';
+    }
+});
+
 /*
  * When any of the export buttons are clicked, either -
  * display the JSON modal and fill the code box with JSON, or
@@ -150,6 +156,7 @@ $('.close').click(function() {
     document.getElementById('exportModal').style.display = "none";
     document.getElementById('importModal').style.display = "none";
     document.getElementById('resizeModal').style.display = "none";
+    document.getElementById('mobileModal').style.display = "none";
 });
 
 $('.closeJSON').click(function() {
