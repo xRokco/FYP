@@ -209,6 +209,10 @@ label[for=background] {
     width: 20%;
 }
 
+#filter-warning {
+    color: red;
+}
+
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;

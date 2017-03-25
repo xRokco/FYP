@@ -902,13 +902,15 @@ $(document).ready(function(){
     $(document).on('keydown', function( event ) {
         //console.log(event.which);
         if(event.which == 46) { //delete object
-            if(canvas.getActiveObject()) {
-                canvas.getActiveObject().remove();  
-            } else if(getSelectedType() == "group") {
-                canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-                canvas.discardActiveGroup().renderAll();
+            if(!$("input,textarea,select").is(":focus")) {
+                if(canvas.getActiveObject()) {
+                    canvas.getActiveObject().remove();  
+                } else if(getSelectedType() == "group") {
+                    canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+                    canvas.discardActiveGroup().renderAll();
+                }
+                updateLayers();
             }
-            updateLayers();
         }
         if(event.ctrlKey==true && event.which == 187){ //zoom in
             event.preventDefault();

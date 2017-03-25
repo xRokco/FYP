@@ -35,8 +35,10 @@ $(document).ready(function(){
 $('#filterButton').click(function(){
     document.getElementById('filterModal').style.display = "block";
     if(!canvas.backgroundImage) {
+        document.getElementById("filter-warning").style.display = "block";
         $(".background-filter-options input").prop('disabled', true);
     } else {
+        document.getElementById("filter-warning").style.display = "none";
         $(".background-filter-options input").prop('disabled', false);
     }
 });
