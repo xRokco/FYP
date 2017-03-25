@@ -18,6 +18,7 @@ var panDiffLeft = 0;
 var transformedP = {};
 transformedP.x = 0;
 transformedP.y = 0;
+var backgroundImageUrl;
 
 $( function() {
     $( ".drag" ).draggable();
@@ -44,6 +45,7 @@ function hideOptions() {
     document.getElementById("text-mode-options").style.display = 'none';
     document.getElementById("locklab").style.display = 'none';
     document.getElementById("straightlab").style.display = 'none';
+    document.getElementById("filter-options").style.display = "none";
     fabric.Object.prototype.selectable = false;
 }
 
@@ -160,7 +162,7 @@ function flipY() {
 
         if(angle == 90 || angle == 270 || angle == -90 || angle == -270){
             backgroundFlipX = !backgroundFlipX;
-            canvas.backgroundImage.setAngle(angle).set('flipX', backgroundFlipX);   
+            canvas.backgroundImage.setAngle(angle).set('flipX', backgroundFlipX); 
         } else if(angle == 0 || angle == 180 || angle == -0 || angle == -180){
             backgroundFlipY = !backgroundFlipY;
             canvas.backgroundImage.setAngle(angle).set('flipY', backgroundFlipY);   
@@ -386,6 +388,7 @@ function newCanvas(width, height) {
         }
         
         fabric.Object.prototype.selectable = false;
+        backgroundImageUrl = "";
         canvas.setZoom(1);
         canvas.setHeight(initHeight);
         canvas.setWidth(initWidth);
@@ -546,6 +549,7 @@ var myAppModule = (function () {
                 backgroundFlipX = false;
                 initWidth = canvas.getWidth();
                 initHeight = canvas.getHeight();
+                backgroundImageUrl = canvas.backgroundImage.toDataURL();
                 $(window).resize();
                 $('#select-mode').click();
             }

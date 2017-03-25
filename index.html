@@ -51,7 +51,7 @@
                                 </li>
                                 <li class="popover-item">
                                     <label for="background">
-                                        <p id="open-label" class="popover-link" title="Ctrl + O">Open</p>
+                                        <p id="open-label" class="popover-link" title="Ctrl + O">Set background image</p>
                                     </label>
                                     <input id="background" type="file"/>
                                 </li>
@@ -116,6 +116,9 @@
                         <div id="imageMenu" class="popover">
                             <ul class="popover-list">
                                 <li class="popover-item">
+                                    <a class="popover-link" href="#" onclick="return false;" id="filterButton">Change background filters</a>
+                                </li>
+                                <li class="popover-item">
                                     <a class="popover-link" href="#" onclick="return false;" id="rotateCW">Rotate 90° Clockwise</a>
                                 </li>
                                 <li class="popover-item">
@@ -148,7 +151,7 @@
         </header>
         <div class="tools drag">
             <img id="drawing-mode" class="tool" src="images/tools/pencil.png" title="brush tool" alt="Pencil icon to enable line drawing mode">
-            <label for="selectFile" title="image upload">
+            <label for="selectFile" title="add image">
                 <img class="tool" onclick="hideOptions()" src="images/tools/image.png" alt="image icon to open the upload image dialogue">
             </label>
             <input id="selectFile" type="file"/>
@@ -178,6 +181,16 @@
             <div style="display: none;" id="straightlab" class="options">
                 <label for="straight" class="inline">Straight line:</label>
                 <input type="checkbox" id="straight"/>
+            </div>
+            <div style="display: none;" id="filter-options" class="filters options">
+                <label for="grayscale" class="inline">Greyscale:</label>
+                <input type="checkbox" id="grayscale" data-filter="0"/>
+                <br/>
+                <label for="sepia" class="inline">Sepia:</label>
+                <input type="checkbox" id="sepia" data-filter="1"/>
+                <br/>
+                <label for="invert" class="inline">Invert:</label>
+                <input type="checkbox" id="invert" data-filter="2"/>
             </div>
             <div style="display: none;" id="text-mode-options" class="options">
                 <label for="text">Text:</label><textarea name="text" id="text"></textarea>
@@ -243,6 +256,29 @@
                     <li><a href="#" onclick="return false;" class="export" value="json">JSON</a> - Specially formatted text which allows you to save your image editing progress to pick it up again later.</li>
                 </ul>
                 
+            </div>
+        </div>
+
+        <div id="filterModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content drag">
+                <!--<div class="modal-close-icon">-->
+                <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
+                <h4>Background image filters...</h4>
+                <ul class="background-filter-options">
+                    <li>
+                        <label for="grayscale" class="inline">Greyscale:</label>
+                        <input type="checkbox" id="grayscale" data-filter="0"/>
+                    </li>
+                    <li>
+                        <label for="sepia" class="inline">Sepia:</label>
+                        <input type="checkbox" id="sepia" data-filter="1"/>
+                    </li>
+                    <li>
+                        <label for="invert" class="inline">Invert:</label>
+                        <input type="checkbox" id="invert" data-filter="2"/>
+                    </li>
+                </ul>
             </div>
         </div>
 

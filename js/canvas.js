@@ -568,6 +568,55 @@ $(document).ready(function(){
         canvas.renderAll();
     });
 
+    var filters = [
+        new fabric.Image.filters.Grayscale(),       // grayscale    0
+        new fabric.Image.filters.Sepia2(),          // sepia        1
+        new fabric.Image.filters.Invert()          // invert       2
+        
+        // new fabric.Image.filters.Convolute({        // emboss       3
+        //     matrix: [ 1, 1, 1,
+        //              1, 0.7, -1,
+        //              -1, -1, -1 ]
+        // }),
+
+        // new fabric.Image.filters.Convolute({        // sharpen      4
+        //     matrix: [  0, -1, 0,
+        //             -1, 5, -1,
+        //             0, -1, 0 ]
+        // })
+    ];
+
+    $('.filters').on("change", "input", function () {
+        var isChecked = $(this).prop("checked");
+        var filter = $(this).data("filter");
+        var obj = canvas.getActiveObject();
+        
+        obj.filters[filter] = isChecked ? filters[filter] : null;
+        obj.applyFilters(function () {
+            canvas.renderAll();
+        });
+        console.log(obj.filters);
+    });
+
+    $('.background-filter-options').on("change", "input", function () {
+        var angle = canvas.backgroundImage.angle;
+        var X = canvas.backgroundImage.flipX;
+        var Y = canvas.backgroundImage.flipY;
+        fabric.Image.fromURL(backgroundImageUrl, (function(image){
+            var filter = $(this).data("filter");
+            var isChecked = $(this).prop("checked");
+            image.filters[filter] = isChecked ? filters[filter] : null;
+            image.applyFilters((function(){
+                canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
+                canvas.backgroundImage.setAngle(angle);
+                canvas.backgroundImage.set('flipX', X);
+                canvas.backgroundImage.set('flipY', Y);
+                canvas.renderAll();
+            }).bind(this));
+        }).bind(this));
+    });
+
+
     /*
      * When the italic checkbox is checked, toggle between italic and normal font on the object
      */
@@ -758,6 +807,28 @@ $(document).ready(function(){
             
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
             document.getElementById("drawing-mode-options").style.display = 'block';
+        } else if(getSelectedType() == "image") {
+            hideOptions();
+            $('#select-mode').click();
+            if(canvas.getActiveObject().filters[0]) {
+                document.getElementById("grayscale").checked = true;
+            } else {
+                document.getElementById("grayscale").checked = false;
+            }
+
+            if(canvas.getActiveObject().filters[1]) {
+                document.getElementById("sepia").checked = true;
+            } else {
+                document.getElementById("sepia").checked = false;
+            }
+
+            if(canvas.getActiveObject().filters[2]) {
+                document.getElementById("invert").checked = true;
+            } else {
+                document.getElementById("invert").checked = false;
+            }
+
+            document.getElementById("filter-options").style.display = "block";
         }
     });
 

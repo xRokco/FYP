@@ -201,6 +201,14 @@ label[for=background] {
     height: 70%;
 }
 
+#filterModal {
+    background-color: rgba(0,0,0,0.0);
+}
+
+#filterModal .modal-content {
+    width: 20%;
+}
+
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;

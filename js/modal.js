@@ -30,6 +30,18 @@ $(document).ready(function(){
 });
 
 /*
+ * On click on the export button in the file menu, display the export modal
+ */
+$('#filterButton').click(function(){
+    document.getElementById('filterModal').style.display = "block";
+    if(!canvas.backgroundImage) {
+        $(".background-filter-options input").prop('disabled', true);
+    } else {
+        $(".background-filter-options input").prop('disabled', false);
+    }
+});
+
+/*
  * When any of the export buttons are clicked, either -
  * display the JSON modal and fill the code box with JSON, or
  * open the image on the canvas in a new tab/window
@@ -152,11 +164,12 @@ $('#resizeHeight').on('change keydown paste input', function() {
 
 // When the user clicks on <span> (x), close the modal
 $('.close').click(function() {
-    document.getElementById('newCanvasModal').style.display = "none";
     document.getElementById('exportModal').style.display = "none";
+    document.getElementById('newCanvasModal').style.display = "none";
     document.getElementById('importModal').style.display = "none";
     document.getElementById('resizeModal').style.display = "none";
     document.getElementById('mobileModal').style.display = "none";
+    document.getElementById('filterModal').style.display = "none";
 });
 
 $('.closeJSON').click(function() {
@@ -171,14 +184,20 @@ $(window).click(function(event) {
     if (event.target == document.getElementById('newCanvasModal')) {
         document.getElementById('newCanvasModal').style.display = "none";
     }
-    if (event.target == document.getElementById('jsonModal')) {
-        document.getElementById('jsonModal').style.display = "none";
-    }
     if (event.target == document.getElementById('importModal')) {
         document.getElementById('importModal').style.display = "none";
     }
     if (event.target == document.getElementById('resizeModal')) {
         document.getElementById('resizeModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('mobileModal')) {
+        document.getElementById('mobileModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('filterModal')) {
+        document.getElementById('filterModal').style.display = "none";
+    }
+    if (event.target == document.getElementById('jsonModal')) {
+        document.getElementById('jsonModal').style.display = "none";
     }
 });
 

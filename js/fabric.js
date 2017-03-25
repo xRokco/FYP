@@ -19931,9 +19931,9 @@ fabric.Image.filters.BaseFilter = fabric.util.createClass(/** @lends fabric.Imag
         g = data[i + 1];
         b = data[i + 2];
 
-        data[i] = (r * 0.393 + g * 0.769 + b * 0.189 ) / 1.351;
-        data[i + 1] = (r * 0.349 + g * 0.686 + b * 0.168 ) / 1.203;
-        data[i + 2] = (r * 0.272 + g * 0.534 + b * 0.131 ) / 2.140;
+        data[i] = (r * 0.393 + g * 0.969 + b * 0.189 );
+        data[i + 1] = (r * 0.349 + g * 0.986 + b * 0.168 );
+        data[i + 2] = (r * 0.272 + g * 0.934 + b * 0.131 );
       }
 
       context.putImageData(imageData, 0, 0);
