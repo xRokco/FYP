@@ -966,7 +966,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 104) { //up arrow
+        if(event.which == 38 || event.which == 104) { //up arrow
             if(event.ctrlKey==true){ //pan up
                 pan(0,10);
             } else {
@@ -982,7 +982,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 102) { //right arrow
+        if(event.which == 39 || event.which == 102) { //right arrow
             if(event.ctrlKey==true){ //pan right
                 pan(-10,0);
             } else {
@@ -998,7 +998,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 98) { //down arrow
+        if(event.which == 40 || event.which == 98) { //down arrow
             if(event.ctrlKey==true){ //pan down
                 pan(0,-10);
             } else {
