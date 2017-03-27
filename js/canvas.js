@@ -905,9 +905,12 @@ $(document).ready(function(){
             if(!$("input,textarea,select").is(":focus")) {
                 if(canvas.getActiveObject()) {
                     canvas.getActiveObject().remove();  
-                } else if(getSelectedType() == "group") {
-                    canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-                    canvas.discardActiveGroup().renderAll();
+                } else if(canvas.getActiveGroup()) {
+                    var group = canvas.getActiveGroup().getObjects();
+                    canvas.discardActiveGroup();
+                    group.forEach(function(object) {
+                        canvas.remove(object);
+                    });
                 }
                 updateLayers();
             }
