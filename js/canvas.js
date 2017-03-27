@@ -952,6 +952,7 @@ $(document).ready(function(){
         }
         if(event.which == 37 || event.which == 100) { //left arrow
             if(event.ctrlKey==true){ //pan left
+                event.preventDefault();
                 pan(10,0);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object left
@@ -968,6 +969,7 @@ $(document).ready(function(){
         }
         if(event.which == 38 || event.which == 104) { //up arrow
             if(event.ctrlKey==true){ //pan up
+                event.preventDefault();
                 pan(0,10);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object up
@@ -984,6 +986,7 @@ $(document).ready(function(){
         }
         if(event.which == 39 || event.which == 102) { //right arrow
             if(event.ctrlKey==true){ //pan right
+                event.preventDefault();
                 pan(-10,0);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object right
@@ -1000,6 +1003,7 @@ $(document).ready(function(){
         }
         if(event.which == 40 || event.which == 98) { //down arrow
             if(event.ctrlKey==true){ //pan down
+                event.preventDefault();
                 pan(0,-10);
             } else {
                 if(!$("input,textarea,select").is(":focus")) { //move object down
