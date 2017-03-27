@@ -915,11 +915,11 @@ $(document).ready(function(){
                 updateLayers();
             }
         }
-        if(event.ctrlKey==true && event.which == 187){ //zoom in
+        if(event.ctrlKey==true && (event.which == 187 || event.which == 107)){ //zoom in
             event.preventDefault();
             zoomIn();
         }
-        if(event.ctrlKey==true && event.which == 189){ //zoom out
+        if(event.ctrlKey==true && (event.which == 189 || event.which == 109)){ //zoom out
             event.preventDefault();
             zoomOut();
         }
@@ -946,11 +946,11 @@ $(document).ready(function(){
             event.preventDefault();
             $('#background').click();
         }
-        if(event.ctrlKey==true && event.which == 78) { //new **DOESN'T WORK ON CHROME USUALLY**
+        if(event.ctrlKey==true && event.which == 78) { //new
             event.preventDefault();
             $('#newCanvasButton').click();
         }
-        if(event.which == 37) { //left arrow
+        if(event.which == 37 || event.which == 100) { //left arrow
             if(event.ctrlKey==true){ //pan left
                 pan(10,0);
             } else {
@@ -966,7 +966,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 38) { //up arrow
+        if(event.which == 104) { //up arrow
             if(event.ctrlKey==true){ //pan up
                 pan(0,10);
             } else {
@@ -982,7 +982,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 39) { //right arrow
+        if(event.which == 102) { //right arrow
             if(event.ctrlKey==true){ //pan right
                 pan(-10,0);
             } else {
@@ -998,7 +998,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 40) { //down arrow
+        if(event.which == 98) { //down arrow
             if(event.ctrlKey==true){ //pan down
                 pan(0,-10);
             } else {
