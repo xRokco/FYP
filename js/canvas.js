@@ -900,8 +900,8 @@ $(document).ready(function(){
      * @param {Event} event Event object
      */
     $(document).on('keydown', function( event ) {
-        //console.log(event.which);
-        if(event.which == 46) { //delete object
+        console.log(event.which);
+        if(event.which == 46 || event.which == 8) { //delete object
             if(!$("input,textarea,select").is(":focus")) {
                 if(canvas.getActiveObject()) {
                     canvas.getActiveObject().remove();  
