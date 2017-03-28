@@ -108,6 +108,13 @@ html {
     margin-left: auto;
 }
 
+#colorvalue {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+
 .rgbvalue, .hslvalue {
     width:60%;
 }
@@ -400,8 +407,6 @@ input[type="file"] {
 #imageMenu {
     left: -15%;
 }
-
-
 
 .popover-item:first-child .popover-link:after, .popover-item:first-child .popover-link:before {
     bottom: 100%;
