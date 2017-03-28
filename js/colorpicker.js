@@ -82,29 +82,4 @@ $(document).ready(function() {
         console.log($.farbtastic('#colorpicker').hsl);
         $('#bgcolour').val($.farbtastic('#colorpicker').color);
     });
-
-    // Variables
-    var $popoverLink = $('[data-popover]'),
-    $document = $(document)
-
-    function init() {
-        $popoverLink.click(openPopover);
-        $document.click(closePopover);
-    }
-
-    function openPopover(e) {
-        e.preventDefault()
-        closePopover();
-        var popover = $($(this).data('popover'));
-        popover.toggleClass('open')
-        e.stopImmediatePropagation();
-    }
-
-    function closePopover(e) {
-        if($('.popover.open').length > 0) {
-            $('.popover').removeClass('open')
-        }
-    }
-
-    init();
 });

@@ -118,6 +118,7 @@ $('#import').click(function(){
 
 //Export Modal
 $('#newCanvasButton').click(function(){
+    $('#bgcolour').val(canvas.backgroundColor);
     document.getElementById('newCanvasModal').style.display = "block";
 });
 

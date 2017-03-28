@@ -897,11 +897,11 @@ $(document).ready(function(){
     /*
      * When a key is pushed down, call this function
      * - only perform certain actions if the control key was held down when the function gets called
-     * @param {Event} event Event object
+     * @param {Event} event Keydown event object
      */
     $(document).on('keydown', function( event ) {
-        console.log(event.which);
-        if(event.which == 46 || event.which == 8) { //delete object
+        //console.log(event.which);
+        if(event.which == 46 || event.which == 8) { //delete object (delete key, backspace)
             if(!$("input,textarea,select").is(":focus")) {
                 if(canvas.getActiveObject()) {
                     canvas.getActiveObject().remove();  
@@ -915,42 +915,42 @@ $(document).ready(function(){
                 updateLayers();
             }
         }
-        if(event.ctrlKey==true && (event.which == 187 || event.which == 107)){ //zoom in
+        if(event.ctrlKey==true && (event.which == 187 || event.which == 107)){ //zoom in (numLine =, numPad +)
             event.preventDefault();
             zoomIn();
         }
-        if(event.ctrlKey==true && (event.which == 189 || event.which == 109)){ //zoom out
+        if(event.ctrlKey==true && (event.which == 189 || event.which == 109)){ //zoom out (numLine -, numPad -)
             event.preventDefault();
             zoomOut();
         }
-        if(event.ctrlKey==true && event.which == 48){ //reset zoom
+        if(event.ctrlKey==true && (event.which == 48 || event.which == 96)){ //reset zoom (numLine 0, numPad 0)
             event.preventDefault();
             resetZoom();
         }
-        if(event.ctrlKey==true && event.which == 8) { //reset pan
+        if(event.ctrlKey==true && event.which == 8) { //reset pan (backspace)
             resetPan();
         }
-        if(event.ctrlKey==true && event.which == 83) { //save/export
+        if(event.ctrlKey==true && event.which == 83) { //save/export (S key)
             event.preventDefault();
             $('#exportButton').click();
         }
-        if(event.ctrlKey==true && event.which == 73) { //import
+        if(event.ctrlKey==true && event.which == 73) { //import (I key)
             event.preventDefault();
             $('#importButton').click();
         }
-        if(event.ctrlKey==true && event.which == 66) { //new
+        if(event.ctrlKey==true && event.which == 66) { //new (B key)
             event.preventDefault();
             $('#newCanvasButton').click();
         }
-        if(event.ctrlKey==true && event.which == 79) { //open background image
+        if(event.ctrlKey==true && event.which == 79) { //open background image (O key)
             event.preventDefault();
             $('#background').click();
         }
-        if(event.ctrlKey==true && event.which == 78) { //new
+        if(event.ctrlKey==true && event.which == 78) { //new (N key) **doesnt work in chrome**
             event.preventDefault();
             $('#newCanvasButton').click();
         }
-        if(event.which == 37 || event.which == 100) { //left arrow
+        if(event.which == 37 || event.which == 100) { //left arrow, numPad 4
             if(event.ctrlKey==true){ //pan left
                 event.preventDefault();
                 pan(10,0);
@@ -967,7 +967,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 38 || event.which == 104) { //up arrow
+        if(event.which == 38 || event.which == 104) { //up arrow, numPad 8
             if(event.ctrlKey==true){ //pan up
                 event.preventDefault();
                 pan(0,10);
@@ -984,7 +984,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 39 || event.which == 102) { //right arrow
+        if(event.which == 39 || event.which == 102) { //right arrow, numPad 6
             if(event.ctrlKey==true){ //pan right
                 event.preventDefault();
                 pan(-10,0);
@@ -1001,7 +1001,7 @@ $(document).ready(function(){
                 }
             }
         }
-        if(event.which == 40 || event.which == 98) { //down arrow
+        if(event.which == 40 || event.which == 98) { //down arrow, numPad 2
             if(event.ctrlKey==true){ //pan down
                 event.preventDefault();
                 pan(0,-10);
