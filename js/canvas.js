@@ -293,7 +293,7 @@ $(document).ready(function(){
                     id: 'circle',
                     left:canvas.getPointer().x,
                     top:canvas.getPointer().y,                
-                    radius: 1,
+                    radius: 5,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,
                     fill:fill
@@ -302,12 +302,10 @@ $(document).ready(function(){
                 //otherwise create an ellipse object
                 circle = new fabric.Ellipse({
                     id: 'ellipse',
-                    left: startPointLeft,
-                    top: startPointTop,
-                    originX:canvas.getPointer().x,
-                    originY:canvas.getPointer().y,
-                    rx: canvas.getPointer().x-startPointLeft,
-                    ry: canvas.getPointer().y-startPointTop,
+                    left: canvas.getPointer().x,
+                    top: canvas.getPointer().y,
+                    rx: 5,
+                    ry: 5,
                     angle: 0,
                     stroke: $.farbtastic('#colorpicker').color,
                     strokeWidth: parseInt(document.getElementById("shape-line-width").value, 10) || 1,

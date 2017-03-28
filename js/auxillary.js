@@ -415,7 +415,7 @@ function resizeCanvas(width, height) {
         bg=null;
     } else {
         if(document.getElementById('resizeBgcolour').value!=''){
-            bg=document.getElementById('bgcolour').value;
+            bg=document.getElementById('resizeBgcolour').value;
         }
     }
     
@@ -487,6 +487,8 @@ function resizeCanvas(width, height) {
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
     canvas.setHeight(height);
     canvas.setWidth(width);
+    canvas.backgroundColor = bg;
+    canvas.renderAll();
     initWidth = canvas.getWidth();
     initHeight = canvas.getHeight();
     updateLayers();
