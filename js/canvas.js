@@ -17,7 +17,22 @@ $(document).ready(function(){
     var context = document.getElementById("c").getContext("2d");
     var clipboard = [];
     var pasteMultiplier = 0;
+    var rectInc = 0;
+    var squareInc = 0;
+    var lineInc = 0;
+    var straightLineInc = 0;
+    var ellipseInc = 0;
+    var circleInc = 0;
+    canvas.incrementer = {
+        rectangle: 0,
+        square: 0,
+        line: 0,
+        ellipse: 0,
+        circle: 0
+    }
+    canvas.incrementer['straight line'] = 0;
 
+    console.log(canvas.incrementer);
     /*
      * Call the file upload functions when the relevant icon is clicked
      */
@@ -217,13 +232,14 @@ $(document).ready(function(){
         if(canvas.straightLineMode) {
             var pointer = canvas.getPointer(event.e);
             var points = [ pointer.x, pointer.y, pointer.x, pointer.y ];
+            canvas.incrementer['straight line']++;
             var line = new fabric.Line(points, {
                 strokeWidth: parseInt(document.getElementById("drawing-line-width").value, 10) || 1,
                 fill: $.farbtastic('#colorpicker').color,
                 stroke: $.farbtastic('#colorpicker').color,
                 originX: 'center',
                 originY: 'center',
-                id: 'straight line'
+                id: 'straight line ' + canvas.incrementer['straight line']
             });
             canvas.add(line);
             refShape=line;
@@ -247,10 +263,13 @@ $(document).ready(function(){
         //Creating the rectangle object
         if(canvas.rectDrawing) {
             if(document.getElementById('lock').checked){
-                var id = 'square';
+                canvas.incrementer['square']++;
+                var id = 'square ' + canvas.incrementer['square'];
             } else {
-                var id = 'rectangle';
+                canvas.incrementer['rectangle']++;
+                var id = 'rectangle ' + canvas.incrementer['rectangle'];
             }
+
 
             var rect=new fabric.Rect({
                 id: id,
@@ -289,8 +308,9 @@ $(document).ready(function(){
         if(canvas.circleDrawing) {
             //create the circle object if the lock checkbox is checked
             if(document.getElementById('lock').checked){
+                canvas.incrementer['circle']++;
                 var circle = new fabric.Circle({
-                    id: 'circle',
+                    id: 'circle ' + canvas.incrementer['circle'],
                     left:canvas.getPointer().x,
                     top:canvas.getPointer().y,                
                     radius: 5,
@@ -300,8 +320,9 @@ $(document).ready(function(){
                  });
             } else {
                 //otherwise create an ellipse object
+                canvas.incrementer['ellipse']++;
                 circle = new fabric.Ellipse({
-                    id: 'ellipse',
+                    id: 'ellipse ' + canvas.incrementer['ellipse'],
                     left: canvas.getPointer().x,
                     top: canvas.getPointer().y,
                     rx: 5,
@@ -441,8 +462,9 @@ $(document).ready(function(){
     canvas.on('mouse:up',function(){
         canvas.isMouseDown=false;
         if(canvas.isDrawingMode == true) {
-            var obj = canvas.getObjects()
-            obj[obj.length - 1].id = "line";
+            canvas.incrementer['line']++;
+            var obj = canvas.getObjects();
+            obj[obj.length - 1].id = "line " + canvas.incrementer['line'];
         }
 
         if(canvas.straightLineMode) {
@@ -902,7 +924,7 @@ $(document).ready(function(){
         if(event.which == 46 || event.which == 8) { //delete object (delete key, backspace)
             if(!$("input,textarea,select").is(":focus")) {
                 if(canvas.getActiveObject()) {
-                    canvas.getActiveObject().remove();  
+                    canvas.getActiveObject().remove();
                 } else if(canvas.getActiveGroup()) {
                     var group = canvas.getActiveGroup().getObjects();
                     canvas.discardActiveGroup();
@@ -1049,6 +1071,7 @@ $(document).ready(function(){
                 clipboard[1] =  fabric.util.object.clone(o);
                 clipboard[1].left = o.left + 15;
                 clipboard[1].top = o.top + 15;
+                clipboard[1].id = clipboard[1].id + " copy";
                 updateLayers();
             } else if(getSelectedType() == "group") {
                 pasteMultiplier = 0;
@@ -1058,6 +1081,7 @@ $(document).ready(function(){
                     clipboard[i] = fabric.util.object.clone(o);
                     clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left + 15;
                     clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top + 15;
+                    clipboard[i].id = clipboard[i].id + " copy";
                     updateLayers();
                     i++;
                 });
@@ -1112,6 +1136,7 @@ $(document).ready(function(){
                 canvas.add(paste[i]);
                 paste[i].set("top", paste[i].top + (pasteMultiplier*15));
                 paste[i].set("left", paste[i].left + (pasteMultiplier*15));
+                paste[i].set("id", paste[i].get("id") + " " + (pasteMultiplier + 1));
                 updateLayers();
                 canvas.renderAll();
                 i++;

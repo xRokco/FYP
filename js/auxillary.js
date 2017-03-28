@@ -77,7 +77,7 @@ function updateLayers() {
             var title = "Make object visible";
         }
 
-        text += "<div class=\"" + selected + "\">" + down + up + "<img title=\"Remove object\" class=\"delete\"src=\"images/delete.png\" onclick=\"deleteObj(" + i + ")\"><span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img title=\"" + title + "\" id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        text += "<div class=\"" + selected + "\">" + down + up + "<img title=\"Remove object\" class=\"delete\"src=\"images/delete.png\" onclick=\"deleteObj(" + i + ")\"><span title=\"" + obj[i].id + "\" onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img title=\"" + title + "\" id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -507,7 +507,7 @@ function getSelectedType() {
     if (canvas.getActiveGroup()){
         return "group";
     } else if(canvas.getActiveObject()){
-        if(canvas.getActiveObject().get("id") == "square") {
+        if(canvas.getActiveObject().get("id").startsWith("square")) {
             return "square";
         } else {
             return canvas.getActiveObject().get("type");
