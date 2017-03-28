@@ -339,7 +339,8 @@ input[type="file"] {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: .2rem;
-    margin-right: 35px;
+    margin-right: 40px;
+    margin-left: 40px;
     text-decoration: none;
     line-height: 6.5rem;
     color: #222;
@@ -383,6 +384,24 @@ input[type="file"] {
     -moz-filter: drop-shadow(0 0 6px rgba(0,0,0,.1));
     filter: drop-shadow(0 0 6px rgba(0,0,0,.1));
 }
+
+#fileMenu {
+    left:-8%;
+}
+
+#editMenu, #helpMenu {
+    left: 15%;
+}
+
+#viewMenu {
+    left: 0%;
+}
+
+#imageMenu {
+    left: -15%;
+}
+
+
 
 .popover-item:first-child .popover-link:after, .popover-item:first-child .popover-link:before {
     bottom: 100%;
