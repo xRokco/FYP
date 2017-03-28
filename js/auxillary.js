@@ -56,13 +56,13 @@ function updateLayers() {
         if(i == obj.length - 1){
             var up = "<img src=\"images/up.png\" style=\"opacity:0.1\">"
         } else {
-            var up = "<img src=\"images/up.png\" onclick=\"moveForwards(" + i + ")\">"
+            var up = "<img title=\"Bring object forwards\" src=\"images/up.png\" onclick=\"moveForwards(" + i + ")\">"
         }
 
         if(i == 0) {
             var down = "<img src=\"images/down.png\" style=\"opacity:0.1\">";
         } else {
-            var down = "<img src=\"images/down.png\" onclick=\"moveBack(" + i + ")\">";
+            var down = "<img title=\"Send object backwards\" src=\"images/down.png\" onclick=\"moveBack(" + i + ")\">";
         }
 
         var selected = "";
@@ -71,11 +71,13 @@ function updateLayers() {
         }
 
         var image = "";
+        var title = "Hide object";
         if(obj[i].visible == false) {
             var image = "-white";
+            var title = "Make object visible";
         }
 
-        text += "<div class=\"" + selected + "\">" + down + up + "<span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
+        text += "<div class=\"" + selected + "\">" + down + up + "<img title=\"Remove object\" class=\"delete\"src=\"images/delete.png\" onclick=\"deleteObj(" + i + ")\"><span onclick=\"selectLayer(event, " + i + ")\">" + obj[i].id + "</span><img title=\"" + title + "\" id=\"image" + i + "\" src=\"images/eye" +  image + ".png\" onclick=\"hideLayer(" + i + ")\"></div>"
     }
     document.getElementById("layers").innerHTML = text;
 }
@@ -245,6 +247,11 @@ function moveBack(index) {
 
 function moveForwards(index) {
     canvas.bringForward(canvas.item(index));
+    updateLayers();
+}
+
+function deleteObj(index) {
+    canvas.getObjects()[index].remove();
     updateLayers();
 }
 

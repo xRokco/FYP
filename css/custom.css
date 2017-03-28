@@ -126,7 +126,7 @@ html {
 #layers {
     border: 1px solid silver;
     border-top: 20px solid silver;
-    min-width: 200px;
+    min-width: 230px;
     min-height: 108px; 
     position: absolute;
     top: 551px;
@@ -157,6 +157,12 @@ html {
     display: inline;
     float: right;
     margin-right: 4px;
+}
+
+#layers .delete {
+    display: inline;
+    float: left;
+    margin-left: 4px;
 }
 
 .selected {
