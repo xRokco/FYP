@@ -408,9 +408,26 @@ function newCanvas(width, height) {
         backgroundFlipX = false;
         initWidth = canvas.getWidth();
         initHeight = canvas.getHeight();
+        if(canvas.getWidth() > $(window).width()) {
+            canvas.setZoom(($(window).width()-300)/canvas.getWidth());
+            canvas.setDimensions({
+                    width: initWidth * canvas.getZoom(),
+                    height: initHeight * canvas.getZoom()
+            });
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+        }
+        if(canvas.getHeight() > ($(window).height()-115)) {
+            console.log("height");
+            canvas.setZoom(($(window).height()-200)/initHeight);
+            canvas.setDimensions({
+                    width: initWidth * canvas.getZoom(),
+                    height: initHeight * canvas.getZoom()
+            });
+            document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+        }
         updateLayers();
         $('.close').click();
-        document.getElementById('canvasWrapper').style.width = width + "px";
+        document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     }
 }
 
@@ -498,9 +515,26 @@ function resizeCanvas(width, height) {
     canvas.renderAll();
     initWidth = canvas.getWidth();
     initHeight = canvas.getHeight();
+    if(canvas.getWidth() > $(window).width()) {
+        canvas.setZoom(($(window).width()-300)/canvas.getWidth());
+        canvas.setDimensions({
+                width: initWidth * canvas.getZoom(),
+                height: initHeight * canvas.getZoom()
+        });
+        document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    }
+    if(canvas.getHeight() > ($(window).height()-115)) {
+        console.log("height");
+        canvas.setZoom(($(window).height()-200)/initHeight);
+        canvas.setDimensions({
+                width: initWidth * canvas.getZoom(),
+                height: initHeight * canvas.getZoom()
+        });
+        document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+    }
     updateLayers();
     $('.close').click();
-    document.getElementById('canvasWrapper').style.width = width + "px";
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
 }
 
 function getSelectedType() {
@@ -559,6 +593,25 @@ var myAppModule = (function () {
                 initWidth = canvas.getWidth();
                 initHeight = canvas.getHeight();
                 backgroundImageUrl = canvas.backgroundImage.toDataURL();
+                if(canvas.getWidth() > $(window).width()) {
+                    canvas.setZoom(($(window).width()-300)/canvas.getWidth());
+                    canvas.setDimensions({
+                            width: initWidth * canvas.getZoom(),
+                            height: initHeight * canvas.getZoom()
+                    });
+                    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+                    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                }
+                if(canvas.getHeight() > ($(window).height()-115)) {
+                    console.log("height");
+                    canvas.setZoom(($(window).height()-200)/initHeight);
+                    canvas.setDimensions({
+                            width: initWidth * canvas.getZoom(),
+                            height: initHeight * canvas.getZoom()
+                    });
+                    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+                    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                }
                 $(window).resize();
                 $('#select-mode').click();
             }
