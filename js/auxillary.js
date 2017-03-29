@@ -93,9 +93,25 @@ function rotate(a) {
     var origItems = canvas._objects;
 
     if(a > 0){
-        group.set({width: canvas.width, height: canvas.height, left: canvas.width, top: 0, originX: 'center', originY: 'center', centeredRotation: true})        
+        group.set({
+            width: canvas.getWidth(),
+            height: canvas.getHeight(),
+            left: canvas.getWidth()/canvas.getZoom(),
+            top: 0,
+            originX: 'center',
+            originY: 'center',
+            centeredRotation: true
+        })        
     } else {
-        group.set({width: canvas.width, height: canvas.height, left: 0, top: canvas.height, originX: 'center', originY: 'center', centeredRotation: true})            
+        group.set({
+            width: canvas.getWidth(),
+            height: canvas.getHeight(),
+            left: 0,
+            top: canvas.getHeight()/canvas.getZoom(),
+            originX: 'center',
+            originY: 'center',
+            centeredRotation: true
+        })            
     }
     
 
@@ -117,12 +133,12 @@ function rotate(a) {
             canvas.backgroundImage.left = 0;
         } else if(angle == 90 || angle == -270){
             canvas.backgroundImage.top = 0;
-            canvas.backgroundImage.left = canvas.width;
+            canvas.backgroundImage.left = canvas.getWidth()/canvas.getZoom();
         } else if(angle == 180 || angle == -180) {
-            canvas.backgroundImage.top = canvas.height;
-            canvas.backgroundImage.left = canvas.width;
+            canvas.backgroundImage.top = canvas.getHeight()/canvas.getZoom();
+            canvas.backgroundImage.left = canvas.getWidth()/canvas.getZoom();
         } else if(angle == 270 || angle == -90){
-            canvas.backgroundImage.top = canvas.height;
+            canvas.backgroundImage.top = canvas.getHeight()/canvas.getZoom();
             canvas.backgroundImage.left = 0;
         }
     }
@@ -137,16 +153,22 @@ function rotate(a) {
     canvas.remove(group);
 
     for (var i = 0; i < items.length; i++) {
-        canvas.add(items[i]);
-        canvas.remove(origItems[i]);
+        items[i].hasControls = true;
+        //items[i].originX = right;
+        //items[i].originY = top;
+        //canvas.add(items[i]);
+        //canvas.remove(origItems[i]);
     }
+
+    canvas.calcOffset();
+    $("#select").click();
 }
 
 function flipY() {
     var group = new fabric.Group();
     var origItems = canvas._objects;
 
-    group.set({width: canvas.width, height: canvas.height, left: canvas.width, top: 0, originX: 'center', originY: 'center', centeredRotation: true})        
+    group.set({width: canvas.getWidth(), height: canvas.getHeight(), left: canvas.getWidth(), top: 0, originX: 'center', originY: 'center', centeredRotation: true})        
     
     var obj = canvas.getObjects();
     for(i=obj.length - 1; i >= 0;i--){
@@ -174,8 +196,8 @@ function flipY() {
             canvas.backgroundImage.top = 0;
             canvas.backgroundImage.left = 0;
         } else if(angle == 180 || angle == -180) {
-            canvas.backgroundImage.top = canvas.height;
-            canvas.backgroundImage.left = canvas.width;
+            canvas.backgroundImage.top = canvas.getHeight();
+            canvas.backgroundImage.left = canvas.getWidth();
         }
     }
 
@@ -195,7 +217,7 @@ function flipX() {
     var group = new fabric.Group();
     var origItems = canvas._objects;
 
-    group.set({width: canvas.width, height: canvas.height, left: 0, top: canvas.height, originX: 'center', originY: 'center', centeredRotation: true})        
+    group.set({width: canvas.getWidth(), height: canvas.getHeight(), left: 0, top: canvas.getHeight(), originX: 'center', originY: 'center', centeredRotation: true})        
     
     var obj = canvas.getObjects();
     for(i=obj.length - 1; i >= 0;i--){
@@ -223,8 +245,8 @@ function flipX() {
             canvas.backgroundImage.top = 0;
             canvas.backgroundImage.left = 0;
         } else if(angle == 180 || angle == -180) {
-            canvas.backgroundImage.top = canvas.height;
-            canvas.backgroundImage.left = canvas.width;
+            canvas.backgroundImage.top = canvas.getHeight();
+            canvas.backgroundImage.left = canvas.getWidth();
         }
     }
 
@@ -488,16 +510,16 @@ function resizeCanvas(width, height) {
             canvas.backgroundImage.width = width;
             canvas.backgroundImage.height = height;
         } else if(canvas.backgroundImage.angle == 90 || canvas.backgroundImage.angle == -270) {
-            canvas.backgroundImage.left = width;
+            canvas.backgroundImage.left = width/canvas.getZoom();
             canvas.backgroundImage.width = height;
             canvas.backgroundImage.height = width;
         } else if(canvas.backgroundImage.angle == -90 || canvas.backgroundImage.angle == 270){
-            canvas.backgroundImage.top = height;
+            canvas.backgroundImage.top = height/canvas.getZoom();
             canvas.backgroundImage.width = height;
             canvas.backgroundImage.height = width;
         } else if(Math.abs(canvas.backgroundImage.angle) == 180) {
-            canvas.backgroundImage.top = height;
-            canvas.backgroundImage.left = width;
+            canvas.backgroundImage.top = height/canvas.getZoom();
+            canvas.backgroundImage.left = width/canvas.getZoom();
             canvas.backgroundImage.width = width;
             canvas.backgroundImage.height = height;
         }
