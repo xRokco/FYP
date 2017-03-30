@@ -38,25 +38,6 @@ $(document).ready(function(){
     $("#selectFile").change(handleFileSelect);
     $("#background").change(handleFileSelect2);
 
-    $.urlParam = function(name){
-        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        if (results==null){
-           return null;
-        }
-        else{
-           return results[1] || 0;
-        }
-    }
-
-    if($.urlParam("json")){
-        if($.urlParam("json").endsWith(".json")) {
-            console.log("hello");
-            $.getJSON( $.urlParam("json"), function( data ) {
-                console.log(data);
-            });
-        }
-    }
-
     /*
      * Enter object selection mode when the icon is clicked
      * Change the cursor to the hand

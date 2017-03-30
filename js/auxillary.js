@@ -83,6 +83,12 @@ function updateLayers() {
 }
 
 function rotate(a) {
+    var zoom = canvas.getZoom();
+    canvas.setZoom(1);
+    canvas.setDimensions({
+        width: initWidth,
+        height: initHeight
+    });
     var width = canvas.getWidth();
     var height = canvas.getHeight();
     canvas.setWidth(height);
@@ -159,6 +165,13 @@ function rotate(a) {
         //canvas.add(items[i]);
         //canvas.remove(origItems[i]);
     }
+
+    canvas.setZoom(zoom);
+    canvas.setDimensions({
+        width: initWidth * canvas.getZoom(),
+        height: initHeight * canvas.getZoom()
+    });
+    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
 
     canvas.calcOffset();
     $("#select").click();
