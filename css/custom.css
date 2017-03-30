@@ -14,7 +14,7 @@
 }
 
 .navbar-list {
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 body {
@@ -93,7 +93,7 @@ html {
     border-top: 20px solid silver;
     position: absolute;
     line-height: normal;
-    top: 120px;
+    top: 100px;
     right:5px;
     width: 300px;
     background-color: #EEE;
@@ -129,8 +129,8 @@ html {
     min-width: 230px;
     min-height: 108px; 
     position: absolute;
-    top: 551px;
-    left:5px;
+    top: 478px;
+    right:5px;
     line-height: normal;
     background-color: #EEE;
     text-align: center;
@@ -497,7 +497,7 @@ input[type="file"] {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: .2rem;
-    margin-right: 40px;
+    margin-right: 20px;
     margin-left: 40px;
     text-decoration: none;
     line-height: 6.5rem;
@@ -552,11 +552,13 @@ input[type="file"] {
 }
 
 #viewMenu {
-    left: 0%;
+    left: -3%;
+    width: 115px;
 }
 
 #imageMenu {
-    left: -15%;
+    left: -27%;
+    width: 180px;
 }
 
 .popover-item:first-child .popover-link:after, .popover-item:first-child .popover-link:before {
