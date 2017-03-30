@@ -126,7 +126,6 @@ html {
 #layers {
     border: 1px solid silver;
     border-top: 20px solid silver;
-    min-width: 230px;
     min-height: 108px; 
     position: absolute;
     top: 478px;
@@ -136,6 +135,7 @@ html {
     text-align: center;
     max-height: 200px;
     overflow: auto;
+    width: 232px;
 }
 
 #layers div {
