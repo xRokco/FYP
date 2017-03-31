@@ -34,30 +34,39 @@ html {
     right:30px;
 }
 
-.tools {
-    border: 1px solid silver;
-    border-top: 20px solid silver;
-    width: 88px;
-    height: 176px;
+#outer-tools {
     position: absolute;
     left: 5px;
     top: 70px; 
+    width: 88px;
+    height: 176px;
+    padding-top: 20px;
+    background-color: silver;
+    border: 1px solid silver;
+}
+
+.tools {
     line-height: normal;
     font-size: 0em;
     background-color: #EEE;
 }
 
-.toolOptions {
-    border: 1px solid silver;
-    border-top: 20px solid silver;
-    min-width: 150px;
-    min-height: 228px; 
+#outer-toolOptions {
     position: absolute;
     top: 280px;
     left:5px;
+    min-width: 150px;
+    min-height: 228px;
+    padding-top: 20px;
+    background-color: silver;
+    border: 1px solid silver;
+}
+
+.toolOptions {
+    min-width: 150px;
+    min-height: 228px;
     line-height: normal;
     background-color: #EEE;
-    padding-top: 5px;
     padding-bottom: 5px;
 }
 
@@ -88,14 +97,18 @@ html {
     margin-right: auto;
 }
 
-.colorwrapper {
-    border: 1px solid silver;
-    border-top: 20px solid silver;
+#outer-colorwrapper {
     position: absolute;
-    line-height: normal;
     top: 100px;
     right:5px;
     width: 300px;
+    background-color: silver;
+    padding-top: 20px;
+    border: 1px solid silver;
+}
+
+.colorwrapper {
+    line-height: normal;
     background-color: #EEE;
 }
 
@@ -123,19 +136,24 @@ html {
     display: inline;
 }
 
-#layers {
-    border: 1px solid silver;
-    border-top: 20px solid silver;
-    min-height: 108px; 
+#outer-layers{
     position: absolute;
     top: 478px;
     right:5px;
+    width: 232px;
+    min-height: 108px; 
+    padding-top: 20px;
+    background-color: silver;
+    border: 1px solid silver;
+}
+
+#layers {
+    min-height: 108px; 
+    max-height: 200px;
     line-height: normal;
     background-color: #EEE;
     text-align: center;
-    max-height: 200px;
     overflow: auto;
-    width: 232px;
 }
 
 #layers div {
@@ -437,7 +455,7 @@ code {
     z-index: 4;
 }
 
-.drag {
+.outer-drag {
     z-index: 3;
 }
 

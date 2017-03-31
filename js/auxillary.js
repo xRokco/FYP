@@ -21,7 +21,15 @@ transformedP.y = 0;
 var backgroundImageUrl;
 
 $( function() {
-    $( ".drag" ).draggable();
+    $( ".outer-drag" ).draggable({
+        cancel: ".inner-drag",
+        scroll: false
+    });
+
+    $("#outer-layers").resizable({
+        handles: 'e, w',
+        minWidth: 232
+    });
 });
 
 //hide options
