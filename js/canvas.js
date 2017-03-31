@@ -500,25 +500,60 @@ $(document).ready(function(){
         }
 
         if(canvas.cropMode){
-            var croppedLeft = refShape.left;
-            var croppedTop = refShape.top;
-            var croppedWidth = refShape.width;
-            var croppedHeight = refShape.height;
+            // var croppedLeft = refShape.left;
+            // var croppedTop = refShape.top;
+            // var croppedWidth = refShape.width;
+            // var croppedHeight = refShape.height;
 
-            refShape.remove();
-            canvas.renderAll();
+            // refShape.remove();
+            // canvas.renderAll();
 
-            var url = canvas.toDataURL({
-                format: 'png',
-                left: croppedLeft,
-                top: croppedTop,
-                width: croppedWidth,
-                height: croppedHeight
-            });
+            // var url = canvas.toDataURL({
+            //     format: 'png',
+            //     left: croppedLeft,
+            //     top: croppedTop,
+            //     width: croppedWidth,
+            //     height: croppedHeight
+            // });
             
-            window.open(url);
+            // window.open(url);
 
-            $('#select-mode').click();
+            // $('#select-mode').click();
+            var zoom = canvas.getZoom();
+            canvas.setZoom(1);
+            canvas.setHeight(initHeight);
+            canvas.setWidth(initWidth);
+            var i;
+            var croppedLeft = 0;
+            var croppedTop = 0;
+            var canvasJson = canvas.getObjects();
+            // Cropping canvas according to cropper rectangle
+            if (canvas.getObjects().length > 0) {
+                var i;
+                for (i = 0; i < canvas.getObjects().length; i++) {
+                    if (canvas.getObjects()[i].type == 'cropper') {
+                        croppedLeft = canvas.getObjects()[i].left;
+                        croppedTop = canvas.getObjects()[i].top;
+                        canvas.setHeight(canvas.getObjects()[i].height);
+                        canvas.setWidth(canvas.getObjects()[i].width);
+                        canvas.getObjects()[i].remove();
+                        initWidth = canvas.getWidth();
+                        initHeight = canvas.getHeight();
+                    }
+                }
+            }
+            //////////////Shifting the elements accordigly////////////////
+            for (i = 0; i < canvasJson.length; i++) {
+                canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft
+                canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop
+                canvas.renderAll();
+            }
+            canvas.setZoom(zoom);
+            canvas.setDimensions({
+                width: initWidth * canvas.getZoom(),
+                height: initHeight * canvas.getZoom()
+            });
+            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
