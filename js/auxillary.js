@@ -6,7 +6,8 @@ fabric.Object.prototype.selectable = false;
 canvas.setHeight(400);
 canvas.setWidth(600);
 canvas.preserveObjectStacking = true;
-document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+//document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+$("#canvasWrapper").width(canvas.getWidth());
 var angle = 0;
 var backgroundFlipY = false;
 var backgroundFlipX = false;
@@ -48,12 +49,12 @@ function hideOptions() {
 
     $('.tool').css("border", "1px solid #EEE");
 
-    document.getElementById("drawing-mode-options").style.display = 'none';
-    document.getElementById("shape-mode-options").style.display = 'none';
-    document.getElementById("text-mode-options").style.display = 'none';
-    document.getElementById("locklab").style.display = 'none';
-    document.getElementById("straightlab").style.display = 'none';
-    document.getElementById("filter-options").style.display = "none";
+    $("#drawing-mode-options").hide();
+    $("#shape-mode-options").hide();
+    $("#text-mode-options").hide();
+    $("#locklab").hide();
+    $("#straightlab").hide();
+    $("#filter-options").hide();
     fabric.Object.prototype.selectable = false;
 }
 
@@ -101,7 +102,8 @@ function rotate(a) {
     var height = canvas.getHeight();
     canvas.setWidth(height);
     canvas.setHeight(width);
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
 
     var group = new fabric.Group();
     var origItems = canvas._objects;
@@ -179,8 +181,9 @@ function rotate(a) {
         width: initWidth * canvas.getZoom(),
         height: initHeight * canvas.getZoom()
     });
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
-
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
+    
     canvas.calcOffset();
     $("#select").click();
 }
@@ -305,7 +308,8 @@ function zoomIn() {
             height: initHeight * canvas.getZoom()
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
 }
 
 function zoomOut() {
@@ -315,7 +319,8 @@ function zoomOut() {
         height: initHeight * canvas.getZoom()
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
 }
 
 function resetZoom() {
@@ -325,7 +330,8 @@ function resetZoom() {
         height: initHeight
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
 }
 
 function pan(x, y) {
@@ -333,6 +339,7 @@ function pan(x, y) {
     canvas.relativePan(delta);
     panDiffLeft += Math.round(x*(1/canvas.getZoom()));
     panDiffTop += Math.round(y*(1/canvas.getZoom()));
+    document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
 }
 
 function resetPan() {
@@ -340,6 +347,7 @@ function resetPan() {
     canvas.absolutePan(delta);
     panDiffTop = 0;
     panDiffLeft = 0;
+    document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
 }
 
 function selectLayer(event, index) {
@@ -442,7 +450,8 @@ function newCanvas(width, height) {
         canvas.setZoom(1);
         canvas.setHeight(initHeight);
         canvas.setWidth(initWidth);
-        document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+        //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+        $("#canvasWrapper").width(canvas.getWidth());
         document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         canvas.setHeight(height);
         canvas.setWidth(width);
@@ -470,7 +479,8 @@ function newCanvas(width, height) {
         }
         updateLayers();
         $('.close').click();
-        document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+        //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+        $("#canvasWrapper").width(canvas.getWidth());
     }
 }
 
@@ -528,21 +538,21 @@ function resizeCanvas(width, height) {
 
     if(canvas.backgroundImage){
         if(Math.abs(canvas.backgroundImage.angle) == 0) {
-            canvas.backgroundImage.width = width;
-            canvas.backgroundImage.height = height;
+            canvas.backgroundImage.width = parseInt(width);
+            canvas.backgroundImage.height = parseInt(height);
         } else if(canvas.backgroundImage.angle == 90 || canvas.backgroundImage.angle == -270) {
             canvas.backgroundImage.left = width/canvas.getZoom();
-            canvas.backgroundImage.width = height;
-            canvas.backgroundImage.height = width;
+            canvas.backgroundImage.width = parseInt(height);
+            canvas.backgroundImage.height = parseInt(width);
         } else if(canvas.backgroundImage.angle == -90 || canvas.backgroundImage.angle == 270){
             canvas.backgroundImage.top = height/canvas.getZoom();
-            canvas.backgroundImage.width = height;
-            canvas.backgroundImage.height = width;
+            canvas.backgroundImage.width = parseInt(height);
+            canvas.backgroundImage.height = parseInt(width);
         } else if(Math.abs(canvas.backgroundImage.angle) == 180) {
             canvas.backgroundImage.top = height/canvas.getZoom();
             canvas.backgroundImage.left = width/canvas.getZoom();
-            canvas.backgroundImage.width = width;
-            canvas.backgroundImage.height = height;
+            canvas.backgroundImage.width = parseInt(width);
+            canvas.backgroundImage.height = parseInt(height);
         }
         canvas.renderAll()
     }
@@ -550,7 +560,8 @@ function resizeCanvas(width, height) {
     canvas.setZoom(1);
     canvas.setHeight(initHeight);
     canvas.setWidth(initWidth);
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
     canvas.setHeight(height);
     canvas.setWidth(width);
@@ -577,7 +588,8 @@ function resizeCanvas(width, height) {
     }
     updateLayers();
     $('.close').click();
-    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+    $("#canvasWrapper").width(canvas.getWidth());
 }
 
 function getSelectedType() {
@@ -629,7 +641,8 @@ var myAppModule = (function () {
                 canvas.setHeight(img.height);
                 canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
                 canvas.background = false;
-                document.getElementById('canvasWrapper').style.width = img.width + "px";
+                //document.getElementById('canvasWrapper').style.width = img.width + "px";
+                $("#canvasWrapper").width(canvas.getWidth());
                 angle = 0;
                 backgroundFlipY = false;
                 backgroundFlipX = false;
@@ -643,7 +656,8 @@ var myAppModule = (function () {
                             height: initHeight * canvas.getZoom()
                     });
                     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-                    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                    $("#canvasWrapper").width(canvas.getWidth());
                 }
                 if(canvas.getHeight() > ($(window).height()-115)) {
                     console.log("height");
@@ -653,7 +667,8 @@ var myAppModule = (function () {
                             height: initHeight * canvas.getZoom()
                     });
                     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-                    document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+                    $("#canvasWrapper").width(canvas.getWidth());
                 }
                 $(window).resize();
                 $('#select-mode').click();

@@ -82,8 +82,8 @@ $(document).ready(function(){
 
         canvas.freeDrawingBrush.width = parseInt(document.getElementById("drawing-line-width").value, 10) || 1;
         canvas.freeDrawingCursor = "url('images/cursors/pencil.png'), auto";
-        document.getElementById("drawing-mode-options").style.display = "";
-        document.getElementById("straightlab").style.display = "";
+        $("#drawing-mode-options").show();
+        $("#straightlab").show();
     });
 
     /*
@@ -118,8 +118,8 @@ $(document).ready(function(){
         hideOptions();
         $('#rectangle-mode').css("border", "1px solid silver");
 
-        document.getElementById("shape-mode-options").style.display = '';
-        document.getElementById("locklab").style.display = '';
+        $("#shape-mode-options").show();
+        $("#locklab").show();
         canvas.defaultCursor = "url('images/cursors/rectangle.png'), auto";
         canvas.hoverCursor = "url('images/cursors/rectangle.png'), auto";
         canvas.rectDrawing = true;
@@ -142,8 +142,8 @@ $(document).ready(function(){
         hideOptions();
         $('#circle-mode').css("border", "1px solid silver");
 
-        document.getElementById("shape-mode-options").style.display = '';
-        document.getElementById("locklab").style.display = '';
+        $("#shape-mode-options").show();
+        $("#locklab").show();
         canvas.defaultCursor = "url('images/cursors/circle.png'), auto";
         canvas.hoverCursor = "url('images/cursors/circle.png'), auto";
         canvas.circleDrawing = true;
@@ -199,7 +199,7 @@ $(document).ready(function(){
         hideOptions();
         $('#crop-mode').css("border", "1px solid silver");
 
-        document.getElementById("locklab").style.display = '';
+        $("#locklab").show();
         canvas.defaultCursor = "url('images/cursors/crop.png'), auto";
         canvas.hoverCursor = "url('images/cursors/crop.png'), auto";
         canvas.cropMode = true;
@@ -495,31 +495,11 @@ $(document).ready(function(){
             canvas.add(text);
             canvas.setActiveObject(text);
             $('#select-mode').click();
-            document.getElementById("text-mode-options").style.display = '';
+            $("#text-mode-options").show();
             canvas.textDrawing = false;
         }
 
         if(canvas.cropMode){
-            // var croppedLeft = refShape.left;
-            // var croppedTop = refShape.top;
-            // var croppedWidth = refShape.width;
-            // var croppedHeight = refShape.height;
-
-            // refShape.remove();
-            // canvas.renderAll();
-
-            // var url = canvas.toDataURL({
-            //     format: 'png',
-            //     left: croppedLeft,
-            //     top: croppedTop,
-            //     width: croppedWidth,
-            //     height: croppedHeight
-            // });
-            
-            // window.open(url);
-
-            // $('#select-mode').click();
-
             var zoom = canvas.getZoom();
             canvas.setZoom(1);
             canvas.setHeight(initHeight);
@@ -561,7 +541,8 @@ $(document).ready(function(){
                 width: initWidth * canvas.getZoom(),
                 height: initHeight * canvas.getZoom()
             });
-            document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            $("#canvasWrapper").width(canvas.getWidth());
             $('#select-mode').click();
         }
 
@@ -851,7 +832,7 @@ $(document).ready(function(){
                 document.getElementById("outline").value = canvas.getActiveObject().stroke;
             }
 
-            document.getElementById("text-mode-options").style.display = 'block';
+            $("#text-mode-options").show();
         } else if (getSelectedType() == 'rect' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             hideOptions();
             $('#select-mode').click();
@@ -862,14 +843,14 @@ $(document).ready(function(){
             } else {
                 document.getElementById("shape-fill").checked = true;
             }
-            document.getElementById("shape-mode-options").style.display = 'block';
-            document.getElementById("locklab").style.display = 'none';
+            $("#shape-mode-options").show();
+            $("#locklab").hide();
         } else if (getSelectedType() == 'path' || getSelectedType() == 'line'){
             hideOptions();
             $('#select-mode').click();
             
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
-            document.getElementById("drawing-mode-options").style.display = 'block';
+            $("#drawing-mode-options").show();
         } else if(getSelectedType() == "image") {
             hideOptions();
             $('#select-mode').click();
@@ -891,7 +872,7 @@ $(document).ready(function(){
                 document.getElementById("invert").checked = false;
             }
 
-            document.getElementById("filter-options").style.display = "block";
+            $("#filter-options").show();
         }
     });
 
