@@ -519,6 +519,7 @@ $(document).ready(function(){
             // window.open(url);
 
             // $('#select-mode').click();
+
             var zoom = canvas.getZoom();
             canvas.setZoom(1);
             canvas.setHeight(initHeight);
@@ -542,18 +543,26 @@ $(document).ready(function(){
                     }
                 }
             }
+
             //////////////Shifting the elements accordigly////////////////
             for (i = 0; i < canvasJson.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft
                 canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop
                 canvas.renderAll();
             }
+
+            if(canvas.backgroundImage) {
+                canvas.backgroundImage.left = canvas.backgroundImage.left - croppedLeft;
+                canvas.backgroundImage.top = canvas.backgroundImage.top - croppedTop;
+            }
+
             canvas.setZoom(zoom);
             canvas.setDimensions({
                 width: initWidth * canvas.getZoom(),
                 height: initHeight * canvas.getZoom()
             });
             document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
+            $('#select-mode').click();
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
