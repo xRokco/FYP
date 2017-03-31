@@ -6,7 +6,6 @@ fabric.Object.prototype.selectable = false;
 canvas.setHeight(400);
 canvas.setWidth(600);
 canvas.preserveObjectStacking = true;
-//document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
 $("#canvasWrapper").width(canvas.getWidth());
 var angle = 0;
 var backgroundFlipY = false;
@@ -102,7 +101,6 @@ function rotate(a) {
     var height = canvas.getHeight();
     canvas.setWidth(height);
     canvas.setHeight(width);
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
 
     var group = new fabric.Group();
@@ -181,7 +179,6 @@ function rotate(a) {
         width: initWidth * canvas.getZoom(),
         height: initHeight * canvas.getZoom()
     });
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
     
     canvas.calcOffset();
@@ -308,7 +305,6 @@ function zoomIn() {
             height: initHeight * canvas.getZoom()
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
@@ -319,7 +315,6 @@ function zoomOut() {
         height: initHeight * canvas.getZoom()
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
@@ -330,7 +325,6 @@ function resetZoom() {
         height: initHeight
     });
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
@@ -450,7 +444,6 @@ function newCanvas(width, height) {
         canvas.setZoom(1);
         canvas.setHeight(initHeight);
         canvas.setWidth(initWidth);
-        //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         $("#canvasWrapper").width(canvas.getWidth());
         document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         canvas.setHeight(height);
@@ -479,7 +472,6 @@ function newCanvas(width, height) {
         }
         updateLayers();
         $('.close').click();
-        //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
         $("#canvasWrapper").width(canvas.getWidth());
     }
 }
@@ -560,7 +552,6 @@ function resizeCanvas(width, height) {
     canvas.setZoom(1);
     canvas.setHeight(initHeight);
     canvas.setWidth(initWidth);
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
     canvas.setHeight(height);
@@ -588,7 +579,6 @@ function resizeCanvas(width, height) {
     }
     updateLayers();
     $('.close').click();
-    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
@@ -641,7 +631,6 @@ var myAppModule = (function () {
                 canvas.setHeight(img.height);
                 canvas.setBackgroundImage(cImg, canvas.renderAll.bind(canvas));
                 canvas.background = false;
-                //document.getElementById('canvasWrapper').style.width = img.width + "px";
                 $("#canvasWrapper").width(canvas.getWidth());
                 angle = 0;
                 backgroundFlipY = false;
@@ -656,7 +645,6 @@ var myAppModule = (function () {
                             height: initHeight * canvas.getZoom()
                     });
                     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-                    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
                     $("#canvasWrapper").width(canvas.getWidth());
                 }
                 if(canvas.getHeight() > ($(window).height()-115)) {
@@ -667,7 +655,6 @@ var myAppModule = (function () {
                             height: initHeight * canvas.getZoom()
                     });
                     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
-                    //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
                     $("#canvasWrapper").width(canvas.getWidth());
                 }
                 $(window).resize();

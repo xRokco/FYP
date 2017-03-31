@@ -959,6 +959,18 @@ $(document).ready(function(){
                 updateLayers();
             }
         }
+        if(event.which == 27) {
+            if(document.getElementById("jsonModal").style.display == "block") {
+                $("#jsonModal").hide();
+            } else {
+                $("#exportModal").hide();
+                $("#newCanvasModal").hide();
+                $("#importModal").hide();
+                $("#resizeModal").hide();
+                $("#mobileModal").hide();
+                $("#filterModal").hide();
+            }
+        }
         if(event.ctrlKey==true && (event.which == 187 || event.which == 107)){ //zoom in (numLine =, numPad +)
             event.preventDefault();
             zoomIn();

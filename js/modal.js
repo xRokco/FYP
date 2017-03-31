@@ -20,13 +20,11 @@ $('#keyboard-icon').hover(function(){
  * On click on the export button in the file menu, display the export modal
  */
 $('#exportButton').click(function(){
-    //document.getElementById('exportModal').style.display = "block";
     $("#exportModal").show();
 });
 
 $(document).ready(function(){
     if (/Mobi/.test(navigator.userAgent)) {
-        //document.getElementById('mobileModal').style.display = 'block';
         $("#mobileModal").show();
     }
 });
@@ -35,14 +33,11 @@ $(document).ready(function(){
  * On click on the export button in the file menu, display the export modal
  */
 $('#filterButton').click(function(){
-    document.getElementById('filterModal').style.display = "block";
     $("#filterModal").show();
     if(!canvas.backgroundImage) {
-        //document.getElementById("filter-warning").style.display = "block";
         $("#filter-warning").show();
         $(".background-filter-options input").prop('disabled', true);
     } else {
-        //document.getElementById("filter-warning").style.display = "none";
         $("#filter-warning").hide();
         $(".background-filter-options input").prop('disabled', false);
     }
@@ -56,7 +51,6 @@ $('#filterButton').click(function(){
 $('.export').click(function(){
     if($(this).attr("value")=="json"){
         document.getElementById('json').innerHTML = 'Loading...';
-        //document.getElementById('jsonModal').style.display = "block";
         $("#jsonModal").show();
         setTimeout(function() {
             document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2']), null, 4);
@@ -82,7 +76,6 @@ $('#select').click(function(){
 });
 
 $('#importButton').click(function(){
-    //document.getElementById('importModal').style.display = 'block';
     $("#importModal").show();
 });
 
@@ -101,7 +94,6 @@ $('#import').click(function(){
                 canvas.renderAll.bind(canvas);
                 canvas.setWidth(object.width);
                 canvas.setHeight(object.height);
-                //document.getElementById('canvasWrapper').style.width = object.width + "px";
                 $("#canvasWrapper").width(canvas.getWidth());
                 var obj = canvas.getObjects();
                 for(i=obj.length - 1; i >= 0;i--){
@@ -127,7 +119,6 @@ $('#import').click(function(){
 //Export Modal
 $('#newCanvasButton').click(function(){
     $('#bgcolour').val(canvas.backgroundColor);
-    //document.getElementById('newCanvasModal').style.display = "block";
     $("#newCanvasModal").show();
 });
 
@@ -148,7 +139,6 @@ $('#resizeButton').click(function(){
     document.getElementById('resizeWidth').value = initWidth;
     document.getElementById('resizeHeight').value = initHeight;
     document.getElementById('resizeType').value = 'px';
-    //document.getElementById('resizeModal').style.display = "block";
     $("#resizeModal").show();
 });
 
@@ -178,12 +168,6 @@ $('#resizeHeight').on('change keydown paste input', function() {
 
 // When the user clicks on <span> (x), close the modal
 $('.close').click(function() {
-    //document.getElementById('exportModal').style.display = "none";
-    //document.getElementById('newCanvasModal').style.display = "none";
-    //document.getElementById('importModal').style.display = "none";
-    //document.getElementById('resizeModal').style.display = "none";
-    //document.getElementById('mobileModal').style.display = "none";
-    //document.getElementById('filterModal').style.display = "none";
     $("#exportModal").hide();
     $("#newCanvasModal").hide();
     $("#importModal").hide();
@@ -193,38 +177,30 @@ $('.close').click(function() {
 });
 
 $('.closeJSON').click(function() {
-    //document.getElementById('jsonModal').style.display = "none";
     $("#jsonModal").hide();
 });
 
 // When the user clicks anywhere outside of the modal, close it
 $(window).click(function(event) {
     if (event.target == document.getElementById('exportModal')) {
-        //document.getElementById('exportModal').style.display = "none";
         $("#exportModal").hide();
     }
     if (event.target == document.getElementById('newCanvasModal')) {
-        //document.getElementById('newCanvasModal').style.display = "none";
         $("#newCanvasModal").hide();
     }
     if (event.target == document.getElementById('importModal')) {
-        //document.getElementById('importModal').style.display = "none";
         $("#importModal").hide();
     }
     if (event.target == document.getElementById('resizeModal')) {
-        //document.getElementById('resizeModal').style.display = "none";
         $("#resizeModal").hide();
     }
     if (event.target == document.getElementById('mobileModal')) {
-        //document.getElementById('mobileModal').style.display = "none";
         $("#mobileModal").hide();
     }
     if (event.target == document.getElementById('filterModal')) {
-        //document.getElementById('filterModal').style.display = "none";
         $("#filterModal").hide();
     }
     if (event.target == document.getElementById('jsonModal')) {
-        //document.getElementById('jsonModal').style.display = "none";
         $("#jsonModal").hide();
     }
 });
