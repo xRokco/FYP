@@ -53,10 +53,36 @@ $('.export').click(function(){
         document.getElementById('json').innerHTML = 'Loading...';
         $("#jsonModal").show();
         setTimeout(function() {
+            var zoom = canvas.getZoom();
+            canvas.setZoom(1);
+            canvas.setDimensions({
+                width: initWidth,
+                height: initHeight
+            });
+
             document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2']), null, 4);
+
+            canvas.setZoom(zoom);
+            canvas.setDimensions({
+                width: initWidth * canvas.getZoom(),
+                height: initHeight * canvas.getZoom()
+            });
         }, 0);
     } else {
-        window.open(canvas.toDataURL( {format: $(this).attr("value") })) 
+        var zoom = canvas.getZoom();
+        canvas.setZoom(1);
+        canvas.setDimensions({
+            width: initWidth,
+            height: initHeight
+        });
+
+        window.open(canvas.toDataURL( {format: $(this).attr("value") }));
+
+        canvas.setZoom(zoom);
+        canvas.setDimensions({
+            width: initWidth * canvas.getZoom(),
+            height: initHeight * canvas.getZoom()
+        });
     }
 });
 
@@ -94,6 +120,8 @@ $('#import').click(function(){
                 canvas.renderAll.bind(canvas);
                 canvas.setWidth(object.width);
                 canvas.setHeight(object.height);
+                initWidth = canvas.getWidth();
+                initHeight = canvas.getHeight();
                 $("#canvasWrapper").width(canvas.getWidth());
                 var obj = canvas.getObjects();
                 for(i=obj.length - 1; i >= 0;i--){
@@ -103,6 +131,25 @@ $('#import').click(function(){
                         console.log("flipping")
                         obj[i].flipY = true;
                     }
+                }
+                if(canvas.getWidth() > $(window).width()) {
+                    canvas.setZoom(($(window).width()-300)/canvas.getWidth());
+                    canvas.setDimensions({
+                            width: initWidth * canvas.getZoom(),
+                            height: initHeight * canvas.getZoom()
+                    });
+                    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+                    $("#canvasWrapper").width(canvas.getWidth());
+                }
+                if(canvas.getHeight() > ($(window).height()-115)) {
+                    console.log("height");
+                    canvas.setZoom(($(window).height()-200)/initHeight);
+                    canvas.setDimensions({
+                            width: initWidth * canvas.getZoom(),
+                            height: initHeight * canvas.getZoom()
+                    });
+                    document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
+                    $("#canvasWrapper").width(canvas.getWidth());
                 }
                 canvas.renderAll();
                 updateLayers();
