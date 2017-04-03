@@ -544,6 +544,7 @@ $(document).ready(function(){
             //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
             $("#canvasWrapper").width(canvas.getWidth());
             $('#select-mode').click();
+            resetPan();
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
