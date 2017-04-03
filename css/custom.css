@@ -107,7 +107,7 @@ html {
     position: absolute;
     top: 110px;
     right:5px;
-    width: 300px;
+    width: 250px;
     background-color: silver;
     padding-top: 20px;
     border: 1px solid silver;
@@ -135,7 +135,7 @@ html {
 }
 
 .rgbvalue, .hslvalue {
-    width:60%;
+    width:70%;
 }
 
 .colorwrapper label {
