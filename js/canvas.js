@@ -28,7 +28,8 @@ $(document).ready(function(){
         square: 0,
         line: 0,
         ellipse: 0,
-        circle: 0
+        circle: 0,
+        image: 0
     }
     canvas.incrementer['straight line'] = 0;
 
@@ -1102,22 +1103,21 @@ $(document).ready(function(){
             console.log('copied')
             if(canvas.getActiveObject()) {
                 pasteMultiplier = 0;
-                var i = 0;
                 clipboard = [];
-                var o = canvas.getActiveObject();
-                clipboard[1] =  fabric.util.object.clone(o);
-                clipboard[1].left = o.left + 15;
-                clipboard[1].top = o.top + 15;
-                clipboard[1].id = clipboard[1].id + " copy";
+                //var o = canvas.getActiveObject();
+                //clipboard[0] =  fabric.util.object.clone(o);
+                clipboard[0] = canvas.getActiveObject().toObject('id');
+                clipboard[0].id = clipboard[0].id + " copy";
                 updateLayers();
             } else if(getSelectedType() == "group") {
                 pasteMultiplier = 0;
                 var i = 0;
                 clipboard = [];
                 canvas.getActiveGroup().forEachObject(function(o) {
-                    clipboard[i] = fabric.util.object.clone(o);
-                    clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left + 15;
-                    clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top + 15;
+                    clipboard[i] = o.toObject('id');
+                    //clipboard[i] = fabric.util.object.clone(o);
+                    clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left;
+                    clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top;
                     clipboard[i].id = clipboard[i].id + " copy";
                     updateLayers();
                     i++;
@@ -1135,22 +1135,21 @@ $(document).ready(function(){
             console.log('cut')
             if(canvas.getActiveObject()) {
                 pasteMultiplier = 0;
-                var i = 0;
                 clipboard = [];
-                var o = canvas.getActiveObject();
-                clipboard[1] =  fabric.util.object.clone(o);
-                clipboard[1].left = o.left + 15;
-                clipboard[1].top = o.top + 15;
+                //var o = canvas.getActiveObject();
+                //clipboard[0] =  fabric.util.object.clone(o);
+                clipboard[0] = canvas.getActiveObject().toObject('id');
                 canvas.getActiveObject().remove();
                 updateLayers();
             } else if(getSelectedType() == "group") {
                 pasteMultiplier = 0;
                 var i = 0;
                 clipboard = [];
-                canvas.getActiveGroup().forEachObject(function(o) {
-                    clipboard[i] = fabric.util.object.clone(o);
-                    clipboard[i].left = o.left + (canvas.getActiveGroup().width/2) + canvas.getActiveGroup().left + 15;
-                    clipboard[i].top = o.top + (canvas.getActiveGroup().height/2) + canvas.getActiveGroup().top + 15;
+                var group = canvas.getActiveGroup().getObjects();
+                canvas.discardActiveGroup();
+                group.forEach(function(o) {
+                    //clipboard[i] = fabric.util.object.clone(o);
+                    clipboard[i] = o.toObject('id');
                     canvas.remove(o);
                     updateLayers();
                     i++;
@@ -1165,10 +1164,21 @@ $(document).ready(function(){
      */
     $(document).bind('paste', function(e) {
         if(!$("input,textarea,select").is(":focus")) {
-            console.log('pasted')
-            var i = 0;
-            var paste = [];
-            clipboard.forEach(function(o) {
+            console.log('pasted');
+            //var i = 0;
+            //var paste = [];
+            pasteMultiplier++;
+            fabric.util.enlivenObjects(clipboard, function(objects) {
+                objects.forEach(function(o) {
+                    o.set("top", o.top + (pasteMultiplier*15));
+                    o.set("left", o.left + (pasteMultiplier*15));
+                    o.set("id", o.get("id") + " " + pasteMultiplier);
+                    canvas.add(o);
+                });
+                updateLayers();
+                canvas.renderAll();
+            });
+            /*clipboard.forEach(function(o) {
                 paste[i] = fabric.util.object.clone(o);
                 canvas.add(paste[i]);
                 paste[i].set("top", paste[i].top + (pasteMultiplier*15));
@@ -1177,8 +1187,8 @@ $(document).ready(function(){
                 updateLayers();
                 canvas.renderAll();
                 i++;
-            })
-            pasteMultiplier++;
+            })*/
+            canvas.deactivateAll().renderAll();
         } else if($("#importJSON").is(":focus")) {
             e.preventDefault();
             $('#importJSON').val("Loading...");

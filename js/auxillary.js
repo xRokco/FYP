@@ -610,7 +610,7 @@ var myAppModule = (function () {
 
     var onloadImage = function () {
         cImg = new fabric.Image(img, {
-            id: 'image',
+            id: 'image ',
             left: 0,
             top: 0,
             angle: 0
@@ -661,6 +661,8 @@ var myAppModule = (function () {
                 $('#select-mode').click();
             }
         } else {
+            canvas.incrementer['image']++;
+            cImg.id = 'image ' + canvas.incrementer['image'];
             canvas.add(cImg);
             updateLayers();
             $('#select-mode').click();
