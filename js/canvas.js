@@ -900,9 +900,6 @@ $(document).ready(function(){
     canvas.on('object:scaling', function() {
         if(canvas.getActiveObject()){
             document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
-        }
-
-        if(canvas.getActiveObject()){
             canvas.getActiveObject().setCoords();
             document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().oCoords.tl.x) + ", " + Math.round(canvas.getActiveObject().oCoords.tl.y);
         } else {

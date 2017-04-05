@@ -738,10 +738,14 @@ $(document).ready(function() {
 
     function openPopover(e) {
         e.preventDefault()
-        closePopover();
-        var popover = $($(this).data('popover'));
-        popover.toggleClass('open')
-        e.stopImmediatePropagation();
+        if($($(this).data('popover')).hasClass("open")){
+            closePopover();    
+        } else {
+            closePopover();
+            var popover = $($(this).data('popover'));
+            popover.toggleClass('open')
+            e.stopImmediatePropagation();
+        }
     }
 
     function closePopover(e) {
