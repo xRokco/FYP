@@ -60,7 +60,7 @@ $('.export').click(function(){
                 height: initHeight
             });
 
-            document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2']), null, 4);
+            document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2', 'angle']), null, 4);
 
             canvas.setZoom(zoom);
             canvas.setDimensions({

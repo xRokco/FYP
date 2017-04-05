@@ -137,6 +137,7 @@ function rotate(a) {
     group.set({angle: a});
 
     if(canvas.backgroundImage){
+        angle = canvas.backgroundImage.angle;
         angle = (angle + a) % 360;
         console.log(angle);
 
