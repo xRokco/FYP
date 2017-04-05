@@ -40,6 +40,18 @@ html {
     right:30px;
 }
 
+#size {
+  position: absolute;
+  left: 5px;
+  bottom: 25px;
+}
+
+#pos {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+}
+
 #outer-tools {
     position: absolute;
     left: 5px;

@@ -549,7 +549,6 @@ $(document).ready(function(){
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
-            console.log(refShape);
             canvas.setActiveObject(refShape);    
         }
         
@@ -834,6 +833,8 @@ $(document).ready(function(){
                 document.getElementById("outline").value = canvas.getActiveObject().stroke;
             }
 
+            document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
+
             $("#text-mode-options").show();
         } else if (getSelectedType() == 'rect' || getSelectedType() == 'square' || getSelectedType() == 'circle' || getSelectedType() == 'ellipse') {
             hideOptions();
@@ -845,6 +846,9 @@ $(document).ready(function(){
             } else {
                 document.getElementById("shape-fill").checked = true;
             }
+
+            document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
+
             $("#shape-mode-options").show();
             $("#locklab").hide();
         } else if (getSelectedType() == 'path' || getSelectedType() == 'line'){
@@ -852,6 +856,9 @@ $(document).ready(function(){
             $('#select-mode').click();
             
             document.getElementById("drawing-line-width").value = canvas.getActiveObject().strokeWidth;
+
+            document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
+
             $("#drawing-mode-options").show();
         } else if(getSelectedType() == "image") {
             hideOptions();
@@ -874,7 +881,53 @@ $(document).ready(function(){
                 document.getElementById("invert").checked = false;
             }
 
+            document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
+
             $("#filter-options").show();
+        } 
+
+        if(getSelectedType() != null) {
+            if(canvas.getActiveObject()){
+                canvas.getActiveObject().setCoords();
+                document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().oCoords.tl.x) + ", " + Math.round(canvas.getActiveObject().oCoords.tl.y);
+            } else {
+                canvas.getActiveGroup().setCoords();
+                document.getElementById("pos").innerHTML = Math.round(canvas.getActiveGroup().oCoords.tl.x) + ", " + Math.round(canvas.getActiveGroup().oCoords.tl.y);
+            }
+        }
+    });
+
+    canvas.on('object:scaling', function() {
+        if(canvas.getActiveObject()){
+            document.getElementById("size").innerHTML = Math.round(canvas.getActiveObject().width*canvas.getActiveObject().scaleX) + " x " + Math.round(canvas.getActiveObject().height*canvas.getActiveObject().scaleY);
+        }
+
+        if(canvas.getActiveObject()){
+            canvas.getActiveObject().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().oCoords.tl.x) + ", " + Math.round(canvas.getActiveObject().oCoords.tl.y);
+        } else {
+            canvas.getActiveGroup().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveGroup().oCoords.tl.x) + ", " + Math.round(canvas.getActiveGroup().oCoords.tl.y);
+        }
+    });
+
+    canvas.on('object:moving', function() {
+        if(canvas.getActiveObject()){
+            canvas.getActiveObject().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().oCoords.tl.x) + ", " + Math.round(canvas.getActiveObject().oCoords.tl.y);
+        } else {
+            canvas.getActiveGroup().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveGroup().oCoords.tl.x) + ", " + Math.round(canvas.getActiveGroup().oCoords.tl.y);
+        }
+    });
+
+    canvas.on('object:rotating', function(){
+        if(canvas.getActiveObject()){
+            canvas.getActiveObject().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().oCoords.tl.x) + ", " + Math.round(canvas.getActiveObject().oCoords.tl.y);
+        } else {
+            canvas.getActiveGroup().setCoords();
+            document.getElementById("pos").innerHTML = Math.round(canvas.getActiveGroup().oCoords.tl.x) + ", " + Math.round(canvas.getActiveGroup().oCoords.tl.y);
         }
     });
 
@@ -885,6 +938,8 @@ $(document).ready(function(){
         if( !canvas.isDrawingMode ){
             $('#select-mode').click();
         }
+        document.getElementById("size").innerHTML = "";
+        document.getElementById("pos").innerHTML = "";
     });
 
     $('#rasterize').click(function(){
@@ -1017,6 +1072,7 @@ $(document).ready(function(){
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left--;
                         canvas.getActiveObject().setCoords();
+                        document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().left) + ", " + Math.round(canvas.getActiveObject().top);
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left--;
                         canvas.getActiveGroup().setCoords();
@@ -1034,6 +1090,7 @@ $(document).ready(function(){
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top--;
                         canvas.getActiveObject().setCoords();
+                        document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().left) + ", " + Math.round(canvas.getActiveObject().top);
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top--;
                         canvas.getActiveGroup().setCoords();
@@ -1051,6 +1108,7 @@ $(document).ready(function(){
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().left++;
                         canvas.getActiveObject().setCoords();
+                        document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().left) + ", " + Math.round(canvas.getActiveObject().top);
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().left++;
                         canvas.getActiveGroup().setCoords();
@@ -1068,6 +1126,7 @@ $(document).ready(function(){
                     if(canvas.getActiveObject()) {
                         canvas.getActiveObject().top++;
                         canvas.getActiveObject().setCoords();
+                        document.getElementById("pos").innerHTML = Math.round(canvas.getActiveObject().left) + ", " + Math.round(canvas.getActiveObject().top);
                     } else if (getSelectedType() == "group"){
                         canvas.getActiveGroup().top++;
                         canvas.getActiveGroup().setCoords();
