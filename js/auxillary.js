@@ -26,6 +26,10 @@ $( function() {
         scroll: false
     });
 
+    $( ".modal-drag" ).draggable({
+        scroll: false
+    });
+
     $("#outer-layers").resizable({
         handles: 'e, w',
         minWidth: 232

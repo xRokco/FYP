@@ -150,8 +150,8 @@
                 </ul>
             </nav>
         </header>
-        <div id="outer-tools" class="outer-drag">
-            <div class="tools inner-drag">
+        <div id="outer-tools" class="outer-modal-drag">
+            <div class="tools inner-modal-drag">
                 <img id="drawing-mode" class="tool" src="images/tools/pencil.png" title="brush tool" alt="Pencil icon to enable line drawing mode">
                 <label for="selectFile" title="add image">
                     <img class="tool" onclick="hideOptions()" src="images/tools/image.png" alt="image icon to open the upload image dialogue">
@@ -166,8 +166,8 @@
             </div>
         </div>
 
-        <div id="outer-toolOptions" class="outer-drag">
-            <div class="inner-drag toolOptions">
+        <div id="outer-toolOptions" class="outer-modal-drag">
+            <div class="inner-modal-drag toolOptions">
                 <div style="display: none;" id="drawing-mode-options" class="options">
                     <label for="drawing-line-width">Line width</label>
                     <input type="range" value="10" min="0" max="150" id="drawing-line-width"><br/>
@@ -232,8 +232,8 @@
         <div id="pos" title="Position of the top left corner of an object relative to the top left corner of the canvas."></div>
         <div id="size" title="Width x height of the object."></div>
 
-        <div id="outer-colorwrapper" class="outer-drag">
-            <div class="colorwrapper inner-drag">
+        <div id="outer-colorwrapper" class="outer-modal-drag">
+            <div class="colorwrapper inner-modal-drag">
                 <div id="colorpicker"></div>
                 <br/>
                 <input type="text" id="colorvalue" name="color" value="#000000" autocomplete="off" />
@@ -250,8 +250,8 @@
             </div>
         </div>
 
-        <div id="outer-layers" class="outer-drag">
-            <div id="layers" class="inner-drag">
+        <div id="outer-layers" class="outer-modal-drag">
+            <div id="layers" class="inner-modal-drag">
             
             </div>
         </div>
@@ -264,7 +264,7 @@
 
         <div id="exportModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Export as...</h4>
@@ -279,7 +279,7 @@
 
         <div id="filterModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Background image filters...</h4>
@@ -303,7 +303,7 @@
 
         <div id="mobileModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h1>Warning!</h1>
@@ -325,7 +325,7 @@
 
         <div id="newCanvasModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>New canvas...</h4>
@@ -354,7 +354,7 @@
 
         <div id="resizeModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Resize canvas...</h4>
@@ -428,7 +428,7 @@
 
         <div id="importModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content drag">
+            <div class="modal-content modal-drag">
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Import from JSON...</h4>
