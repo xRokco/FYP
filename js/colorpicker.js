@@ -3,7 +3,6 @@ $(document).ready(function() {
         //console.log(this.color);
         $('#colorvalue').val($.farbtastic('#colorpicker').color.toUpperCase());
         $('#colorvalue').css('background-color', $.farbtastic('#colorpicker').color);
-        $('#colorvalue').css('color', $("#lvalue").val() > 0.5 ? '#000' : '#fff');
 
         canvas.freeDrawingBrush.color = $.farbtastic("#colorpicker").color;
 
@@ -40,6 +39,7 @@ $(document).ready(function() {
         $("#hvalue").val(Math.round(h * 100) / 100);
         $("#svalue").val(Math.round(s * 100) / 100);
         $("#lvalue").val(Math.round(l * 100) / 100);
+        $('#colorvalue').css('color', $("#lvalue").val() > 0.5 ? '#000' : '#fff');
         if(document.getElementById('newCanvasModal').style.display != "none"){
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }

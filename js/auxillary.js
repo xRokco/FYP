@@ -3,6 +3,7 @@ var canvas = new fabric.Canvas('c');
 canvas.enableRetinaScaling = false;
 canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
+//fabric.Object.prototype.cornerColor = 'red';
 canvas.setHeight(400);
 canvas.setWidth(600);
 canvas.preserveObjectStacking = true;
@@ -15,9 +16,6 @@ var initWidth = canvas.getWidth();
 var initHeight = canvas.getHeight();
 var panDiffTop = 0;
 var panDiffLeft = 0;
-var transformedP = {};
-transformedP.x = 0;
-transformedP.y = 0;
 var backgroundImageUrl;
 
 $( function() {

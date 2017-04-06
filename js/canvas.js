@@ -17,12 +17,6 @@ $(document).ready(function(){
     var context = document.getElementById("c").getContext("2d");
     var clipboard = [];
     var pasteMultiplier = 0;
-    var rectInc = 0;
-    var squareInc = 0;
-    var lineInc = 0;
-    var straightLineInc = 0;
-    var ellipseInc = 0;
-    var circleInc = 0;
     canvas.incrementer = {
         rectangle: 0,
         square: 0,
@@ -549,6 +543,7 @@ $(document).ready(function(){
         }
 
         if(canvas.circleDrawing || canvas.rectDrawing){
+            console.log(refShape);
             canvas.setActiveObject(refShape);    
         }
         
@@ -840,6 +835,8 @@ $(document).ready(function(){
             hideOptions();
             $('#select-mode').click();
             
+            canvas.getActiveObject().oCoords.tl.color = 'red';
+            console.log(canvas.getActiveObject());
             document.getElementById("shape-line-width").value = canvas.getActiveObject().strokeWidth;
             if(canvas.getActiveObject().fill == ''){
                 document.getElementById("shape-fill").checked = false;
