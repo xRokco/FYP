@@ -642,6 +642,12 @@ $(document).ready(function(){
         var angle = canvas.backgroundImage.angle;
         var X = canvas.backgroundImage.flipX;
         var Y = canvas.backgroundImage.flipY;
+        var width = canvas.backgroundImage.width;
+        var height = canvas.backgroundImage.height;
+        var top = canvas.backgroundImage.top;
+        var left = canvas.backgroundImage.left;
+        console.log(top);
+        console.log(left);
         fabric.Image.fromURL(backgroundImageUrl, (function(image){
             var filter = $(this).data("filter");
             var isChecked = $(this).prop("checked");
@@ -651,6 +657,10 @@ $(document).ready(function(){
                 canvas.backgroundImage.setAngle(angle);
                 canvas.backgroundImage.set('flipX', X);
                 canvas.backgroundImage.set('flipY', Y);
+                canvas.backgroundImage.width = width;
+                canvas.backgroundImage.height = height;
+                canvas.backgroundImage.top = top;
+                canvas.backgroundImage.left = left;
                 canvas.renderAll();
             }).bind(this));
         }).bind(this));
