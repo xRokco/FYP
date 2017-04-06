@@ -233,8 +233,9 @@ function flipY() {
     canvas.remove(group);
 
     for (var i = 0; i < items.length; i++) {
-        canvas.add(items[i]);
-        canvas.remove(origItems[i]);
+        items[i].hasControls = true;
+        //canvas.add(items[i]);
+        //canvas.remove(origItems[i]);
     }
 }
 
@@ -282,8 +283,9 @@ function flipX() {
     canvas.remove(group);
 
     for (var i = 0; i < items.length; i++) {
-        canvas.add(items[i]);
-        canvas.remove(origItems[i]);
+        items[i].hasControls = true;
+        //canvas.add(items[i]);
+        //canvas.remove(origItems[i]);
     }
 }
 
