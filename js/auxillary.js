@@ -25,6 +25,7 @@ $( function() {
     });
 
     $( ".modal-drag" ).draggable({
+        cancel: ".cancel-drag",
         scroll: false
     });
 

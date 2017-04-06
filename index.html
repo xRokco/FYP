@@ -269,9 +269,9 @@
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Export as...</h4>
                 <ul>
-                    <li><a href="#" onclick="return false;" class="export" value="png">PNG</a> - Good for images with text and fine details. Crucial for transparency but provides large file sizes.</li>
-                    <li><a href="#" onclick="return false;" class="export" value="jpeg">JPG</a> - Good for general pictures and photos without transparency, compressed down to a lightweight package.</li>
-                    <li><a href="#" onclick="return false;" class="export" value="json">JSON</a> - Specially formatted text which allows you to save your image editing progress to pick it up again later.</li>
+                    <li class="cancel-drag"><a href="#" onclick="return false;" class="export" value="png">PNG</a> - Good for images with text and fine details. Crucial for transparency but provides large file sizes.</li>
+                    <li class="cancel-drag" class="cancel-drag"><a href="#" onclick="return false;" class="export" value="jpeg">JPG</a> - Good for general pictures and photos without transparency, compressed down to a lightweight package.</li>
+                    <li class="cancel-drag"><a href="#" onclick="return false;" class="export" value="json">JSON</a> - Specially formatted text which allows you to save your image editing progress to pick it up again later.</li>
                 </ul>
                 
             </div>
@@ -283,17 +283,17 @@
                 <!--<div class="modal-close-icon">-->
                 <a href="#" onclick="return false;" class="close"><i class="fa fa-times"></i></a>
                 <h4>Background image filters...</h4>
-                <p id="filter-warning">These filters only apply to the canvas's background image. Your canvas doesn't have one currently.</p>
+                <p class="cancel-drag" id="filter-warning">These filters only apply to the canvas's background image. Your canvas doesn't have one currently.</p>
                 <ul class="background-filter-options">
-                    <li>
+                    <li class="cancel-drag">
                         <input type="checkbox" id="bggrayscale" data-filter="0">
                         <label for="bggrayscale" class="inline"><span></span>Greyscale</label>
                     </li>
-                    <li>
+                    <li class="cancel-drag">
                         <input type="checkbox" id="bgsepia" data-filter="1">
                         <label for="bgsepia" class="inline"><span></span>Sepia</label>
                     </li>
-                    <li>
+                    <li class="cancel-drag">
                         <input type="checkbox" id="bginvert" data-filter="2">
                         <label for="bginvert" class="inline"><span></span>Invert</label>
                     </li>
@@ -318,8 +318,8 @@
             <div class="modal-content modal-drag">
                 <a href="#" onclick="return false;" class="closeJSON"><i class="fa fa-times"></i></a>
                 <h4>JSON...</h4>
-                <pre><code id="json"></code></pre>
-                <input class="button-primary" id="select" value="Select all" type="submit">
+                <pre><code id="json" class="cancel-drag"></code></pre>
+                <input class="button-primary cancel-drag" id="select" value="Select all" type="submit">
             </div>
         </div>
 
@@ -332,18 +332,18 @@
                 <form class="form">
                     <div class="row">
                         <div class="six columns">
-                            <label for="resizewidth">Width</label> <input type="number" name="width" id="width"><br>
+                            <label class="cancel-drag" for="resizewidth">Width</label> <input class="cancel-drag" type="number" name="width" id="width"><br>
                         </div>
                         <div class="six columns">
-                            <label for="resizeheight">Height</label><input type="number" name="height" id="height"><br>
+                            <label class="cancel-drag" for="resizeheight">Height</label><input class="cancel-drag" type="number" name="height" id="height"><br>
                         </div>
                     </div>
                     <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
                         <div class="six columns">
-                            <label for="bgcolour">Background colour</label> <input type="text" name="bgcolour" id="bgcolour">
+                            <label class="cancel-drag" for="bgcolour">Background colour</label> <input class="cancel-drag" type="text" name="bgcolour" id="bgcolour">
                         </div>
                         <div class="six columns">
-                            <input type="checkbox" name="transparent" id="transparent"><label for="transparent"><span></span>Transparent background</label>
+                            <input class="cancel-drag" type="checkbox" name="transparent" id="transparent"><label class="cancel-drag" for="transparent"><span></span>Transparent background</label>
                         </div>
                     </div>
 
@@ -361,18 +361,18 @@
                 <form class="form">
                     <div class="row">
                         <div class="six columns">
-                            <label for="resizeWidth">Width</label> <input type="number" name="resizeWidth" id="resizeWidth">
+                            <label class="cancel-drag" for="resizeWidth">Width</label> <input class="cancel-drag" type="number" name="resizeWidth" id="resizeWidth">
                         </div>
                         <div class="six columns">
-                            <input type="checkbox" name="resizeLocked" id="resizeLocked"><label for="resizeLocked"><span></span>Lock rezise aspect ratio</label>
+                            <input class="cancel-drag" type="checkbox" name="resizeLocked" id="resizeLocked"><label class="cancel-drag" for="resizeLocked"><span></span>Lock rezise aspect ratio</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="six columns">
-                            <label for="resizeHeight">Height</label><input type="number" name="resizeHeight" id="resizeHeight">
+                            <label class="cancel-drag" for="resizeHeight">Height</label><input class="cancel-drag" type="number" name="resizeHeight" id="resizeHeight">
                         </div>
                         <div class="six columns">
-                            <select id="resizeType">
+                            <select class="cancel-drag" id="resizeType">
                                 <option value="px">px</option>
                                 <option value="percent">%</option>
                             </select>
@@ -380,14 +380,14 @@
                     </div>
                     <div class="row" style="border-bottom: 1px solid silver;padding-bottom: 15px;margin-bottom: 15px;">
                         <div class="six columns">
-                            <label for="resizeBgcolour">Background colour</label> <input type="text" name="resizeBgcolour" id="resizeBgcolour">
+                            <label class="cancel-drag" for="resizeBgcolour">Background colour</label> <input class="cancel-drag" type="text" name="resizeBgcolour" id="resizeBgcolour">
                         </div>
                         <div class="six columns">
-                            <input type="checkbox" name="resizeTransparent" id="resizeTransparent"><label for="resizeTransparent"><span></span>Transparent background</label>
+                            <input class="cancel-drag" type="checkbox" name="resizeTransparent" id="resizeTransparent"><label class="cancel-drag" for="resizeTransparent"><span></span>Transparent background</label>
                         </div>
                     </div>
 
-                    <input class="button-primary" id="resizeCanvas" value="Create" type="submit">
+                    <input class="button-primary cancel-drag" id="resizeCanvas" value="Create" type="submit">
                 </form>
             </div>
         </div>
@@ -434,9 +434,9 @@
                 <h4>Import from JSON...</h4>
                 <div class="row">
                     <div class="twelve columns">
-                        <textarea id="importJSON"></textarea>
+                        <textarea id="importJSON" class="cancel-drag"></textarea>
                     </div>
-                    <input class="button-primary" id="import" value="Import" type="submit">
+                    <input class="button-primary cancel-drag" id="import" value="Import" type="submit">
                 </div>
             </div>
         </div>
