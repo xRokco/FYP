@@ -382,18 +382,18 @@ $(document).ready(function(){
             if(document.getElementById('lock').checked){
                 if(startPointLeft > posX) {
                     refShape.set({originX: 'right' });
-                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
+                    refShape.setWidth(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));  
                 } else {
                     refShape.set({originX: 'left' });
-                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
+                    refShape.setWidth(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));  
                 }
 
                 if(startPointTop > posY) {
                     refShape.set({originY: 'bottom' });
-                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
+                    refShape.setHeight(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));
                 } else {
                     refShape.set({originY: 'top' });
-                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
+                    refShape.setHeight(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));
                 }
             } else {
                 if(startPointLeft > posX) {
@@ -401,7 +401,7 @@ $(document).ready(function(){
                     refShape.setWidth(Math.abs((posX-startPointLeft)));
                 } else {
                     refShape.set({originX: 'left' });
-                    refShape.setWidth(Math.abs((posX-refShape.get('left'))));
+                    refShape.setWidth(Math.abs((posX-startPointLeft)));
                 }
 
                 if(startPointTop > posY) {
@@ -409,7 +409,7 @@ $(document).ready(function(){
                     refShape.setHeight(Math.abs(posY-startPointTop));
                 } else {
                     refShape.set({originY: 'top' });
-                    refShape.setHeight(Math.abs((posY-refShape.get('top'))));
+                    refShape.setHeight(Math.abs((posY-startPointTop)));
                 }
             }
             refShape.setCoords();
