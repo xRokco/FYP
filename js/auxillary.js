@@ -3,7 +3,6 @@ var canvas = new fabric.Canvas('c');
 canvas.enableRetinaScaling = false;
 canvas.backgroundColor="white";
 fabric.Object.prototype.selectable = false;
-//fabric.Object.prototype.cornerColor = 'red';
 canvas.setHeight(400);
 canvas.setWidth(600);
 canvas.preserveObjectStacking = true;
@@ -35,7 +34,10 @@ $( function() {
     });
 });
 
-//hide options
+/*
+ * This function gets called whenever a tool icon is clicked - it resets the current settings to default and hides all the specific tool options
+ * and makes all the objects unselectable.
+ */
 function hideOptions() {
     canvas.eyedropper = false;
     canvas.isDrawingMode = false;
@@ -60,6 +62,10 @@ function hideOptions() {
     fabric.Object.prototype.selectable = false;
 }
 
+/*
+ * This gets called whenever an object gets added, removed, changes visibility, changes order or changes ID, and in a couple of places
+ * It generates a list of objects in the order they appear on the canvas, and has buttons that call other functions for each object.
+ */
 function updateLayers() {
     var obj = canvas.getObjects();
     var text = "";
@@ -93,6 +99,12 @@ function updateLayers() {
     document.getElementById("layers").innerHTML = text;
 }
 
+/*
+ * This function rotates the canvas, all objects on it and its background image by a certain number of degress. This only works with 90 or -90 degree turns.
+ * It creates a canvas sized group of all the objects and then rotates the group around its center point
+ * It also rotates the background image and depending on the final angle changes its offset from the top and left.
+ * @param a Angle to rotate the canvas by
+ */
 function rotate(a) {
     var zoom = canvas.getZoom();
     canvas.setZoom(1);
@@ -189,6 +201,10 @@ function rotate(a) {
     $("#select").click();
 }
 
+/*
+ * Flips the canvas and all objects vertically. Works very similarly to the rotation, but as well as rotating everything -180 degrees, it also flips them,
+ * to simulate a verticle flip.
+ */
 function flipY() {
     var group = new fabric.Group();
     var origItems = canvas._objects;
@@ -239,6 +255,10 @@ function flipY() {
     }
 }
 
+/*
+ * Flips the canvas and all objects horizontally. Works very similarly to the rotation, but as well as rotating everything -180 degrees, it also flips them,
+ * to simulate a horizontal flip.
+ */
 function flipX() {
     var group = new fabric.Group();
     var origItems = canvas._objects;
@@ -289,21 +309,36 @@ function flipX() {
     }
 }
 
+/*
+ * Sends the object backwards relative to other objects, and then updates the layers list
+ * @param index The index of the object to be moved
+ */
 function moveBack(index) {
     canvas.sendBackwards(canvas.item(index));
     updateLayers();
 }
 
+/*
+ * Brings the object forwards relative to other objects, and then updates the layers list
+ * @param index The index of the object to be moved
+ */
 function moveForwards(index) {
     canvas.bringForward(canvas.item(index));
     updateLayers();
 }
 
+/*
+ * Deletes the object at index
+ * @param index The index of the object to be deleted
+ */
 function deleteObj(index) {
     canvas.getObjects()[index].remove();
     updateLayers();
 }
 
+/*
+ * Zooms the canvas in by 1% and increases the width and height of the canvas by the new zoom level to simulate a zoom in
+ */
 function zoomIn() {
     canvas.setZoom(canvas.getZoom() + 0.01 );
     canvas.setDimensions({
@@ -314,6 +349,9 @@ function zoomIn() {
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
+/*
+ * Zooms the canvas out by 1 percentage point and decreases the width and height of the canvas by the new zoom level to simulate a zoom out
+ */
 function zoomOut() {
     canvas.setZoom(canvas.getZoom() - 0.01 );
     canvas.setDimensions({
@@ -324,6 +362,9 @@ function zoomOut() {
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
+/*
+ * Resets the zoom level of the canvas to 100% and the width and height to its initial values
+ */
 function resetZoom() {
     canvas.setZoom(1);
     canvas.setDimensions({
@@ -334,22 +375,52 @@ function resetZoom() {
     $("#canvasWrapper").width(canvas.getWidth());
 }
 
+/*
+ * Moves the editable canvas area within the canvas viewport to simulate panning around
+ * @param x The horizontal distance to pan by, plus or minus value to move different directions
+ * @param y The parrallel distance to pan by, plus or minus value to move different directions
+ */
 function pan(x, y) {
-    var delta = new fabric.Point(x,y) ;
-    canvas.relativePan(delta);
-    panDiffLeft += Math.round(x*(1/canvas.getZoom()));
-    panDiffTop += Math.round(y*(1/canvas.getZoom()));
-    document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
+    var marginTop = $("#canvasWrapper").css("margin-top");
+    marginTop = parseInt(marginTop) + parseInt(y);
+    $("#canvasWrapper").css("margin-top", (marginTop) + "px");
+
+    var marginLeft = $("#canvasWrapper").css("margin-left");
+    marginLeft = parseInt(marginLeft) + parseInt(x);
+    $("#canvasWrapper").css("margin-left", (marginLeft) + "px");
+
+
+
+    // var delta = new fabric.Point(x,y) ;
+    // canvas.relativePan(delta);
+    // panDiffLeft += Math.round(x*(1/canvas.getZoom()));
+    // panDiffTop += Math.round(y*(1/canvas.getZoom()));
+    // document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
 }
 
+/*
+ * Restes the canvas viewport to default by setting the absolute pan distance to 0, 0.
+ */
 function resetPan() {
-    var delta = new fabric.Point(0,0) ;
-    canvas.absolutePan(delta);
-    panDiffTop = 0;
-    panDiffLeft = 0;
-    document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
+    $("#canvasWrapper").css("margin-left", "auto");
+    $("#canvasWrapper").css("margin-right", "auto");
+    $("#canvasWrapper").css("margin-top", "115px");
+
+    // var delta = new fabric.Point(0,0) ;
+    // canvas.absolutePan(delta);
+    // panDiffTop = 0;
+    // panDiffLeft = 0;
+    // document.getElementById("pan").innerHTML = "Relative pan: " + panDiffLeft + ", " + panDiffTop;
 }
 
+/*
+ * Programatically selects an object or creates a group of objects cased on a click or other event.
+ * If select is held down and an object is already selected it will create a group and add the two objects to it (essentially selecting them both)
+ * If select is held down and a group is already selected it will add the clicked object to the group
+ * If select isn't held down it will just select the sing object
+ * @param event The Javascript event object
+ * @param index The index of the object to be selected
+ */
 function selectLayer(event, index) {
     if(event.shiftKey == true){
         if(canvas.getActiveGroup()){
@@ -476,6 +547,7 @@ function newCanvas(width, height) {
             });
             document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
         }
+        resetPan();
         updateLayers();
         $('.close').click();
         $("#canvasWrapper").width(canvas.getWidth());
@@ -663,7 +735,7 @@ var myAppModule = (function () {
                     document.getElementById("zoom").innerHTML = "Zoom level: " + Math.round(canvas.getZoom() * 100)/100;
                     $("#canvasWrapper").width(canvas.getWidth());
                 }
-                $(window).resize();
+                resetPan();
                 $('#select-mode').click();
             }
         } else {
@@ -730,6 +802,11 @@ $(window).on('beforeunload', function (e) {
 
         return confirmationMessage;
     }
+});
+
+$(window).resize(function(e){
+    $("#canvasWrapper").css("margin-left", "auto");
+    $("#canvasWrapper").css("margin-right", "auto");
 });
 
 $(document).ready(function() {

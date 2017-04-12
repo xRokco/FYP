@@ -152,6 +152,7 @@ $('#import').click(function(){
                     $("#canvasWrapper").width(canvas.getWidth());
                 }
                 canvas.renderAll();
+                resetPan();
                 updateLayers();
                 $('.close').click();
             });

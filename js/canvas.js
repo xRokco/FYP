@@ -536,6 +536,8 @@ $(document).ready(function(){
                 width: initWidth * canvas.getZoom(),
                 height: initHeight * canvas.getZoom()
             });
+
+            if(canvas.select)
             //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
             $("#canvasWrapper").width(canvas.getWidth());
             $('#select-mode').click();
@@ -807,7 +809,15 @@ $(document).ready(function(){
      * - simulate a click on the select icon
      * - display the relevant options
      */
-    canvas.on('object:selected', function() {
+    canvas.on('object:selected', function(event) {
+        console.log("selected");
+        // if(canvas.getActiveObject()){
+        //     console.log(canvas.getObjects().indexOf(event.target));
+        //     console.log(event.target);    
+        // } else {
+        //     console.log(event.target._objects.indexOf(event.target));
+        // }
+        
         if(getSelectedType() == 'text'){
             hideOptions();
             $('#select-mode').click();

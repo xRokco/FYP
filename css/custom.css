@@ -1,7 +1,7 @@
 #canvasWrapper {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
+    margin-top: 115px;
     width: 800px;
     background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
     background-size: 20px 20px;
@@ -32,24 +32,28 @@ html {
     position: absolute;
     top:67px;
     right:30px;
+    z-index: 4;
 }
 
 #pan{
     position: absolute;
     top:85px;
     right:30px;
+    z-index: 4;
 }
 
 #size {
   position: absolute;
   left: 5px;
   bottom: 25px;
+  z-index: 4;
 }
 
 #pos {
   position: absolute;
   left: 5px;
   bottom: 5px;
+  z-index: 4;
 }
 
 #outer-tools {
@@ -240,12 +244,7 @@ label[for=background] {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-#mobileModal {
-    z-index: 9;
-}
-
 #mobileModal .modal-content {
-    z-index: 9;
     width: 90%;
     height: 70%;
 }
@@ -436,7 +435,7 @@ code {
     border: 0;
 }
 
-#newCanvasModal {
+#newCanvasModal, #resizeModal {
     z-index: 5;
 }
 
@@ -477,7 +476,7 @@ code {
     z-index: 3;
 }
 
-.colorwrapper {
+#outer-colorwrapper {
     z-index: 6;
 }
 
@@ -500,11 +499,12 @@ input[type="file"] {
 }
 
 .navbar,.navbar-spacer {
+    position: absolute;
     display: block;
     width: 100%;
     height: 6.5rem;
     background: #fff;
-    z-index: 2;
+    z-index: 4;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
 }

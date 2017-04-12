@@ -43,6 +43,10 @@ $(document).ready(function() {
         if(document.getElementById('newCanvasModal').style.display != "none"){
             $('#bgcolour').val($.farbtastic('#colorpicker').color);
         }
+
+        if(document.getElementById('resizeModal').style.display != "none"){
+            $('#resizeBgcolour').val($.farbtastic('#colorpicker').color);
+        }
         $("#colorvalue").change();        
     });
 
