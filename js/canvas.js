@@ -379,39 +379,26 @@ $(document).ready(function(){
             var posX=canvas.getPointer().x;
             var posY=canvas.getPointer().y;
 
-            if(document.getElementById('lock').checked){
-                if(startPointLeft > posX) {
-                    refShape.set({originX: 'right' });
-                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
-                } else {
-                    refShape.set({originX: 'left' });
-                    refShape.setWidth(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));  
-                }
-
-                if(startPointTop > posY) {
-                    refShape.set({originY: 'bottom' });
-                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
-                } else {
-                    refShape.set({originY: 'top' });
-                    refShape.setHeight(Math.max(Math.abs(posX-refShape.get('left')), Math.abs(posY-refShape.get('top'))));
-                }
+            if(startPointLeft > posX) {
+                refShape.set({originX: 'right' });
             } else {
-                if(startPointLeft > posX) {
-                    refShape.set({originX: 'right' });
-                    refShape.setWidth(Math.abs((posX-startPointLeft)));
-                } else {
-                    refShape.set({originX: 'left' });
-                    refShape.setWidth(Math.abs((posX-refShape.get('left'))));
-                }
-
-                if(startPointTop > posY) {
-                    refShape.set({originY: 'bottom' });
-                    refShape.setHeight(Math.abs(posY-startPointTop));
-                } else {
-                    refShape.set({originY: 'top' });
-                    refShape.setHeight(Math.abs((posY-refShape.get('top'))));
-                }
+                refShape.set({originX: 'left' });
             }
+            
+            if(startPointTop > posY) {
+                refShape.set({originY: 'bottom' });
+            } else {
+                refShape.set({originY: 'top' });
+            }
+
+            if(document.getElementById('lock').checked){
+                refShape.setWidth(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));
+                refShape.setHeight(Math.max(Math.abs(posX-startPointLeft), Math.abs(posY-startPointTop)));
+            } else {
+                refShape.setHeight(Math.abs(posY-startPointTop));
+                refShape.setWidth(Math.abs(posX-startPointLeft));
+            }
+
             refShape.setCoords();
             canvas.renderAll(); 
         }
