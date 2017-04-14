@@ -484,7 +484,6 @@ $(document).ready(function(){
         if(canvas.cropMode){
             var zoom = canvas.getZoom();
             resetZoom();
-            var i;
             var croppedLeft = 0;
             var croppedTop = 0;
             var canvasJson = canvas.getObjects();
