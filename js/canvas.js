@@ -1,7 +1,8 @@
-/* These functions control almost everything that occurs on the canvas, such as creating it, adding shapes, changing colours of tools
+/* These functions control almost all the canvas event handlers and functions in the tools window like adding shapes, changing colours of tools
+ * Also manages keyboard shortcut code
  *
  * Author: Matt Carrick
- * Website: http://matt.netsoc.co/FYP
+ * Website: http://stijl.cf
  */
 
 

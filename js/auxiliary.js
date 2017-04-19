@@ -1,3 +1,9 @@
+/* These functions control almost everything that occurs in the background and on tools in the menu such as rotation, flipping, zooming, panning, etc
+ *
+ * Author: Matt Carrick
+ * Website: http://stijl.cf
+ */
+
 //Canvac creation
 var canvas = new fabric.Canvas('c');  //creates Fabric.JS canvas object
 canvas.enableRetinaScaling = false; //Disables retina scaling for high res displays
