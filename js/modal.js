@@ -54,35 +54,19 @@ $('.export').click(function(){
         $("#jsonModal").show();
         setTimeout(function() {
             var zoom = canvas.getZoom();
-            canvas.setZoom(1);
-            canvas.setDimensions({
-                width: initWidth,
-                height: initHeight
-            });
+            resetZoom();
 
             document.getElementById('json').innerHTML = JSON.stringify(canvas.toJSON(['width', 'height', 'id', 'flipX2', 'flipY2']), null, 4);
 
-            canvas.setZoom(zoom);
-            canvas.setDimensions({
-                width: initWidth * canvas.getZoom(),
-                height: initHeight * canvas.getZoom()
-            });
+            fixZoom(zoom);
         }, 0);
     } else {
         var zoom = canvas.getZoom();
-        canvas.setZoom(1);
-        canvas.setDimensions({
-            width: initWidth,
-            height: initHeight
-        });
+        resetZoom();
 
         window.open(canvas.toDataURL( {format: $(this).attr("value") }));
 
-        canvas.setZoom(zoom);
-        canvas.setDimensions({
-            width: initWidth * canvas.getZoom(),
-            height: initHeight * canvas.getZoom()
-        });
+        fixZoom(zoom);
     }
 });
 

@@ -483,13 +483,11 @@ $(document).ready(function(){
 
         if(canvas.cropMode){
             var zoom = canvas.getZoom();
-            canvas.setZoom(1);
-            canvas.setHeight(initHeight);
-            canvas.setWidth(initWidth);
-            var i;
+            resetZoom();
             var croppedLeft = 0;
             var croppedTop = 0;
             var canvasJson = canvas.getObjects();
+            var keepHidden = [];
             // Cropping canvas according to cropper rectangle
             if (canvas.getObjects().length > 0) {
                 var i;
@@ -502,31 +500,42 @@ $(document).ready(function(){
                         canvas.getObjects()[i].remove();
                         initWidth = canvas.getWidth();
                         initHeight = canvas.getHeight();
+                    } else {
+                        if(canvas.getObjects()[i].visible == false){
+                            keepHidden.push(canvas.getObjects()[i]);
+                        } else {
+                            canvas.getObjects()[i].visible = false;
+                        }
                     }
                 }
+            }
+
+            if(canvas.backgroundImage) {
+                var url = canvas.toDataURL({
+                    format: 'png',
+                    left: croppedLeft,
+                    top: croppedTop,
+                    width: canvas.width,
+                    height: canvas.height,
+                    multiplier: 1
+                });
+
+                fabric.Image.fromURL(url, function(oImg){
+                    canvas.setBackgroundImage(oImg, canvas.renderAll.bind(canvas));
+                });
             }
 
             //////////////Shifting the elements accordigly////////////////
             for (i = 0; i < canvasJson.length; i++) {
                 canvas.getObjects()[i].left = canvas.getObjects()[i].left - croppedLeft
                 canvas.getObjects()[i].top = canvas.getObjects()[i].top - croppedTop
+                if(!keepHidden.includes(canvas.getObjects()[i])){
+                    canvas.getObjects()[i].visible = true;
+                }
                 canvas.renderAll();
-            }
+            } 
 
-            if(canvas.backgroundImage) {
-                canvas.backgroundImage.left = canvas.backgroundImage.left - croppedLeft;
-                canvas.backgroundImage.top = canvas.backgroundImage.top - croppedTop;
-            }
-
-            canvas.setZoom(zoom);
-            canvas.setDimensions({
-                width: initWidth * canvas.getZoom(),
-                height: initHeight * canvas.getZoom()
-            });
-
-            if(canvas.select)
-            //document.getElementById('canvasWrapper').style.width = canvas.getWidth() + "px";
-            $("#canvasWrapper").width(canvas.getWidth());
+            fixZoom(zoom);
             $('#select-mode').click();
             resetPan();
         }
