@@ -1,16 +1,16 @@
 //Canvac creation
-var canvas = new fabric.Canvas('c');
-canvas.enableRetinaScaling = false;
-canvas.backgroundColor="white";
-fabric.Object.prototype.selectable = false;
-canvas.setHeight(400);
-canvas.setWidth(600);
-canvas.preserveObjectStacking = true;
-$("#canvasWrapper").width(canvas.getWidth());
+var canvas = new fabric.Canvas('c');  //creates Fabric.JS canvas object
+canvas.enableRetinaScaling = false; //Disables retina scaling for high res displays
+canvas.backgroundColor="white"; //Sets canvas background colour to white
+fabric.Object.prototype.selectable = false; //Makes all objects unselectable
+canvas.setHeight(400); //Sets height of canvas to 400
+canvas.setWidth(600); //Sets width of canvas to 600
+canvas.preserveObjectStacking = true; //Disables the currently selected objects from appearing on top of all others, even if they are places lower
+$("#canvasWrapper").width(canvas.getWidth()); //Sets the checkboard backgroun pattern to the same width as the canvas
 var angle = 0;
 var backgroundFlipY = false;
 var backgroundFlipX = false;
-canvas.renderAll();
+canvas.renderAll(); //Updates the canvas on screen
 var initWidth = canvas.getWidth();
 var initHeight = canvas.getHeight();
 var panDiffTop = 0;
@@ -18,19 +18,19 @@ var panDiffLeft = 0;
 var backgroundImageUrl;
 
 $( function() {
-    $( ".outer-drag" ).draggable({
-        cancel: ".inner-drag",
-        scroll: false
+    $( ".outer-drag" ).draggable({ //Makes any div with the outer-drag class draggable
+        cancel: ".inner-drag", //Makes the above div be undraggable when inner-drag is clicked (to simulate only being able to drag when clicking on a "border")
+        scroll: false //Stops draggable divs scrolling the page around
     });
 
-    $( ".modal-drag" ).draggable({
-        cancel: ".cancel-drag",
-        scroll: false
+    $( ".modal-drag" ).draggable({ //Makes modals draggable
+        cancel: ".cancel-drag", //Disables drag on the contents of the modal like the input boxes and text
+        scroll: false //Stops draggable modals scrolling the page around
     });
 
-    $("#outer-layers").resizable({
-        handles: 'e, w',
-        minWidth: 232
+    $("#outer-layers").resizable({ //Makes the outer-layers window resizable
+        handles: 'e, w', //Only allows horizontal resize
+        minWidth: 232 //Can't be made smaller than 232 pixels
     });
 });
 
@@ -39,6 +39,7 @@ $( function() {
  * and makes all the objects unselectable.
  */
 function hideOptions() {
+    //Disables the currently selected tool
     canvas.eyedropper = false;
     canvas.isDrawingMode = false;
     canvas.rectDrawing = false;
@@ -46,20 +47,24 @@ function hideOptions() {
     canvas.textDrawing = false;
     canvas.cropMode = false;
     canvas.straightLineMode = false;
+
+    //Makes the select box invisible as it should only be visible when the select tool is chosen
     canvas.selectionColor = "rgba(0,0,0,0)";
     canvas.selectionBorderColor = "rgba(0,0,0,0)";
 
-    updateLayers();
+    updateLayers(); //Updates the layer window
 
-    $('.tool').css("border", "1px solid #EEE");
+    $('.tool').css("border", "1px solid #EEE"); //Sets the border of the tool icon to be the same as the background (essentially hiding it)
 
+    //Hides all tool specific options
     $("#drawing-mode-options").hide();
     $("#shape-mode-options").hide();
     $("#text-mode-options").hide();
     $("#locklab").hide();
     $("#straightlab").hide();
     $("#filter-options").hide();
-    fabric.Object.prototype.selectable = false;
+
+    fabric.Object.prototype.selectable = false; //Makes all objects unselectable
 }
 
 /*
