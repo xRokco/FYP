@@ -20,8 +20,8 @@ var backgroundFlipY = false;
 var backgroundFlipX = false;
 var initWidth = canvas.getWidth();
 var initHeight = canvas.getHeight();
-var panDiffTop = 0;
-var panDiffLeft = 0;
+//var panDiffTop = 0;
+//var panDiffLeft = 0;
 var backgroundImageUrl;
 
 $( function() {
