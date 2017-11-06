@@ -1,7 +1,7 @@
 /* These functions control everything to do with the colourpicker like converting between colour values
  *
  * Author: Matt Carrick
- * Website: http://stijl.cf
+ * Website: http://stijl.cc
  */
 
 $(document).ready(function() {

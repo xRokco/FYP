@@ -20,6 +20,6 @@ Everything in the project was written by me, except the following libraries
 * normalize.css - another Skeleton CSS file
 
 ## Live version
-A live version of the site can be visited at http://Stijl.cf
+A live version of the site can be visited at http://Stijl.cc
 
-The most recent code can be found at https://github.com/xRokco/Stijl.cf
+The most recent code can be found at https://github.com/xRokco/Stijl.cc

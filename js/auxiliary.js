@@ -1,7 +1,7 @@
 /* These functions control almost everything that occurs in the background and on tools in the menu such as rotation, flipping, zooming, panning, etc
  *
  * Author: Matt Carrick
- * Website: http://stijl.cf
+ * Website: http://stijl.cc
  */
 
 //Canvac creation

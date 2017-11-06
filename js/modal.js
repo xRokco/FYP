@@ -1,7 +1,7 @@
 /* These functions control the modals and functions within the modals
  *
  * Author: Matt Carrick
- * Website: http://matt.netsoc.co/FYP
+ * Website: http://stijl.cc
  */
 
 /*
@@ -72,7 +72,13 @@ $('.export').click(function(){
         resetZoom();
 
         //Open the exported image in a new tab
-        window.open(canvas.toDataURL( {format: $(this).attr("value") }));
+        var string = canvas.toDataURL( {format: $(this).attr("value") });
+
+        var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>"
+        var x = window.open();
+        x.document.open();
+        x.document.write(iframe);
+        x.document.close();
 
         //revert zoom to the previous value
         fixZoom(zoom);

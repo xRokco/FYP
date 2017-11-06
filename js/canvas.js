@@ -2,7 +2,7 @@
  * Also manages keyboard shortcut code
  *
  * Author: Matt Carrick
- * Website: http://stijl.cf
+ * Website: http://stijl.cc
  */
 
 
