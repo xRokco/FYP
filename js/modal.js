@@ -52,7 +52,7 @@ $('#filterButton').click(function(){
  * open the image on the canvas in a new tab/window
  */
 $('.export').click(function(){
-    if($(this).attr("value")=="json"){ //if JSON export is clicked
+    //if($(this).attr("value")=="json"){ //if JSON export is clicked
         document.getElementById('json').innerHTML = 'Loading...'; //put a loading warning in the json field
         $("#jsonModal").show(); //show the json modal
         setTimeout(function() { //use an async function to display the JSON
@@ -66,24 +66,28 @@ $('.export').click(function(){
             //revert zoom to the previous value
             fixZoom(zoom);
         }, 0);
-    } else {
-        //temporarily change zoom level to 1
-        var zoom = canvas.getZoom();
-        resetZoom();
-
-        //Open the exported image in a new tab
-        var string = canvas.toDataURL( {format: $(this).attr("value") });
-
-        var iframe = "<iframe width='100%' height='100%' src='" + string + "'></iframe>"
-        var x = window.open();
-        x.document.open();
-        x.document.write(iframe);
-        x.document.close();
-
-        //revert zoom to the previous value
-        fixZoom(zoom);
-    }
+    //}
 });
+
+document.getElementById('png').addEventListener('click', function() {
+    downloadCanvas(this, 'png', 'image.png');
+}, false);
+
+document.getElementById('jpg').addEventListener('click', function() {
+    downloadCanvas(this, 'jpeg', 'image.jpg');
+}, false);
+
+function downloadCanvas(link, format, filename) {
+    //temporarily change zoom level to 1
+    var zoom = canvas.getZoom();
+    resetZoom();
+
+    link.href = canvas.toDataURL( {format: format });
+    link.download = filename;
+
+    //revert zoom to the previous value
+    fixZoom(zoom);
+}
 
 /*
  * When the "Select All" button is clicked on in the JSON modal
